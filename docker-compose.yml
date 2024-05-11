@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  companywebapi:
+    container_name: CompanyWebApi
+    image: ${DOCKER_REGISTRY-}companywebapi
+    restart: on-failure
+    hostname: CompanyWebApi
+    build:
+      context: .
+      dockerfile: src/CompanyWebApi/Dockerfile
+    volumes:
+      - "./sqlite-database-volume:/Database"

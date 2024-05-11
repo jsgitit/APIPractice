@@ -1,0 +1,9 @@
+﻿.swagger-ui .topbar {
+    background-color: #49545a;
+    border-bottom: 3px solid black;
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label select {
+    border-color: #000;
+    background: #fff;
+}
