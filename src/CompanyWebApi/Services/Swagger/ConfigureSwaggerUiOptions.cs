@@ -1,6 +1,6 @@
-﻿using CompanyWebApi.Configurations;
+﻿using Asp.Versioning.ApiExplorer;
+using CompanyWebApi.Configurations;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;

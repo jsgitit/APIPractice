@@ -1,16 +1,16 @@
-﻿using CompanyWebApi.Configurations;
+﻿using Asp.Versioning.ApiExplorer;
+using CompanyWebApi.Configurations;
 using CompanyWebApi.Services.Swagger.Filters;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System;
 
 namespace CompanyWebApi.Services.Swagger
 {
@@ -99,7 +99,7 @@ namespace CompanyWebApi.Services.Swagger
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             return xmlPath;
         }
-        
+
         /// <summary>
         /// Create API version
         /// </summary>
@@ -134,7 +134,7 @@ namespace CompanyWebApi.Services.Swagger
                     }
                 }
             };
-  
+
             if (description.IsDeprecated)
             {
                 info.Description += " ** THIS API VERSION HAS BEEN DEPRECATED!";
