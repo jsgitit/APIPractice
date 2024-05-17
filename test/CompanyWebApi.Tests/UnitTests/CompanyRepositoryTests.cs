@@ -1,12 +1,12 @@
 ﻿using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Persistence.Repositories;
+using CompanyWebApi.Tests.Factories;
 using CompanyWebApi.Tests.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using System;
 using System.Linq;
-using CompanyWebApi.Tests.Factories;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace CompanyWebApi.Tests.UnitTests
@@ -28,7 +28,7 @@ namespace CompanyWebApi.Tests.UnitTests
         [MemberData(nameof(CompanyTestFactory.Companies), MemberType = typeof(CompanyTestFactory))]
         public async Task CanAddCompanies(Company company)
         {
-            var repoCompany = await _companyRepository.AddCompanyAsync(company).ConfigureAwait(false);
+            var repoCompany = await _companyRepository.AddCompanyAsync(company);
             Assert.True(repoCompany.CompanyId > 0);
         }
 
@@ -38,16 +38,19 @@ namespace CompanyWebApi.Tests.UnitTests
             _logger.LogInformation("CanAdd");
             var company = new Company
             {
-                CompanyId = 999, Name = "New Company", Created = DateTime.UtcNow, Modified = DateTime.UtcNow
+                CompanyId = 999,
+                Name = "New Company",
+                Created = DateTime.UtcNow,
+                Modified = DateTime.UtcNow
             };
-            var repoCompany = await _companyRepository.AddCompanyAsync(company).ConfigureAwait(false);
+            var repoCompany = await _companyRepository.AddCompanyAsync(company);
             Assert.Equal("New Company", repoCompany.Name);
         }
 
         [Fact]
         public async Task CanCount()
         {
-            var nrCompanies = await _companyRepository.CountAsync().ConfigureAwait(false);
+            var nrCompanies = await _companyRepository.CountAsync();
             Assert.True(nrCompanies > 0);
         }
 
@@ -56,26 +59,29 @@ namespace CompanyWebApi.Tests.UnitTests
         {
             var company = new Company
             {
-                CompanyId = 9999, Name = "Delete Company", Created = DateTime.UtcNow, Modified = DateTime.UtcNow
+                CompanyId = 9999,
+                Name = "Delete Company",
+                Created = DateTime.UtcNow,
+                Modified = DateTime.UtcNow
             };
-            await _companyRepository.AddCompanyAsync(company).ConfigureAwait(false);
+            await _companyRepository.AddCompanyAsync(company);
             _companyRepository.Remove(company);
-            await _companyRepository.SaveAsync().ConfigureAwait(false);
-            var repoCompany = await _companyRepository.GetCompanyAsync(company.CompanyId).ConfigureAwait(false);
+            await _companyRepository.SaveAsync();
+            var repoCompany = await _companyRepository.GetCompanyAsync(company.CompanyId);
             Assert.Null(repoCompany);
         }
 
         [Fact]
         public async Task CanGetAll()
         {
-            var companies = await _companyRepository.GetCompaniesAsync().ConfigureAwait(false);
+            var companies = await _companyRepository.GetCompaniesAsync();
             Assert.True(companies.Any());
         }
 
         [Fact]
         public async Task CanGetSingle()
         {
-            var company = await _companyRepository.GetCompanyAsync(predicate: cmp => cmp.Name.Equals("Company One")).ConfigureAwait(false);
+            var company = await _companyRepository.GetCompanyAsync(predicate: cmp => cmp.Name.Equals("Company One"));
             Assert.Equal("Company One", company.Name);
         }
 
@@ -84,10 +90,13 @@ namespace CompanyWebApi.Tests.UnitTests
         {
             var company = new Company
             {
-                CompanyId = 3, Name = "Updated Test Company", Created = DateTime.UtcNow, Modified = DateTime.UtcNow
+                CompanyId = 3,
+                Name = "Updated Test Company",
+                Created = DateTime.UtcNow,
+                Modified = DateTime.UtcNow
             };
-            await _companyRepository.UpdateAsync(company).ConfigureAwait(false);
-            await _companyRepository.SaveAsync().ConfigureAwait(false);
+            await _companyRepository.UpdateAsync(company);
+            await _companyRepository.SaveAsync();
             Assert.Equal("Updated Test Company", company.Name);
         }
     }
