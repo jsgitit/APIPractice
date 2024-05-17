@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 /src/CompanyWebApi/Database/Companies.db
+/src/CompanyWebApi/Database/Companies.db-shm
+/src/CompanyWebApi/Database/Companies.db-wal
