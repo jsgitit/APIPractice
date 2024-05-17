@@ -46,7 +46,7 @@ namespace CompanyWebApi.Tests.IntegrationTests
             {
                 EmployeeId = employee.EmployeeId,
                 Username = "testuser",
-                Password = "testpassword"
+                Password = "password"
             };
 
             var user = await _httpClientHelper.PostAsync<UserCreateDto, UserDto>(_usersBaseUrl + "create", newUser);
@@ -83,12 +83,12 @@ namespace CompanyWebApi.Tests.IntegrationTests
             {
                 EmployeeId = 2,
                 Username = "mathiasg",
-                Password = "abcde12345",
+                Password = "password",
                 Token = string.Empty
             };
 
             var updatedUser = await _httpClientHelper.PutAsync(_usersBaseUrl + "update", newUser);
-            Assert.Equal("abcde12345", updatedUser.Password);
+            Assert.Equal("password", updatedUser.Password);
         }
 
         [Fact]

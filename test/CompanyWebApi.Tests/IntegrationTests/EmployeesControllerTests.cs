@@ -33,8 +33,8 @@ namespace CompanyWebApi.Tests.IntegrationTests
                 CompanyId = 1,
                 DepartmentId = 1,
                 Address = "New Address",
-                Password = "sdfaeswgraewg23423&",
-                Username = "sylholt"
+                Password = "password",
+                Username = "password"
             };
             var employee = await _httpClientHelper.PostAsync<EmployeeCreateDto, EmployeeDto>(_baseUrl + "create", newEmployee);
             Assert.Equal(newEmployee.FirstName, employee.FirstName);
