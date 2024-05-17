@@ -1,12 +1,12 @@
 ﻿using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Persistence.Repositories;
+using CompanyWebApi.Tests.Factories;
 using CompanyWebApi.Tests.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using CompanyWebApi.Tests.Factories;
 using Xunit;
 
 namespace CompanyWebApi.Tests.UnitTests
@@ -27,7 +27,7 @@ namespace CompanyWebApi.Tests.UnitTests
         [MemberData(nameof(EmployeeTestFactory.Employees), MemberType = typeof(EmployeeTestFactory))]
         public async Task CanAddEmployees(Employee employee)
         {
-            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee).ConfigureAwait(false);
+            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee);
             Assert.True(repoEmployee.EmployeeId > 0);
         }
 
@@ -35,7 +35,7 @@ namespace CompanyWebApi.Tests.UnitTests
         [MemberData(nameof(EmployeeTestFactory.Employees), MemberType = typeof(EmployeeTestFactory))]
         public async Task IsAdult(Employee employee)
         {
-            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee).ConfigureAwait(false);
+            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee);
             var isAdult = EmployeeTestFactory.IsAdult(repoEmployee);
             Assert.True(isAdult);
         }
@@ -55,14 +55,14 @@ namespace CompanyWebApi.Tests.UnitTests
                 Created = DateTime.UtcNow,
                 Modified = DateTime.UtcNow
             };
-            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee).ConfigureAwait(false);
+            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee);
             Assert.Equal("TesterLastName", repoEmployee.LastName);
         }
 
         [Fact]
         public async Task CanCount()
         {
-            var numEmployees = await _employeeRepository.CountAsync().ConfigureAwait(false);
+            var numEmployees = await _employeeRepository.CountAsync();
             Assert.True(numEmployees > 0);
         }
 
@@ -79,32 +79,32 @@ namespace CompanyWebApi.Tests.UnitTests
                 DepartmentId = 1,
                 Created = DateTime.UtcNow,
                 Modified = DateTime.UtcNow
-            };            
-            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee).ConfigureAwait(false);
+            };
+            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee);
             _employeeRepository.Remove(repoEmployee);
-            await _employeeRepository.SaveAsync().ConfigureAwait(false);
-            var deletedEmployee = await _employeeRepository.GetEmployeeAsync(employee.EmployeeId).ConfigureAwait(false);
+            await _employeeRepository.SaveAsync();
+            var deletedEmployee = await _employeeRepository.GetEmployeeAsync(employee.EmployeeId);
             Assert.Null(deletedEmployee);
         }
 
         [Fact]
         public async Task CanGetAllByPredicate()
         {
-            var employees = await _employeeRepository.GetEmployeesAsync().ConfigureAwait(false);
+            var employees = await _employeeRepository.GetEmployeesAsync();
             Assert.True(employees.Any());
         }
 
         [Fact]
         public async Task CanGetSingle()
         {
-            var employee = await _employeeRepository.GetEmployeeAsync(cmp => cmp.FirstName.Equals("Alois") && cmp.LastName.Equals("Mock")).ConfigureAwait(false);
-            Assert.True(employee != null);
+            var employee = await _employeeRepository.GetEmployeeAsync(cmp => cmp.FirstName.Equals("Alois") && cmp.LastName.Equals("Mock"));
+            Assert.NotNull(employee);
         }
 
         [Fact]
         public async Task CanGetAll()
         {
-            var employees = await _employeeRepository.GetEmployeesAsync().ConfigureAwait(false);
+            var employees = await _employeeRepository.GetEmployeesAsync();
             Assert.True(employees.Any());
         }
 
@@ -122,8 +122,8 @@ namespace CompanyWebApi.Tests.UnitTests
                 Created = DateTime.UtcNow,
                 Modified = DateTime.UtcNow
             };
-            await _employeeRepository.UpdateAsync(employee).ConfigureAwait(false);
-            await _employeeRepository.SaveAsync().ConfigureAwait(false);
+            await _employeeRepository.UpdateAsync(employee);
+            await _employeeRepository.SaveAsync();
             Assert.Equal("Reynolds Updated", employee.LastName);
         }
     }

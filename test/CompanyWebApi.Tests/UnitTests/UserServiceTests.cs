@@ -18,8 +18,9 @@ namespace CompanyWebApi.Tests.UnitTests
         [Fact]
         public async Task CanAuthorizeUser()
         {
-            var authenticatedUser = await _userService.AuthenticateAsync("johnw", "test").ConfigureAwait(false);
-            Assert.True(!string.IsNullOrEmpty(authenticatedUser.Token));
+            var authenticatedUser = await _userService.AuthenticateAsync("johnw", "test");
+            Assert.NotNull(authenticatedUser.Token);
+            Assert.NotEmpty(authenticatedUser.Token);
         }
     }
 }

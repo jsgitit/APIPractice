@@ -1,9 +1,9 @@
-﻿using System;
-using CompanyWebApi.Contracts.Entities;
+﻿using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Persistence.Repositories;
 using CompanyWebApi.Tests.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -39,32 +39,32 @@ namespace CompanyWebApi.Tests.UnitTests
                 Created = DateTime.UtcNow,
                 Modified = DateTime.UtcNow
             };
-            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee, true).ConfigureAwait(false);
+            var repoEmployee = await _employeeRepository.AddEmployeeAsync(employee, true);
 
             var user = new User
             {
-                EmployeeId = 9999, 
-                Username = "tester", 
-                Password = "testPass", 
+                EmployeeId = 9999,
+                Username = "tester",
+                Password = "testPass",
                 Token = string.Empty
             };
 
-            var addedUser = await _userRepository.AddUserAsync(user, true).ConfigureAwait(false);
+            var addedUser = await _userRepository.AddUserAsync(user, true);
             Assert.Equal("tester", addedUser.Username);
 
-            var repoUser = await _userRepository.GetUserAsync(user.EmployeeId, true).ConfigureAwait(false);
+            var repoUser = await _userRepository.GetUserAsync(user.EmployeeId, true);
             _userRepository.Remove(repoUser);
-            await _userRepository.SaveAsync().ConfigureAwait(false);
+            await _userRepository.SaveAsync();
 
             _employeeRepository.Remove(repoEmployee);
-            await _employeeRepository.SaveAsync().ConfigureAwait(false);
+            await _employeeRepository.SaveAsync();
         }
 
         [Fact]
         public async Task CanCount()
         {
             _logger.LogInformation("CanCount");
-            var nrCompanies = await _userRepository.CountAsync().ConfigureAwait(false);
+            var nrCompanies = await _userRepository.CountAsync();
             Assert.True(nrCompanies > 0);
         }
 
@@ -74,12 +74,15 @@ namespace CompanyWebApi.Tests.UnitTests
             _logger.LogInformation("CanDelete");
             var user = new User
             {
-                EmployeeId = 9999, Username = "tester", Password = "test", Token = string.Empty
+                EmployeeId = 9999,
+                Username = "tester",
+                Password = "test",
+                Token = string.Empty
             };
-            await _userRepository.AddUserAsync(user, true).ConfigureAwait(false);
+            await _userRepository.AddUserAsync(user, true);
             _userRepository.Remove(user);
-            await _userRepository.SaveAsync().ConfigureAwait(false);
-            var repoUser = await _userRepository.GetUserAsync(user.EmployeeId).ConfigureAwait(false);
+            await _userRepository.SaveAsync();
+            var repoUser = await _userRepository.GetUserAsync(user.EmployeeId);
             Assert.Null(repoUser);
         }
 
@@ -87,15 +90,15 @@ namespace CompanyWebApi.Tests.UnitTests
         public async Task CanGetSingle()
         {
             _logger.LogInformation("LogInformation");
-            var user = await _userRepository.GetUserAsync(cmp => cmp.Username.Equals("johnw")).ConfigureAwait(false);
-            Assert.True(user != null);
+            var user = await _userRepository.GetUserAsync(cmp => cmp.Username.Equals("johnw"));
+            Assert.NotNull(user);
         }
 
         [Fact]
         public async Task CanGetAll()
         {
             _logger.LogInformation("CanGetAll");
-            var companies = await _userRepository.GetUsersAsync().ConfigureAwait(false);
+            var companies = await _userRepository.GetUsersAsync();
             Assert.True(companies.Any());
         }
 
@@ -105,10 +108,13 @@ namespace CompanyWebApi.Tests.UnitTests
             _logger.LogInformation("CanUpdate");
             var user = new User
             {
-                EmployeeId = 1, Username = "johnw", Password = "sfd$%fsaDgw4564", Token = string.Empty
+                EmployeeId = 1,
+                Username = "johnw",
+                Password = "sfd$%fsaDgw4564",
+                Token = string.Empty
             };
-            await _userRepository.UpdateAsync(user).ConfigureAwait(false);
-            await _userRepository.SaveAsync().ConfigureAwait(false);
+            await _userRepository.UpdateAsync(user);
+            await _userRepository.SaveAsync();
             Assert.Equal("sfd$%fsaDgw4564", user.Password);
         }
     }
