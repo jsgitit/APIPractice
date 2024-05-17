@@ -98,7 +98,7 @@ namespace CompanyWebApi.Tests.UnitTests
         public async Task CanGetSingle()
         {
             var employee = await _employeeRepository.GetEmployeeAsync(cmp => cmp.FirstName.Equals("Alois") && cmp.LastName.Equals("Mock"));
-            Assert.True(employee != null);
+            Assert.NotNull(employee);
         }
 
         [Fact]

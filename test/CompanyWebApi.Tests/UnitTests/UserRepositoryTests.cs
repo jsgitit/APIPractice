@@ -91,7 +91,7 @@ namespace CompanyWebApi.Tests.UnitTests
         {
             _logger.LogInformation("LogInformation");
             var user = await _userRepository.GetUserAsync(cmp => cmp.Username.Equals("johnw"));
-            Assert.True(user != null);
+            Assert.NotNull(user);
         }
 
         [Fact]

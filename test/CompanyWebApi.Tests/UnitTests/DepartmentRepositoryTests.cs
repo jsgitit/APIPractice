@@ -95,7 +95,7 @@ namespace CompanyWebApi.Tests.UnitTests
         public async Task CanGetByPredicate()
         {
             var department = await _departmentRepository.GetDepartmentAsync(dep => dep.Name.Equals("Development"));
-            Assert.True(department != null);
+            Assert.NotNull(department);
         }
 
         [Fact]
