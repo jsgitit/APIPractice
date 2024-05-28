@@ -11,7 +11,7 @@ using Xunit;
 
 namespace CompanyWebApi.Tests.UnitTests
 {
-
+    [Collection("Sequential")]
     public class EmployeeRepositoryTests : IClassFixture<WebApiTestFactory>
     {
         private readonly ILogger _logger;

@@ -2,6 +2,7 @@
 using CompanyWebApi.Persistence.DbContexts;
 using System.Linq;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace CompanyWebApi.Services
 {
@@ -17,18 +18,26 @@ namespace CompanyWebApi.Services
 			_dbContext = dbContext;
 		}
 
-		public void Initialize(bool recreateDb = true)
+		public void Initialize(bool applyMigrations = true)
 		{
-			if (recreateDb)
+			if (applyMigrations)
 			{
-				_dbContext.Database.EnsureDeleted();
-				_dbContext.Database.EnsureCreated();
+                // We used to run EnsureDeleted() EnsureCreated() here to recreate the database,
+                // but we changed to using EF Core Migrations.
+                // Migrate() will create db if it does not exist.
+                _dbContext.Database.Migrate(); 
 			}
-			else if (_dbContext.Companies.Any())
+			
+			if (_dbContext.Companies.Any())
 			{
-				return; // DB exists and has been seeded
+				return; // return early, assuming the DB exists and has been seeded
 			}
 
+			// WARNING: The following seeding should only run once for initial DB seeding.
+			// It assumes all tables have no data.
+			// Migrations should handle subsequent seeding and adjusting of table data.
+
+			// Proceed to seed database 
 			_dbContext.Companies.AddRange(
 				new Company
 				{
@@ -46,7 +55,6 @@ namespace CompanyWebApi.Services
 					Name = "Company Three"
 				}
 			);
-
 
 			_dbContext.Departments.AddRange(
 				new Department { CompanyId = 1, DepartmentId = 1, Name = "Logistics" },
