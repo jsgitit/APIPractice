@@ -25,7 +25,7 @@ namespace CompanyWebApi.Tests.UnitTests
 
         [Theory]
         [MemberData(nameof(DepartmentTestFactory.Departments), MemberType = typeof(DepartmentTestFactory))]
-        public async Task CanAddEmployees(Department department)
+        public async Task CanAddDepartments(Department department)
         {
             var repoDepartment = await _departmentRepository.AddDepartmentAsync(department);
             Assert.True(repoDepartment.DepartmentId > 0);
@@ -38,7 +38,7 @@ namespace CompanyWebApi.Tests.UnitTests
             var department = new Department
             {
                 CompanyId = 1,
-                DepartmentId = 999,
+                //DepartmentId = 999,
                 Name = "TEST DEPARTMENT"
             };
             var repoDepartment = await _departmentRepository.AddDepartmentAsync(department);
@@ -111,6 +111,7 @@ namespace CompanyWebApi.Tests.UnitTests
             var department = new Department
             {
                 DepartmentId = 1,
+                CompanyId = 1, // added, since UpdateAsync() expects fully populated entity, else CompanyId=0, and fails FK constraint
                 Name = "HR Updated"
             };
             await _departmentRepository.UpdateAsync(department);

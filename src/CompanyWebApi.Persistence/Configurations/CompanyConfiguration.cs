@@ -24,6 +24,6 @@ namespace CompanyWebApi.Persistence.Configurations
                 .OnDelete(DeleteBehavior.ClientSetNull)
 				.HasForeignKey(dep => dep.CompanyId)
 				.OnDelete(DeleteBehavior.Cascade);
-		}
-	}
+        }
+    }
 }

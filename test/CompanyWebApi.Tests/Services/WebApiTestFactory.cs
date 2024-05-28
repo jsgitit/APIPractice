@@ -1,14 +1,16 @@
 using CompanyWebApi.Persistence.DbContexts;
-using CompanyWebApi.Services;
+using CompanyWebApi.Persistence.Repositories;
+using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using WebMotions.Fake.Authentication.JwtBearer;
 
 namespace CompanyWebApi.Tests.Services
@@ -18,8 +20,7 @@ namespace CompanyWebApi.Tests.Services
     /// </summary>
     public class WebApiTestFactory : WebApplicationFactory<Startup>
     {
-        private readonly InMemoryDatabaseRoot _databaseRoot = new();
-        private readonly string _connectionString = Guid.NewGuid().ToString();
+        private readonly string _databaseFileName = Guid.NewGuid().ToString();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
@@ -36,30 +37,32 @@ namespace CompanyWebApi.Tests.Services
                         services.Remove(descriptor);
                     }
 
-                    // Add EntityFramework InMemoryDatabase
-                    var serviceProvider = new ServiceCollection()
-                      .AddEntityFrameworkInMemoryDatabase()
-                      .BuildServiceProvider();
-
-                    // Add ApplicationDbContext using an in-memory database for testing
+                    // Add ApplicationDbContext using a unique SQLite in-memory database for testing, NOT the EntityFrameworkInMemoryDatabase
                     services.AddDbContext<ApplicationDbContext>(options =>
                     {
-                        options.UseInMemoryDatabase(_connectionString, _databaseRoot);
-                        options.UseInternalServiceProvider(serviceProvider);
+                        options.UseSqlite($"DataSource=file:{_databaseFileName}?mode=memory&cache=shared", sqliteOptions =>
+                        {
+                            sqliteOptions.UseRelationalNulls();
+                            sqliteOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        });
                     });
 
+                    var serviceProvider = services.BuildServiceProvider();
+
                     // Create a scope to obtain a reference to the database context (ApplicationDbContext)
-                    using (var serviceScope = services.BuildServiceProvider().CreateScope())
+                    using (var serviceScope = serviceProvider.CreateScope())
                     {
                         var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<WebApiTestFactory>>();
                         try
                         {
                             var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                            dbContext.Database.EnsureCreated();
+                            dbContext.Database.OpenConnection();
 
-                            // Seed test data
-                            var seeder = serviceScope.ServiceProvider.GetRequiredService<DbInitializer>();
-                            seeder.Initialize();
+                            // Use Migrate() instead of EnsureCreated() to evolve the database schema
+                            // Migrate() is preferred when evolving the schema and bringing both schema and data to the current state
+                            // While dbContext may contain initial seed data, migrations are expected to transition data from seed data to the evolved schema
+                            dbContext.Database.Migrate();
+
                         }
                         catch (Exception ex)
                         {

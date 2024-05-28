@@ -74,12 +74,11 @@ namespace CompanyWebApi.Tests.UnitTests
             _logger.LogInformation("CanDelete");
             var user = new User
             {
-                EmployeeId = 9999,
+                EmployeeId = 6, // changed from 9999
                 Username = "tester",
                 Password = "test",
                 Token = string.Empty
             };
-            await _userRepository.AddUserAsync(user, true);
             _userRepository.Remove(user);
             await _userRepository.SaveAsync();
             var repoUser = await _userRepository.GetUserAsync(user.EmployeeId);

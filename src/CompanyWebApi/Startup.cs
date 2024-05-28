@@ -255,7 +255,7 @@ namespace CompanyWebApi
         /// <param name="services"></param>
         protected virtual void RegisterServices(IServiceCollection services)
         {
-            services.AddTransient<DbInitializer>();
+            //services.AddTransient<DbInitializer>(); no longer used
             services.AddScoped<ValidModelStateAsyncActionFilter>();
 
             // Register middlewares
