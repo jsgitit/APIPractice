@@ -9,6 +9,8 @@ namespace CompanyWebApi.Persistence.DbContexts
 {
     public class ApplicationDbContext : DbContext
     {
+        DateTime _fixedCreatedDate = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime _fixedModifiedDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
         {
@@ -52,31 +54,37 @@ namespace CompanyWebApi.Persistence.DbContexts
                 new Company
                 {
                     CompanyId = 1,
-                    Name = "Company One"
+                    Name = "Company One",
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 },
                 new Company
                 {
                     CompanyId = 2,
-                    Name = "Company Two"
+                    Name = "Company Two",
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 },
                 new Company
                 {
                     CompanyId = 3,
-                    Name = "Company Three"
+                    Name = "Company Three",
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 });
 
             modelBuilder.Entity<Department>().HasData(
-                new Department { CompanyId = 1, DepartmentId = 1, Name = "Logistics" },
-                new Department { CompanyId = 1, DepartmentId = 2, Name = "Administration" },
-                new Department { CompanyId = 1, DepartmentId = 3, Name = "Development" },
-                new Department { CompanyId = 2, DepartmentId = 4, Name = "Sales" },
-                new Department { CompanyId = 2, DepartmentId = 5, Name = "Marketing" },
-                new Department { CompanyId = 3, DepartmentId = 6, Name = "Customer support" },
-                new Department { CompanyId = 3, DepartmentId = 7, Name = "Research and Development" },
-                new Department { CompanyId = 3, DepartmentId = 8, Name = "Purchasing" },
-                new Department { CompanyId = 3, DepartmentId = 9, Name = "Human Resource Management" },
-                new Department { CompanyId = 3, DepartmentId = 10, Name = "Accounting and Finance" },
-                new Department { CompanyId = 3, DepartmentId = 11, Name = "Production" });
+                new Department { CompanyId = 1, DepartmentId = 1, Name = "Logistics", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 1, DepartmentId = 2, Name = "Administration", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 1, DepartmentId = 3, Name = "Development", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 2, DepartmentId = 4, Name = "Sales", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 2, DepartmentId = 5, Name = "Marketing", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 3, DepartmentId = 6, Name = "Customer support", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 3, DepartmentId = 7, Name = "Research and Development", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 3, DepartmentId = 8, Name = "Purchasing", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 3, DepartmentId = 9, Name = "Human Resource Management", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 3, DepartmentId = 10, Name = "Accounting and Finance", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new Department { CompanyId = 3, DepartmentId = 11, Name = "Production", Created = _fixedCreatedDate, Modified = _fixedModifiedDate });
 
             modelBuilder.Entity<Employee>().HasData(
                 new Employee
@@ -86,7 +94,9 @@ namespace CompanyWebApi.Persistence.DbContexts
                     EmployeeId = 1,
                     FirstName = "John",
                     LastName = "Whyne",
-                    BirthDate = new DateTime(1991, 8, 7)
+                    BirthDate = new DateTime(1991, 8, 7),
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 },
                 new Employee
                 {
@@ -95,7 +105,9 @@ namespace CompanyWebApi.Persistence.DbContexts
                     EmployeeId = 2,
                     FirstName = "Mathias",
                     LastName = "Gernold",
-                    BirthDate = new DateTime(1997, 10, 12)
+                    BirthDate = new DateTime(1997, 10, 12),
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 },
                 new Employee
                 {
@@ -104,7 +116,9 @@ namespace CompanyWebApi.Persistence.DbContexts
                     EmployeeId = 3,
                     FirstName = "Julia",
                     LastName = "Reynolds",
-                    BirthDate = new DateTime(1955, 12, 16)
+                    BirthDate = new DateTime(1955, 12, 16),
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 },
                 new Employee
                 {
@@ -113,7 +127,9 @@ namespace CompanyWebApi.Persistence.DbContexts
                     EmployeeId = 4,
                     FirstName = "Alois",
                     LastName = "Mock",
-                    BirthDate = new DateTime(1935, 2, 9)
+                    BirthDate = new DateTime(1935, 2, 9),
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 },
                 new Employee
                 {
@@ -122,7 +138,9 @@ namespace CompanyWebApi.Persistence.DbContexts
                     EmployeeId = 5,
                     FirstName = "Gertraud",
                     LastName = "Bochold",
-                    BirthDate = new DateTime(2001, 3, 4)
+                    BirthDate = new DateTime(2001, 3, 4),
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 }
                 ,
                 new Employee
@@ -132,7 +150,9 @@ namespace CompanyWebApi.Persistence.DbContexts
                     EmployeeId = 6,
                     FirstName = "Alan",
                     LastName = "Ford",
-                    BirthDate = new DateTime(1984, 6, 15)
+                    BirthDate = new DateTime(1984, 6, 15),
+                    Created = _fixedCreatedDate,
+                    Modified = _fixedModifiedDate
                 });
 
             modelBuilder.Entity<EmployeeAddress>().HasData(
@@ -144,12 +164,12 @@ namespace CompanyWebApi.Persistence.DbContexts
                 new EmployeeAddress { EmployeeId = 6, Address = "Milano, Italy" });
 
             modelBuilder.Entity<User>().HasData(
-                new User { EmployeeId = 1, Username = "johnw", Password = "test", Token = string.Empty },
-                new User { EmployeeId = 2, Username = "mathiasg", Password = "test", Token = string.Empty },
-                new User { EmployeeId = 3, Username = "juliar", Password = "test", Token = string.Empty },
-                new User { EmployeeId = 4, Username = "aloism", Password = "test", Token = string.Empty },
-                new User { EmployeeId = 5, Username = "gertraudb", Password = "test", Token = string.Empty },
-                new User { EmployeeId = 6, Username = "alanf", Password = "test", Token = string.Empty });
+                new User { EmployeeId = 1, Username = "johnw", Password = "test", Token = string.Empty, Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new User { EmployeeId = 2, Username = "mathiasg", Password = "test", Token = string.Empty, Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new User { EmployeeId = 3, Username = "juliar", Password = "test", Token = string.Empty, Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new User { EmployeeId = 4, Username = "aloism", Password = "test", Token = string.Empty, Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new User { EmployeeId = 5, Username = "gertraudb", Password = "test", Token = string.Empty, Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new User { EmployeeId = 6, Username = "alanf", Password = "test", Token = string.Empty, Created = _fixedCreatedDate, Modified = _fixedModifiedDate });
         }
 
         /// <summary>

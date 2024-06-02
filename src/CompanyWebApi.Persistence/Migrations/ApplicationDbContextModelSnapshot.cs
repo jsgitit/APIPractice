@@ -85,22 +85,22 @@ namespace CompanyWebApi.Persistence.Migrations
                         new
                         {
                             CompanyId = 1,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1524),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1525),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Company One"
                         },
                         new
                         {
                             CompanyId = 2,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1526),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1526),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Company Two"
                         },
                         new
                         {
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1527),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1527),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Company Three"
                         });
                 });
@@ -136,88 +136,88 @@ namespace CompanyWebApi.Persistence.Migrations
                         {
                             DepartmentId = 1,
                             CompanyId = 1,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1603),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1603),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Logistics"
                         },
                         new
                         {
                             DepartmentId = 2,
                             CompanyId = 1,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1604),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1604),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Administration"
                         },
                         new
                         {
                             DepartmentId = 3,
                             CompanyId = 1,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1605),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1605),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Development"
                         },
                         new
                         {
                             DepartmentId = 4,
                             CompanyId = 2,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1606),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1606),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Sales"
                         },
                         new
                         {
                             DepartmentId = 5,
                             CompanyId = 2,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1607),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1607),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Marketing"
                         },
                         new
                         {
                             DepartmentId = 6,
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1607),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1608),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Customer support"
                         },
                         new
                         {
                             DepartmentId = 7,
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1608),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1608),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Research and Development"
                         },
                         new
                         {
                             DepartmentId = 8,
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1609),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1609),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Purchasing"
                         },
                         new
                         {
                             DepartmentId = 9,
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1610),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1610),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Human Resource Management"
                         },
                         new
                         {
                             DepartmentId = 10,
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1610),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1610),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Accounting and Finance"
                         },
                         new
                         {
                             DepartmentId = 11,
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1611),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1611),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Production"
                         });
                 });
@@ -273,66 +273,66 @@ namespace CompanyWebApi.Persistence.Migrations
                             EmployeeId = 1,
                             BirthDate = new DateTime(1991, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CompanyId = 1,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1623),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentId = 1,
                             FirstName = "John",
                             LastName = "Whyne",
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1623)
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             EmployeeId = 2,
                             BirthDate = new DateTime(1997, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CompanyId = 2,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1626),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentId = 4,
                             FirstName = "Mathias",
                             LastName = "Gernold",
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1626)
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             EmployeeId = 3,
                             BirthDate = new DateTime(1955, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CompanyId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1627),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentId = 7,
                             FirstName = "Julia",
                             LastName = "Reynolds",
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1628)
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             EmployeeId = 4,
                             BirthDate = new DateTime(1935, 2, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CompanyId = 1,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1628),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentId = 2,
                             FirstName = "Alois",
                             LastName = "Mock",
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1628)
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             EmployeeId = 5,
                             BirthDate = new DateTime(2001, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CompanyId = 2,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1629),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentId = 6,
                             FirstName = "Gertraud",
                             LastName = "Bochold",
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1629)
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             EmployeeId = 6,
                             BirthDate = new DateTime(1984, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CompanyId = 2,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1630),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentId = 6,
                             FirstName = "Alan",
                             LastName = "Ford",
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1630)
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -417,8 +417,8 @@ namespace CompanyWebApi.Persistence.Migrations
                         new
                         {
                             EmployeeId = 1,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1650),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1650),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "test",
                             Token = "",
                             Username = "johnw"
@@ -426,8 +426,8 @@ namespace CompanyWebApi.Persistence.Migrations
                         new
                         {
                             EmployeeId = 2,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1651),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1651),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "test",
                             Token = "",
                             Username = "mathiasg"
@@ -435,8 +435,8 @@ namespace CompanyWebApi.Persistence.Migrations
                         new
                         {
                             EmployeeId = 3,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1652),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1652),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "test",
                             Token = "",
                             Username = "juliar"
@@ -444,8 +444,8 @@ namespace CompanyWebApi.Persistence.Migrations
                         new
                         {
                             EmployeeId = 4,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1652),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1652),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "test",
                             Token = "",
                             Username = "aloism"
@@ -453,8 +453,8 @@ namespace CompanyWebApi.Persistence.Migrations
                         new
                         {
                             EmployeeId = 5,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1653),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1653),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "test",
                             Token = "",
                             Username = "gertraudb"
@@ -462,8 +462,8 @@ namespace CompanyWebApi.Persistence.Migrations
                         new
                         {
                             EmployeeId = 6,
-                            Created = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1653),
-                            Modified = new DateTime(2024, 6, 1, 22, 59, 23, 808, DateTimeKind.Utc).AddTicks(1654),
+                            Created = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Modified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "test",
                             Token = "",
                             Username = "alanf"
