@@ -24,6 +24,9 @@ namespace CompanyWebApi.Persistence.DbContexts
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Address> AddressRelations { get; set; }
+
         public override int SaveChanges()
         {
             TrackChanges();
@@ -40,6 +43,8 @@ namespace CompanyWebApi.Persistence.DbContexts
             _ = new EmployeeAddressConfiguration(modelBuilder.Entity<EmployeeAddress>());
             _ = new DepartmentConfiguration(modelBuilder.Entity<Department>());
             _ = new UserConfiguration(modelBuilder.Entity<User>());
+            _ = new AddressRelationConfiguration(modelBuilder.Entity<AddressRelation>());
+            _ = new AddressConfiguration(modelBuilder.Entity<Address>());
 
             // Add initial seed data for entities
 
