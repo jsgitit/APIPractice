@@ -1,14 +1,13 @@
-using System;
+using CompanyWebApi.Persistence.DbContexts;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System;
 using System.IO;
-using CompanyWebApi.Persistence.DbContexts;
-using CompanyWebApi.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 
 namespace CompanyWebApi
 {
@@ -16,29 +15,29 @@ namespace CompanyWebApi
     {
         public static void Main(string[] args)
         {
-			var host = CreateHostBuilder(args).Build();
-			ApplyDbMigrations(host);
-			host.Run();
-		}
+            var host = CreateHostBuilder(args).Build();
+            ApplyDbMigrations(host);
+            host.Run();
+        }
 
         private static void ApplyDbMigrations(IHost host)
         {
-	        using var scope = host.Services.CreateScope();
-	        var services = scope.ServiceProvider;
-			try
-	        {
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            try
+            {
                 // Apply any pending database migrations
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                context.Database.Migrate();  
+                context.Database.Migrate();
             }
-	        catch (Exception ex)
-	        {
-		        var logger = services.GetRequiredService<ILogger<Program>>();
-		        logger.LogError(ex, "An error occurred applying database migrations.");
-	        }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred applying database migrations.");
+            }
         }
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 // Configure Serilog
                 .UseSerilog((context, services, configuration) => configuration
