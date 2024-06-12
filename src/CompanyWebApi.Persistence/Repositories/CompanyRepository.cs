@@ -28,7 +28,7 @@ namespace CompanyWebApi.Persistence.Repositories
         {
             var result = await GetAsync<Company>(
                 include: source => source
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddress)
+                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddresses)
                     .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.User),
                 orderBy: cmp => cmp
                     .OrderBy(o => o.CompanyId),
@@ -41,7 +41,7 @@ namespace CompanyWebApi.Persistence.Repositories
             var result = await GetSingleOrDefaultAsync<Company>(
                 cmp => cmp.CompanyId == id,
                 source => source
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddress)
+                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddresses)
                     .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.User),
                 tracking).ConfigureAwait(false);
             return result;
@@ -52,7 +52,7 @@ namespace CompanyWebApi.Persistence.Repositories
             var result = await GetSingleOrDefaultAsync<Company>(
                 predicate,
                 source => source
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddress)
+                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddresses)
                     .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.User),
                 tracking).ConfigureAwait(false);
             return result;

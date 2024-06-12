@@ -26,14 +26,16 @@ namespace CompanyWebApi.Contracts.Converters
 				EmployeeId = employee.EmployeeId,
 				FirstName = employee.FirstName,
 				LastName = employee.LastName,
-                Address = employee.EmployeeAddress == null ? string.Empty : employee.EmployeeAddress.Address,
+                Address = employee.EmployeeAddresses?
+					.Where(e => e.AddressTypeId == AddressType.Work)
+					.FirstOrDefault()?.Address ?? string.Empty,
                 Age = employee.Age,
-                BirthDate = employee.BirthDate,
-                Username = employee.User == null ? string.Empty : employee.User.Username,
-                CompanyId = employee.Company?.CompanyId ?? 0,
-                Company = employee.Company == null ? string.Empty : employee.Company.Name,
-                DepartmentId = employee.Department?.DepartmentId ?? 0,
-                Department = employee.Department == null ? string.Empty : employee.Department.Name
+				BirthDate = employee.BirthDate,
+				Username = employee.User == null ? string.Empty : employee.User.Username,
+				CompanyId = employee.Company?.CompanyId ?? 0,
+				Company = employee.Company == null ? string.Empty : employee.Company.Name,
+				DepartmentId = employee.Department?.DepartmentId ?? 0,
+				Department = employee.Department == null ? string.Empty : employee.Department.Name
 			};
 			return employeeDto;
 		}

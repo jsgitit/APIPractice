@@ -151,12 +151,12 @@ namespace CompanyWebApi.Persistence.DbContexts
                 });
 
             modelBuilder.Entity<EmployeeAddress>().HasData(
-                new EmployeeAddress { EmployeeId = 1, Address = "Kentucky, USA" },
-                new EmployeeAddress { EmployeeId = 2, Address = "Berlin, Germany" },
-                new EmployeeAddress { EmployeeId = 3, Address = "Los Angeles, USA" },
-                new EmployeeAddress { EmployeeId = 4, Address = "Vienna, Austria" },
-                new EmployeeAddress { EmployeeId = 5, Address = "Cologne, Germany" },
-                new EmployeeAddress { EmployeeId = 6, Address = "Milano, Italy" });
+                new EmployeeAddress { EmployeeId = 1, Address = "Kentucky, USA", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new EmployeeAddress { EmployeeId = 2, Address = "Berlin, Germany", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new EmployeeAddress { EmployeeId = 3, Address = "Los Angeles, USA", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new EmployeeAddress { EmployeeId = 4, Address = "Vienna, Austria", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new EmployeeAddress { EmployeeId = 5, Address = "Cologne, Germany", Created = _fixedCreatedDate, Modified = _fixedModifiedDate },
+                new EmployeeAddress { EmployeeId = 6, Address = "Milano, Italy", Created = _fixedCreatedDate, Modified = _fixedModifiedDate });
 
             modelBuilder.Entity<User>().HasData(
                 new User { EmployeeId = 1, Username = "johnw", Password = "test", Token = string.Empty, Created = _fixedCreatedDate, Modified = _fixedModifiedDate },

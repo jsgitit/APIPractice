@@ -33,7 +33,7 @@ namespace CompanyWebApi.Persistence.Repositories
                 source => source
                       .Include(emp => emp.Company)
                       .Include(emp => emp.Department)
-                      .Include(emp => emp.EmployeeAddress)
+                      .Include(emp => emp.EmployeeAddresses)
                       .Include(emp => emp.User),
                 tracking).ConfigureAwait(false);
             return result;
@@ -46,7 +46,7 @@ namespace CompanyWebApi.Persistence.Repositories
                 source => source
                       .Include(emp => emp.Company)
                       .Include(emp => emp.Department)
-                      .Include(emp => emp.EmployeeAddress)
+                      .Include(emp => emp.EmployeeAddresses)
                       .Include(emp => emp.User),
                 tracking).ConfigureAwait(false);
             return result;
@@ -58,7 +58,7 @@ namespace CompanyWebApi.Persistence.Repositories
                 include: source => source
                     .Include(emp => emp.Company)
                     .Include(emp => emp.Department)
-                    .Include(emp => emp.EmployeeAddress)
+                    .Include(emp => emp.EmployeeAddresses)
                     .Include(emp => emp.User),
                 orderBy: emp => emp
                     .OrderBy(o => o.LastName)

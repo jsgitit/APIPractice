@@ -49,7 +49,7 @@ namespace CompanyWebApi.Persistence.Repositories
             var result = await GetSingleOrDefaultAsync<User>(
                 user => user.EmployeeId == id,
                 source => source
-                    .Include(user => user.Employee).ThenInclude(user => user.EmployeeAddress)
+                    .Include(user => user.Employee).ThenInclude(user => user.EmployeeAddresses)
                     .Include(user => user.Employee).ThenInclude(user => user.Department),
                 tracking).ConfigureAwait(false);
             return result;
@@ -60,7 +60,7 @@ namespace CompanyWebApi.Persistence.Repositories
             var result = await GetSingleOrDefaultAsync<User>(
                 predicate,
                 source => source
-                    .Include(user => user.Employee).ThenInclude(user => user.EmployeeAddress)
+                    .Include(user => user.Employee).ThenInclude(user => user.EmployeeAddresses)
                     .Include(user => user.Employee).ThenInclude(user => user.Department),
                 tracking).ConfigureAwait(false);
             return result;

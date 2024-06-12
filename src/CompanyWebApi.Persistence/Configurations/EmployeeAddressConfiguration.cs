@@ -12,7 +12,7 @@ namespace CompanyWebApi.Persistence.Configurations
             entity.ToTable("EmployeeAddresses");
 
             // Keys
-            entity.HasKey(empa => empa.EmployeeId);
+            entity.HasKey(empa => new { empa.EmployeeId, empa.AddressTypeId});
 
             // Properties
             entity.Property(empa => empa.Address)
@@ -20,9 +20,8 @@ namespace CompanyWebApi.Persistence.Configurations
 
             // Relationships
             entity.HasOne(empa => empa.Employee)
-                .WithOne(emp => emp.EmployeeAddress)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasForeignKey<EmployeeAddress>("EmployeeId")
+                .WithMany(emp => emp.EmployeeAddresses)
+                .HasForeignKey(empa => empa.EmployeeId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

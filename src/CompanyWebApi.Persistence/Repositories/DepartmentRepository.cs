@@ -29,7 +29,7 @@ namespace CompanyWebApi.Persistence.Repositories
             var result = await GetAsync<Department>(
                 include: source => source
                     .Include(dep => dep.Company)
-                    .Include(emp => emp.Employees).ThenInclude(emp => emp.EmployeeAddress)
+                    .Include(emp => emp.Employees).ThenInclude(emp => emp.EmployeeAddresses)
                     .Include(emp => emp.Employees).ThenInclude(emp => emp.User),
                 orderBy: o => o
                     .OrderBy(ob => ob.DepartmentId),
@@ -43,7 +43,7 @@ namespace CompanyWebApi.Persistence.Repositories
                 dpt => dpt.DepartmentId == id,
                 source => source
                     .Include(dep => dep.Company)
-                    .Include(emp => emp.Employees).ThenInclude(emp => emp.EmployeeAddress)
+                    .Include(emp => emp.Employees).ThenInclude(emp => emp.EmployeeAddresses)
                     .Include(emp => emp.Employees).ThenInclude(emp => emp.User),
                 tracking).ConfigureAwait(false);
             return result;
@@ -54,7 +54,7 @@ namespace CompanyWebApi.Persistence.Repositories
             var result = await GetSingleOrDefaultAsync<Department>(predicate,
                 source => source
                     .Include(dep => dep.Company)
-                    .Include(emp => emp.Employees).ThenInclude(emp => emp.EmployeeAddress)
+                    .Include(emp => emp.Employees).ThenInclude(emp => emp.EmployeeAddresses)
                     .Include(emp => emp.Employees).ThenInclude(emp => emp.User),
                 tracking).ConfigureAwait(false);
             return result;

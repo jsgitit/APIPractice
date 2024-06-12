@@ -28,9 +28,10 @@ namespace CompanyWebApi.Contracts.Converters
                 CompanyId = employee.CompanyId,
                 DepartmentId = employee.DepartmentId,
                 BirthDate = employee.BirthDate,
-                EmployeeAddress = new EmployeeAddress
+                EmployeeAddresses = new List<EmployeeAddress>
                 {
-                    Address = string.IsNullOrEmpty(employee.Address) ? string.Empty : employee.Address
+                    new EmployeeAddress {Address = string.IsNullOrEmpty(employee.Address) ? string.Empty : employee.Address, 
+                                         AddressTypeId = AddressType.Work}
                 }
             };
 
