@@ -10,11 +10,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;1591</NoWarn>
-    <Optimize>false</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>False</Optimize>
     <DocumentationFile>bin\Debug\net5.0\CompanyWebApi.xml</DocumentationFile>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
-    <DebugType>none</DebugType>
+    <DebugType>portable</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

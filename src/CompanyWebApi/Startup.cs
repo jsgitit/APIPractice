@@ -95,6 +95,8 @@ namespace CompanyWebApi
                 options.UseSqlite(Configuration.GetConnectionString("SqLiteConnectionString"), opt =>
                 {
                     opt.CommandTimeout(15); // secs
+                    opt.UseRelationalNulls(); // added
+                    opt.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); // added 
                 });
             });
         }

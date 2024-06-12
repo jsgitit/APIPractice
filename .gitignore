@@ -262,3 +262,6 @@ __pycache__/
 /src/CompanyWebApi/Database/Companies.db
 /src/CompanyWebApi/Database/Companies.db-shm
 /src/CompanyWebApi/Database/Companies.db-wal
+
+# Custom Docs folder for App
+/docs

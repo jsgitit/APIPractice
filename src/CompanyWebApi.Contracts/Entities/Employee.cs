@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections.Generic;
 
 namespace CompanyWebApi.Contracts.Entities
 {
@@ -41,7 +42,7 @@ namespace CompanyWebApi.Contracts.Entities
         public Department Department { get; set; }
 
         // Reference navigation property
-        public EmployeeAddress EmployeeAddress { get; set; }
+        public IList<EmployeeAddress> EmployeeAddresses { get; set; } = new List<EmployeeAddress>();
 
         // Reference navigation property
         public User User { get; set; }

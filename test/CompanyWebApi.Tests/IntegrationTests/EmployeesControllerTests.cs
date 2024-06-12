@@ -38,6 +38,7 @@ namespace CompanyWebApi.Tests.IntegrationTests
             };
             var employee = await _httpClientHelper.PostAsync<EmployeeCreateDto, EmployeeDto>(_baseUrl + "create", newEmployee);
             Assert.Equal(newEmployee.FirstName, employee.FirstName);
+            Assert.Equal(newEmployee.Address, employee.Address);
             await _httpClientHelper.DeleteAsync(_baseUrl + $"DeleteEmployeeById{API_VERSION}/{employee.EmployeeId}");
         }
 

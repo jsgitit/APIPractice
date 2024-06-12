@@ -30,7 +30,9 @@ namespace CompanyWebApi.Contracts.Converters
 			};
 			foreach (var employee in department.Employees)
             {
-                var addressStr = employee.EmployeeAddress == null ? string.Empty : employee.EmployeeAddress.Address;
+                var addressStr = employee.EmployeeAddresses?
+					.Where(e => e.AddressTypeId == AddressType.Work)
+					.FirstOrDefault()?.Address ?? string.Empty;
                 var departmentStr = employee.Department == null ? string.Empty : employee.Department.Name;
                 var username = employee.User == null ? string.Empty : employee.User.Username;
                 var employeeDto = $"{employee.FirstName} {employee.LastName}, Address: {addressStr}, Department: {departmentStr}, Username: {username}";
