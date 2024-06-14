@@ -10,7 +10,6 @@ using CompanyWebApi.Persistence.Repositories;
 using CompanyWebApi.Services.Authorization;
 using CompanyWebApi.Services.Filters;
 using CompanyWebApi.Services.Helpers;
-using CompanyWebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,12 +21,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System;
-using Asp.Versioning.Conventions;
 
 namespace CompanyWebApi
 {
@@ -92,6 +90,7 @@ namespace CompanyWebApi
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.EnableDetailedErrors();
+                options.EnableSensitiveDataLogging();
                 options.UseSqlite(Configuration.GetConnectionString("SqLiteConnectionString"), opt =>
                 {
                     opt.CommandTimeout(15); // secs
@@ -167,15 +166,15 @@ namespace CompanyWebApi
 
             app.UseEndpoints(configure =>
             {
-	            configure.MapControllers();
-	            configure.MapDefaultControllerRoute();
-	            configure.MapHealthChecks("health");
-	            // Redirect root to Swagger UI
-	            configure.MapGet("", context =>
-	            {
-		            context.Response.Redirect("./swagger/index.html", permanent: false);
-		            return Task.FromResult(0);
-	            });
+                configure.MapControllers();
+                configure.MapDefaultControllerRoute();
+                configure.MapHealthChecks("health");
+                // Redirect root to Swagger UI
+                configure.MapGet("", context =>
+                {
+                    context.Response.Redirect("./swagger/index.html", permanent: false);
+                    return Task.FromResult(0);
+                });
             });
         }
 
@@ -270,6 +269,7 @@ namespace CompanyWebApi
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeAddressRepository, EmployeeAddressRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             // Services

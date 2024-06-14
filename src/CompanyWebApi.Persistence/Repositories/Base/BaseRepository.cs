@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using System.Reflection;
 
 namespace CompanyWebApi.Persistence.Repositories.Base
 {
@@ -147,23 +148,32 @@ namespace CompanyWebApi.Persistence.Repositories.Base
         }
 
         public async Task UpdateAsync(TEntity entity)
-		{
-			var properties = entity.GetType().GetProperties();
-            // Try to find a [Key] attribute
-            var keyProperty = (from property in properties
-							   let keyAttr = property.GetCustomAttributes(typeof(KeyAttribute), false).Cast<KeyAttribute>().FirstOrDefault()
-							   where keyAttr != null
-							   select property).FirstOrDefault();
-            if (keyProperty == null)
-			{
-                throw new ArgumentException("TEntity has no [Key] attribute", nameof(entity));
+        {
+            var keyProperties = GetKeyProperties(entity);
+
+            if (keyProperties.Length == 0)
+            {
+                throw new ArgumentException("TEntity has no key properties defined", nameof(entity));
             }
-            var entityObject = await DatabaseContext.FindAsync(entity.GetType(), keyProperty.GetValue(entity)).ConfigureAwait(false);
+
+            var keyValues = keyProperties.Select(prop => prop.GetValue(entity)).ToArray();
+
+            var entityObject = await DatabaseContext.FindAsync(typeof(TEntity), keyValues).ConfigureAwait(false);
             if (entityObject is not TEntity existing)
             {
-                throw new ArgumentException("TEntity does not exists", nameof(entity));
+                throw new ArgumentException("Entity does not exist", nameof(entity));
             }
+
             DatabaseContext.Entry(existing).CurrentValues.SetValues(entity);
-		}
+        }
+        private PropertyInfo[] GetKeyProperties(TEntity entity)
+        {
+            var entityType = typeof(TEntity);
+            var properties = entityType.GetProperties()
+                                       .Where(prop => prop.IsDefined(typeof(KeyAttribute), false))
+                                       .ToArray();
+            return properties;
+        }
+
     }
 }
