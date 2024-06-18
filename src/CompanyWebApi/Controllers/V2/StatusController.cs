@@ -10,8 +10,9 @@ using Asp.Versioning;
 namespace CompanyWebApi.Controllers.V2
 {
 	[ApiController]
-	[ApiVersion("2.0")]
-	[Produces("application/json")]
+    [ApiVersion("2.0", Deprecated = true)]
+    [ApiVersion("2.1")]
+    [Produces("application/json")]
 	[EnableCors("EnableCORS")]
 	[ServiceFilter(typeof(ValidModelStateAsyncActionFilter))]
 	[Route("api/v{version:apiVersion}/[controller]")]

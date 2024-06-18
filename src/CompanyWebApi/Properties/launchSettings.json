@@ -12,7 +12,7 @@
     "Development": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger/index.html?urls.primaryName=V2",
+      "launchUrl": "swagger/index.html?urls.primaryName=V2.1",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
