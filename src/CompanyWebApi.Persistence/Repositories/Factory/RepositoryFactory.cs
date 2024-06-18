@@ -13,12 +13,14 @@ namespace CompanyWebApi.Persistence.Repositories.Factory
             ICompanyRepository companyRepository,
             IDepartmentRepository departmentRepository,
             IEmployeeRepository employeeRepository,
+            IEmployeeAddressRepository employeeAddressRepository,
             IUserRepository userRepository)
         {
             _dbContext = dbContext ?? throw new ArgumentException("DbContext is null", nameof(dbContext));
             CompanyRepository = companyRepository ?? throw new ArgumentException("Repository is null", nameof(dbContext));
             DepartmentRepository = departmentRepository ?? throw new ArgumentException("Repository is null", nameof(departmentRepository));
             EmployeeRepository = employeeRepository ?? throw new ArgumentException("Repository is null", nameof(employeeRepository));
+            EmployeeAddressRepository = employeeAddressRepository ?? throw new ArgumentException("Repository is null", nameof(employeeAddressRepository));
             UserRepository = userRepository ?? throw new ArgumentException("Repository is null", nameof(userRepository));
         }
 
@@ -27,6 +29,8 @@ namespace CompanyWebApi.Persistence.Repositories.Factory
         public IDepartmentRepository DepartmentRepository { get; }
 
         public IEmployeeRepository EmployeeRepository { get; }
+
+        public IEmployeeAddressRepository EmployeeAddressRepository { get; }
 
         public IUserRepository UserRepository { get; }
 

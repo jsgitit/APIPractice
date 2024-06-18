@@ -10,6 +10,8 @@ namespace CompanyWebApi.Persistence.Repositories.Factory
         IDepartmentRepository DepartmentRepository { get; }
 
         IEmployeeRepository EmployeeRepository { get; }
+        
+        IEmployeeAddressRepository EmployeeAddressRepository { get; }   
 
         IUserRepository UserRepository { get; }
 
