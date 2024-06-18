@@ -44,7 +44,7 @@ namespace CompanyWebApi.Extensions
             app.UseReDoc(sa =>
             {
                 sa.DocumentTitle = $"{swaggerConfig.Title} Documentation";
-                sa.SpecUrl = $"/{swaggerConfig.RoutePrefix}/V2/{swaggerConfig.DocsFile}";
+                sa.SpecUrl = $"/{swaggerConfig.RoutePrefix}/V2.1/{swaggerConfig.DocsFile}";
             });
         }
     }

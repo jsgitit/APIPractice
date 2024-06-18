@@ -20,7 +20,7 @@ namespace CompanyWebApi.Extensions
             services.AddApiVersioning(options =>
             {
                 // Specify the default API AssemblyVersion
-                options.DefaultApiVersion = new ApiVersion(2, 0);
+                options.DefaultApiVersion = new ApiVersion(2, 1);
                 // Use default version when version is not specified
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 // Advertise the API versions supported for the particular endpoint
