@@ -7,6 +7,7 @@ using CompanyWebApi.Extensions;
 using CompanyWebApi.Middleware;
 using CompanyWebApi.Persistence.DbContexts;
 using CompanyWebApi.Persistence.Repositories;
+using CompanyWebApi.RouteConstraints;
 using CompanyWebApi.Services.Authorization;
 using CompanyWebApi.Services.Filters;
 using CompanyWebApi.Services.Helpers;
@@ -184,7 +185,12 @@ namespace CompanyWebApi
         /// <param name="services"></param>
         protected void RegisterConfigurations(IServiceCollection services)
         {
-            services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+            services.Configure<RouteOptions>(options =>
+            {
+                options.LowercaseUrls = true;
+                options.ConstraintMap.Add("AddressType", typeof(AddressTypeRouteConstraint));
+            });
+            
             services.Configure<AuthSettings>(Configuration.GetSection(nameof(AuthSettings)));
             services.Configure<SwaggerConfig>(Configuration.GetSection(nameof(SwaggerConfig)));
         }
@@ -280,12 +286,20 @@ namespace CompanyWebApi
             // Entity to Dto Converters
             services.AddTransient<IConverter<Company, CompanyDto>, CompanyToDtoConverter>();
             services.AddTransient<IConverter<IList<Company>, IList<CompanyDto>>, CompanyToDtoConverter>();
+
             services.AddTransient<IConverter<Department, DepartmentDto>, DepartmentToDtoConverter>();
             services.AddTransient<IConverter<IList<Department>, IList<DepartmentDto>>, DepartmentToDtoConverter>();
+
             services.AddTransient<IConverter<Employee, EmployeeDto>, EmployeeToDtoConverter>();
             services.AddTransient<IConverter<IList<Employee>, IList<EmployeeDto>>, EmployeeToDtoConverter>();
             services.AddTransient<IConverter<EmployeeCreateDto, Employee>, EmployeeFromDtoConverter>();
             services.AddTransient<IConverter<IList<EmployeeCreateDto>, IList<Employee>>, EmployeeFromDtoConverter>();
+
+            services.AddTransient<IConverter<EmployeeAddress, EmployeeAddressDto>, EmployeeAddressToDtoConverter>();
+            services.AddTransient<IConverter<IList<EmployeeAddress>, IList<EmployeeAddressDto>>, EmployeeAddressToDtoConverter>();
+            services.AddTransient<IConverter<EmployeeAddressCreateDto, EmployeeAddress>, EmployeeAddressFromDtoConverter>();
+            services.AddTransient<IConverter<IList<EmployeeAddressCreateDto>, IList<EmployeeAddress>>, EmployeeAddressFromDtoConverter>();
+
             services.AddTransient<IConverter<User, UserDto>, UserToDtoConverter>();
             services.AddTransient<IConverter<IList<User>, IList<UserDto>>, UserToDtoConverter>();
             services.AddTransient<IConverter<User, UserAuthenticateDto>, UserToAuthenticateDtoConverter>();

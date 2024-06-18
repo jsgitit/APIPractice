@@ -34,6 +34,16 @@ namespace CompanyWebApi.Services.Swagger.Filters
                         Description = "Here are some Departments public interfaces"
                     }
                 },
+                new ()
+                {
+                    Name = "Employee's Addresses",
+                    Description = "Employees Address related interface",
+                    ExternalDocs = new OpenApiExternalDocs
+                    {
+                        Description = "Here are some Employee Address public interfaces"
+                    }
+                    
+                },
                 new()
                 {
                     Name = "Employees",
@@ -42,8 +52,7 @@ namespace CompanyWebApi.Services.Swagger.Filters
                     {
                         Description = "Here are some Employees public interfaces"
                     }
-                }
-                ,
+                },
                 new()
                 {
                     Name = "Users",
