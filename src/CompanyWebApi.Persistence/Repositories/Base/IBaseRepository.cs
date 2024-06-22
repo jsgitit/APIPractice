@@ -133,7 +133,16 @@ namespace CompanyWebApi.Persistence.Repositories.Base
         /// Update existing entity
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        Task UpdateAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity, bool tracking = true);
+
+        /// <summary>
+        /// Update or Insert a range of new entities
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task UpsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
     }
 }

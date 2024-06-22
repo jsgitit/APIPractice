@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using System;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CompanyWebApi.Persistence.Repositories.Base
 {
@@ -20,24 +20,24 @@ namespace CompanyWebApi.Persistence.Repositories.Base
         where TEntity : class
         where TDbContext : DbContext
     {
-		protected readonly TDbContext DatabaseContext;
-		protected readonly DbSet<TEntity> DatabaseSet;
+        protected readonly TDbContext DatabaseContext;
+        protected readonly DbSet<TEntity> DatabaseSet;
 
-		protected BaseRepository(TDbContext dbContext)
-		{
+        protected BaseRepository(TDbContext dbContext)
+        {
             DatabaseContext = dbContext ?? throw new ArgumentException("DbContext is null", nameof(dbContext));
-			DatabaseSet = DatabaseContext.Set<TEntity>();
-		}
+            DatabaseSet = DatabaseContext.Set<TEntity>();
+        }
 
         public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
-		{
-			await DatabaseSet.AddAsync(entity, cancellationToken).ConfigureAwait(false);
-		}
+        {
+            await DatabaseSet.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+        }
 
         public async Task AddAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
-		{
-			await DatabaseSet.AddRangeAsync(entities, cancellationToken).ConfigureAwait(false);
-		}
+        {
+            await DatabaseSet.AddRangeAsync(entities, cancellationToken).ConfigureAwait(false);
+        }
 
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate = null, bool tracking = false, CancellationToken cancellationToken = default)
         {
@@ -146,8 +146,7 @@ namespace CompanyWebApi.Persistence.Repositories.Base
                 DatabaseSet.RemoveRange(entities);
             }
         }
-
-        public async Task UpdateAsync(TEntity entity)
+        public async Task UpdateAsync(TEntity entity, bool tracking = true)
         {
             var keyProperties = GetKeyProperties(entity);
 
@@ -165,7 +164,47 @@ namespace CompanyWebApi.Persistence.Repositories.Base
             }
 
             DatabaseContext.Entry(existing).CurrentValues.SetValues(entity);
+            if (tracking)
+            {
+                DatabaseContext.Entry(existing).State = EntityState.Modified;
+            }
         }
+
+        public async Task UpsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            if (entities == null || !entities.Any())
+            {
+                // UpsertAsync operation called with null or empty entity collection
+                return;
+            }
+
+            // Get key properties once for all entities
+            var firstEntity = entities.First();
+            var keyProperties = GetKeyProperties(firstEntity);
+
+            if (keyProperties.Length == 0)
+            {
+                // TEntity has no key properties defined - required for an update operation
+                return;
+            }
+
+            foreach (var entity in entities)
+            {
+                // Get key values for the current entity
+                var keyValues = keyProperties.Select(prop => prop.GetValue(entity)).ToArray();
+
+                var entityObject = await DatabaseContext.FindAsync(typeof(TEntity), keyValues).ConfigureAwait(false);
+                if (entityObject is not TEntity existing)
+                {
+                    await DatabaseSet.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    DatabaseContext.Entry(existing).CurrentValues.SetValues(entity);
+                }
+            }
+        }
+
         private PropertyInfo[] GetKeyProperties(TEntity entity)
         {
             var entityType = typeof(TEntity);
@@ -174,6 +213,5 @@ namespace CompanyWebApi.Persistence.Repositories.Base
                                        .ToArray();
             return properties;
         }
-
     }
 }
