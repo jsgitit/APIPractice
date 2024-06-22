@@ -64,8 +64,8 @@ namespace CompanyWebApi.Tests.UnitTests
         [Fact]
         public async Task CanGetAll()
         {
-            var employees = await _employeeAddressRepository.GetEmployeeAddressesAsync();
-            Assert.True(employees.Any());
+            var employeesAddresses = await _employeeAddressRepository.GetEmployeeAddressesAsync();
+            Assert.True(employeesAddresses.Any());
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace CompanyWebApi.Tests.UnitTests
         }
 
         [Fact]
-        public async Task CanUpdate()
+        public async Task CanUpdateSingleAddress()
         {
             var address = new EmployeeAddress
             {
@@ -93,8 +93,7 @@ namespace CompanyWebApi.Tests.UnitTests
                 Address = "A new work address"
             };
 
-            await _employeeAddressRepository.UpdateAsync(address);
-            await _employeeAddressRepository.SaveAsync();
+            await _employeeAddressRepository.UpdateEmployeeAddressAsync(address);
 
             // Refresh the address entity from the context to reflect changes
             address = await _employeeAddressRepository.GetEmployeeAddressAsync(address.EmployeeId, address.AddressTypeId);
@@ -103,6 +102,28 @@ namespace CompanyWebApi.Tests.UnitTests
             Assert.Equal(AddressType.Work, address.AddressTypeId);
         }
 
+        //[Fact]
+        //public async Task CanUpdateMultipleAddresses()
+        //{
+        //    // Arrange new addresses to be updated for Employee 2
+
+        //    await _employeeAddressRepository.AddEmployeeAddressAsync(new EmployeeAddress { EmployeeId = 2, AddressTypeId = AddressType.Mailing, Address = "Initial Mailing Address" });
+        //    await _employeeAddressRepository.AddEmployeeAddressAsync(new EmployeeAddress { EmployeeId = 2, AddressTypeId = AddressType.Residential, Address = "Initial Residential Address" });
+        //    await _employeeAddressRepository.SaveAsync();
+
+        //    var employeesAddresses = await _employeeAddressRepository.GetEmployeeAddressesAsync();
+        //    Assert.Equal(4,  employeesAddresses.Count);
+
+        //    employeesAddresses[0].Address = "Changed";
+        //    employeesAddresses[1].Address = "Changed";
+
+
+        //    employeesAddresses.Add(new EmployeeAddress { EmployeeId = 2, AddressTypeId = AddressType.Unknown, Address = "Unknown Mailing Address" });
+        //    await _employeeAddressRepository.UpsertAsync(employeesAddresses);
+        //    await _employeeAddressRepository.SaveAsync();
+
+
+        //}
         // This CannotAddDuplicateEmployeeAddress() test is flaky
         // because it seems to cause other tests in this class to fail.
         // Failed test methods can run successfully when ran in isolation,
