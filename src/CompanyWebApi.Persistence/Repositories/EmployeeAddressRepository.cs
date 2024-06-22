@@ -1,5 +1,4 @@
-﻿using CompanyWebApi.Contracts.Dto.V3;
-using CompanyWebApi.Contracts.Entities;
+﻿using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Persistence.DbContexts;
 using CompanyWebApi.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
