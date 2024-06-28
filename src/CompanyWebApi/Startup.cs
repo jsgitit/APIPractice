@@ -1,6 +1,8 @@
 using CompanyWebApi.Configurations;
 using CompanyWebApi.Contracts.Converters;
+using CompanyWebApi.Contracts.Converters.V3;
 using CompanyWebApi.Contracts.Dto;
+using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Core.Auth;
 using CompanyWebApi.Extensions;
@@ -137,7 +139,7 @@ namespace CompanyWebApi
             // A slightly less secure option would be to redirect http to 400, 505, etc.
             app.UseHttpsRedirection();
 
-            // NOTE** Add logging middleware(s) only when not runnig from integration/unit tests!
+            // NOTE** Add logging middleware(s) only when not running from integration/unit tests!
             if (!UnitTestDetector.IsRunningFromUnitTest())
             {
                 // Adds request/response logging middleware
@@ -295,10 +297,17 @@ namespace CompanyWebApi
             services.AddTransient<IConverter<EmployeeCreateDto, Employee>, EmployeeFromDtoConverter>();
             services.AddTransient<IConverter<IList<EmployeeCreateDto>, IList<Employee>>, EmployeeFromDtoConverter>();
 
-            services.AddTransient<IConverter<EmployeeAddress, EmployeeAddressDto>, EmployeeAddressToDtoConverter>();
-            services.AddTransient<IConverter<IList<EmployeeAddress>, IList<EmployeeAddressDto>>, EmployeeAddressToDtoConverter>();
-            services.AddTransient<IConverter<EmployeeAddressCreateDto, EmployeeAddress>, EmployeeAddressFromDtoConverter>();
-            services.AddTransient<IConverter<IList<EmployeeAddressCreateDto>, IList<EmployeeAddress>>, EmployeeAddressFromDtoConverter>();
+            services.AddTransient<IConverter<EmployeeAddress, CompanyWebApi.Contracts.Dto.EmployeeAddressDto>, CompanyWebApi.Contracts.Converters.EmployeeAddressToDtoConverter>();
+            services.AddTransient<IConverter<IList<EmployeeAddress>, IList<CompanyWebApi.Contracts.Dto.EmployeeAddressDto>>, CompanyWebApi.Contracts.Converters.EmployeeAddressToDtoConverter>();
+            services.AddTransient<IConverter<CompanyWebApi.Contracts.Dto.EmployeeAddressCreateDto, EmployeeAddress>, CompanyWebApi.Contracts.Converters.EmployeeAddressFromDtoConverter>();
+            services.AddTransient<IConverter<IList<CompanyWebApi.Contracts.Dto.EmployeeAddressCreateDto>, IList<EmployeeAddress>>, CompanyWebApi.Contracts.Converters.EmployeeAddressFromDtoConverter>();
+
+            services.AddTransient<IConverter<EmployeeAddress, CompanyWebApi.Contracts.Dto.V3.EmployeeAddressDto>, CompanyWebApi.Contracts.Converters.V3.EmployeeAddressToDtoConverter>();
+            services.AddTransient<IConverter<IList<EmployeeAddress>, IList<CompanyWebApi.Contracts.Dto.V3.EmployeeAddressDto>>, CompanyWebApi.Contracts.Converters.V3.EmployeeAddressToDtoConverter>();
+            services.AddTransient<IConverter<CompanyWebApi.Contracts.Dto.V3.EmployeeAddressCreateDto, EmployeeAddress>, CompanyWebApi.Contracts.Converters.V3.EmployeeAddressFromDtoConverter>();
+            services.AddTransient<IConverter<IList<CompanyWebApi.Contracts.Dto.V3.EmployeeAddressCreateDto>, IList<CompanyWebApi.Contracts.Entities.EmployeeAddress>>, CompanyWebApi.Contracts.Converters.V3.EmployeeAddressFromDtoConverter>();
+            services.AddTransient<IConverter<CompanyWebApi.Contracts.Dto.V3.EmployeeAddressUpdateDto, EmployeeAddress>, EmployeeAddressUpdateDtoToEntityConverter>();
+            services.AddTransient<IConverter<IList<CompanyWebApi.Contracts.Dto.V3.EmployeeAddressUpdateDto>, IList<EmployeeAddress>>, EmployeeAddressUpdateDtoToEntityConverter>();
 
             services.AddTransient<IConverter<User, UserDto>, UserToDtoConverter>();
             services.AddTransient<IConverter<IList<User>, IList<UserDto>>, UserToDtoConverter>();

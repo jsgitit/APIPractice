@@ -63,65 +63,9 @@ public class EmployeeAddressRepository : BaseRepository<EmployeeAddress, Applica
 
     }
 
-    // public async Task<IList<EmployeeAddressDto>> UpsertAsync(IList<EmployeeAddressUpdateDto> addresses)
-    //{
-    //    var updatedAddresses = new List<EmployeeAddressDto>();
-
-    //    foreach (var addressDto in addresses)
-    //    {
-    //        var existingAddress = await _addressRepository.GetByIdAsync(addressDto.AddressId);
-
-    //        if (existingAddress != null)
-    //        {
-    //            // Check if an update is necessary
-    //            if (existingAddress.Address != addressDto.Address || existingAddress.Type != addressDto.Type)
-    //            {
-    //                // Update the existing address
-    //                existingAddress.Address = addressDto.Address;
-    //                existingAddress.Type = addressDto.Type;
-    //                existingAddress.ModifiedDate = DateTime.UtcNow;
-
-    //                await _addressRepository.UpdateAsync(existingAddress);
-    //            }
-
-    //            var updatedAddressDto = new EmployeeAddressDto
-    //            {
-    //                AddressId = existingAddress.AddressId,
-    //                EmployeeId = existingAddress.EmployeeId,
-    //                Address = existingAddress.Address,
-    //                Type = existingAddress.Type,
-    //                ModifiedDate = existingAddress.ModifiedDate
-    //            };
-
-    //            updatedAddresses.Add(updatedAddressDto);
-    //        }
-    //        else
-    //        {
-    //            // Add new address
-    //            var newAddress = new EmployeeAddress
-    //            {
-    //                EmployeeId = addressDto.EmployeeId,
-    //                Address = addressDto.Address,
-    //                Type = addressDto.Type,
-    //                CreatedDate = DateTime.UtcNow,
-    //                ModifiedDate = DateTime.UtcNow
-    //            };
-
-    //            await _addressRepository.AddAsync(newAddress);
-
-    //            var newAddressDto = new EmployeeAddressDto
-    //            {
-    //                AddressId = newAddress.AddressId,
-    //                EmployeeId = newAddress.EmployeeId,
-    //                Address = newAddress.Address,
-    //                Type = newAddress.Type,
-    //                ModifiedDate = newAddress.ModifiedDate
-    //            };
-
-    //            updatedAddresses.Add(newAddressDto);
-    //        }
-    //    }
-
-    //    return updatedAddresses;
-    //}
+    public async Task UpsertEmployeeAddressesAsync(IList<EmployeeAddress> employeeAddresses, bool tracking = true)
+    {
+        await UpsertAsync(employeeAddresses).ConfigureAwait(false);
+        await SaveAsync().ConfigureAwait(false);
+    }
 }

@@ -4,7 +4,9 @@ using CompanyWebApi.Tests.Factories;
 using CompanyWebApi.Tests.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -102,25 +104,53 @@ namespace CompanyWebApi.Tests.UnitTests
             Assert.Equal(AddressType.Work, address.AddressTypeId);
         }
 
-        //[Fact]
-        //public async Task CanUpdateMultipleAddresses()
-        //{
-        //    // Arrange new addresses to be updated for Employee 2
+        [Fact]
+        public async Task CanUpdateAndInsertABatchOfAddresses()
+        {
+            // Arrange an update to an existing work address for Employee 2
+            var employeeAddresses = (await _employeeAddressRepository
+                .GetEmployeeAddressesAsync(ea => ea.EmployeeId == 2 && ea.AddressTypeId == AddressType.Work))
+                .ToList(); // Convert to list to allow modifications
 
-        //    await _employeeAddressRepository.AddEmployeeAddressAsync(new EmployeeAddress { EmployeeId = 2, AddressTypeId = AddressType.Mailing, Address = "Initial Mailing Address" });
-        //    await _employeeAddressRepository.AddEmployeeAddressAsync(new EmployeeAddress { EmployeeId = 2, AddressTypeId = AddressType.Residential, Address = "Initial Residential Address" });
-        //    await _employeeAddressRepository.SaveAsync();
+            var workAddress = employeeAddresses.FirstOrDefault();
+            workAddress.Address = "123 changed work address";
+            
+            // Arrange a few new addresses for Employee 2
+            employeeAddresses.Add(new EmployeeAddress
+            {
+                EmployeeId = 2,
+                AddressTypeId = AddressType.Mailing,
+                Address = "Initial Mailing Address"
+            });
+            employeeAddresses.Add(new EmployeeAddress
+            {
+                EmployeeId = 2,
+                AddressTypeId = AddressType.Residential,
+                Address = "Initial Residential Address"
+            });
 
-        //    var employeesAddresses = await _employeeAddressRepository.GetEmployeeAddressesAsync();
-        //    Assert.Equal(4,  employeesAddresses.Count);
+            await _employeeAddressRepository.UpsertEmployeeAddressesAsync(employeeAddresses); // "Upsert" -> is return type needed?
+            await _employeeAddressRepository.SaveAsync();
 
-        //    employeesAddresses[0].Address = "Changed";
-        //    employeesAddresses[1].Address = "Changed";
+            var updatedAddresses = (await _employeeAddressRepository
+                .GetEmployeeAddressesAsync(ea => ea.EmployeeId == 2))
+                .ToList();
 
+            Assert.Equal("123 changed work address", updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Work)?.Address);
+            Assert.True(updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Work)?.Modified > DateTime.UtcNow.AddMinutes(-1));
+            Assert.True(updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Work)?.Created < DateTime.UtcNow.AddMinutes(-1));
 
-        //    employeesAddresses.Add(new EmployeeAddress { EmployeeId = 2, AddressTypeId = AddressType.Unknown, Address = "Unknown Mailing Address" });
-        //    await _employeeAddressRepository.UpsertAsync(employeesAddresses);
-        //    await _employeeAddressRepository.SaveAsync();
+            Assert.Equal("Initial Mailing Address", updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Mailing)?.Address);
+            // Assert created/modified dates
+            Assert.Equal("Initial Residential Address", updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Residential)?.Address);
+            // Assert created/modified dates
+
+        }
 
 
         //}
@@ -146,5 +176,5 @@ namespace CompanyWebApi.Tests.UnitTests
         //        await _employeeAddressRepository.AddEmployeeAddressAsync(existingEmployeeAddress);
         //    });
         //}
-    }
+    }  
 }
