@@ -71,6 +71,9 @@ namespace CompanyWebApi.Extensions
 
                 // Application Controller's API document description information
                 options.DocumentFilter<SwaggerDocumentFilter>();
+
+                // Describe enums using their string values
+                options.UseInlineDefinitionsForEnums();
             });
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CompanyWebApi.Contracts.Entities.Base;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,16 @@ namespace CompanyWebApi.Persistence.Repositories.Base
 
         public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
+            SetAuditDates(entity, setCreated: true, setModified: false);
             await DatabaseSet.AddAsync(entity, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task AddAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
+            foreach (var entity in entities)
+            {
+                SetAuditDates(entity, setCreated: true, setModified: false);
+            }
             await DatabaseSet.AddRangeAsync(entities, cancellationToken).ConfigureAwait(false);
         }
 
@@ -164,6 +170,7 @@ namespace CompanyWebApi.Persistence.Repositories.Base
             }
 
             DatabaseContext.Entry(existing).CurrentValues.SetValues(entity);
+            SetAuditDates(entity, setModified: true);
             if (tracking)
             {
                 DatabaseContext.Entry(existing).State = EntityState.Modified;
@@ -174,7 +181,6 @@ namespace CompanyWebApi.Persistence.Repositories.Base
         {
             if (entities == null || !entities.Any())
             {
-                // UpsertAsync operation called with null or empty entity collection
                 return;
             }
 
@@ -200,6 +206,7 @@ namespace CompanyWebApi.Persistence.Repositories.Base
                 }
                 else
                 {
+                    SetAuditDates(entity, setModified: true);
                     DatabaseContext.Entry(existing).CurrentValues.SetValues(entity);
                 }
             }
@@ -212,6 +219,16 @@ namespace CompanyWebApi.Persistence.Repositories.Base
                                        .Where(prop => prop.IsDefined(typeof(KeyAttribute), false))
                                        .ToArray();
             return properties;
+        }
+        private void SetAuditDates(TEntity entity, bool setCreated = false, bool setModified = false)
+        {
+            if (entity is IBaseAuditEntity auditEntity)
+            {
+                if (setCreated)
+                    auditEntity.Created = DateTime.UtcNow;
+                if (setModified)
+                    auditEntity.Modified = DateTime.UtcNow;
+            }
         }
     }
 }
