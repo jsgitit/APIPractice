@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using CompanyWebApi.Contracts.Converters;
+using CompanyWebApi.Contracts.Converters.V3;
 using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Controllers.Base;

@@ -1,15 +1,15 @@
-﻿using CompanyWebApi.Contracts.Converters;
-using CompanyWebApi.Contracts.Dto.V3;
+﻿using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
+namespace CompanyWebApi.Contracts.Converters.V3;
 public class EmployeeAddressUpdateDtoToEntityConverter : IConverter<EmployeeAddressUpdateDto, EmployeeAddress>, IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>>
 {
-    private readonly ILogger<EmployeeAddressToDtoConverter> _logger;
+    private readonly ILogger<EmployeeAddressUpdateDtoToEntityConverter> _logger;
 
-    public EmployeeAddressUpdateDtoToEntityConverter(ILogger<EmployeeAddressToDtoConverter> logger)
+    public EmployeeAddressUpdateDtoToEntityConverter(ILogger<EmployeeAddressUpdateDtoToEntityConverter> logger)
     {
         _logger = logger;
     }
