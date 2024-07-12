@@ -2,6 +2,7 @@
 using CompanyWebApi.Contracts.Converters.V3;
 using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
+using CompanyWebApi.Contracts.Models;
 using CompanyWebApi.Controllers.Base;
 using CompanyWebApi.Persistence.Repositories.Factory;
 using CompanyWebApi.Services.Filters;
@@ -18,7 +19,6 @@ namespace CompanyWebApi.Controllers.V3;
 
 [ApiAuthorization]
 [ApiController]
-[ApiVersion("2.1", Deprecated = true)]
 [ApiVersion("3.0")]
 [Produces("application/json")]
 [EnableCors("EnableCORS")]
@@ -450,27 +450,40 @@ public class EmployeesController : BaseController<EmployeesController>
         return Ok(employeeDto);
     }
 
-    // TODO: Fix search - After creating all version 3 files, noticed that the Repository layer depends on the "EmployeeSearchDto" and repo layer should not rely on dtos. 
-    // Since it IS relying on the dto, if we version the dto, it breaks one version or the other and we don't want to have to version the repo.
+    // TODO: Fix search - After creating all version 3 files, I noticed that the Repository layer depends on
+    // the "EmployeeSearchDto" and this layer should not rely on dtos. 
+    // Since it IS relying on the dto, if we version the dto,
+    // it breaks one version or the other and we don't want to have to version the repo.
 
     /// <summary>
     /// Search for employees
     /// </summary>
     /// <param name="searchCriteria">EmployeeSearchDto model</param>
     /// <param name="version">API version</param>
-    //[SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<EmployeeDto>), Description = "Returns a list of employees according to search criteria")]
-    //[SwaggerResponse(StatusCodes.Status404NotFound, "No employees were found")]
-    //[SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-    //[HttpGet("search", Name = "SearchEmployeeV3")]
-    //public async Task<IActionResult> SearchAsync([FromQuery] EmployeeSearchDto searchCriteria, ApiVersion version)
-    //{
-    //    Logger.LogDebug(nameof(SearchAsync));
-    //    var employees = await _repositoryFactory.EmployeeRepository.SearchEmployeesAsync(searchCriteria).ConfigureAwait(false);
-    //    if (!employees.Any())
-    //    {
-    //        return NotFound(new { message = "No employees were found" });
-    //    }
-    //    var employeesDto = _employeeToDtoListConverter.Convert(employees);
-    //    return Ok(employeesDto);
-    //}
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<EmployeeDto>), Description = "Returns a list of employees according to search criteria")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "No employees were found")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
+    [HttpGet("search", Name = "SearchEmployeeV3")]
+    public async Task<IActionResult> SearchAsync([FromQuery] EmployeeSearchDto searchCriteria, ApiVersion version)
+    {
+        Logger.LogDebug(nameof(SearchAsync));
+
+        // Convert dto to older version since Repository is relying on this older version
+        // TODO: Repository needs to be refactored to not use versioned DTO folder eventually.
+        var employeeSearchCriteria = new EmployeeSearchCriteria
+        {
+            FirstName = searchCriteria.FirstName,
+            LastName = searchCriteria.LastName,
+            BirthDate = searchCriteria.BirthDate,
+            Department = searchCriteria.Department,
+            Username = searchCriteria.Username
+        };
+        var employees = await _repositoryFactory.EmployeeRepository.SearchEmployeesAsync(employeeSearchCriteria).ConfigureAwait(false);
+        if (!employees.Any())
+        {
+            return NotFound(new { message = "No employees were found" });
+        }
+        var employeesDto = _employeeToDtoListConverter.Convert(employees);
+        return Ok(employeesDto);
+    }
 }

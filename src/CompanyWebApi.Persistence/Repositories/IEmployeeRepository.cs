@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System;
+using CompanyWebApi.Contracts.Models;
 
 namespace CompanyWebApi.Persistence.Repositories
 {
@@ -43,13 +44,20 @@ namespace CompanyWebApi.Persistence.Repositories
         Task<IList<Employee>> GetEmployeesAsync(Expression<Func<Employee, bool>> predicate = null, bool tracking = false);
 
         /// <summary>
-        /// Search employees
+        /// Search employees (deprecated)
         /// </summary>
         /// <param name="searchCriteria">EmployeeSearchDto model</param>
         /// <param name="tracking">Tracking changes</param>
         /// <returns></returns>
         Task<IList<Employee>> SearchEmployeesAsync(EmployeeSearchDto searchCriteria, bool tracking = false);
 
+        /// <summary>
+        /// Search employees
+        /// </summary>
+        /// <param name="searchCriteria">EmployeeSearchCriteria model</param>
+        /// <param name="tracking">Tracking changes</param>
+        /// <returns></returns>
+        Task<IList<Employee>> SearchEmployeesAsync(EmployeeSearchCriteria searchCriteria, bool tracking = false);
         Task UpdateEmployeeAsync(Employee employee, bool tracking = true);    
     }
 }
