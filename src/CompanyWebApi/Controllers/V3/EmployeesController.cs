@@ -350,6 +350,106 @@ public class EmployeesController : BaseController<EmployeesController>
         return Ok(employeeDto);
     }
 
+    /// <summary>
+    /// 'Upsert' an employee. Employee info is updated and supplied addresses are inserted or updated. 
+    /// If an employee address existed previously, but was not supplied in request, 
+    /// it will remain in the database unaffected for employee.
+    /// </summary>
+    /// <remarks>
+    /// Sample request body:
+    ///
+    ///     {
+    ///       "employeeId": 1,
+    ///       "firstName": "John",
+    ///       "lastName": "Whyne",
+    ///       "birthDate": "1965-05-31",
+    ///       "addresses": 
+    ///       [
+    ///         {
+    ///            "employeeId": 7,
+    ///            "addressTypeId": 0,
+    ///            "address": "Unknown address"
+    ///         },
+    ///         {
+    ///            "employeeId": 7,
+    ///            "addressTypeId": 2,
+    ///            "address": "Residential address"
+    ///         }
+    ///       ]
+    ///     }
+    /// 
+    /// Sample response body:
+    /// 
+    ///     {
+    ///       "employeeId": 1,
+    ///       "firstName": "John",
+    ///       "lastName": "Whyne",
+    ///       "birthDate": "1965-05-31T00:00:00",
+    ///       "age": 55,
+    ///       "company": "Company One",
+    ///       "department": "HR",
+    ///       "addresses": 
+    ///       [
+    ///         {
+    ///           "employeeId": 7,
+    ///           "addressTypeId": 0,
+    ///           "address": "Unknown address"
+    ///         },
+    ///         {
+    ///           "employeeId": 7,
+    ///           "addressTypeId": 1,
+    ///           "address": "Work address"  (This address existed for employee and will remain after upsert if not supplied in request)
+    ///         },
+    ///         {
+    ///           "employeeId": 7,
+    ///           "addressTypeId": 2,
+    ///           "address": "Residential address"
+    ///         }
+    ///       ],
+    ///       "username": "johnw"
+    ///     }
+    /// </remarks>
+    /// <param name="employee"><see cref="EmployeeUpdateDto"/></param>
+    /// <param name="version">API version</param>
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(EmployeeDto), Description = "Return updated employee")]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "The request was not valid")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "The employee was not found")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
+    [HttpPut("upsert", Name = "UpsertEmployeeV3")]
+    public async Task<IActionResult> UpsertEmployeeAsync([FromBody] EmployeeUpdateDto employee, ApiVersion version)
+    {
+        Logger.LogDebug(nameof(UpsertEmployeeAsync));
+        if (employee == null)
+        {
+            return BadRequest();
+        }
+
+        var repoEmployee = await _repositoryFactory.EmployeeRepository.GetEmployeeAsync(employee.EmployeeId).ConfigureAwait(false);
+        if (repoEmployee == null)
+        {
+            return NotFound(new { message = "The employee was not found" });
+        }
+
+        var changedEmployeeAddresses = _employeeAddressUpdateDtoToEntityConverter
+            .Convert(employee.Addresses); 
+        await _repositoryFactory.EmployeeAddressRepository
+            .UpsertEmployeeAddressesAsync(changedEmployeeAddresses);
+        repoEmployee.EmployeeAddresses.Clear();
+        repoEmployee.EmployeeAddresses = await _repositoryFactory.EmployeeAddressRepository
+            .GetEmployeeAddressesAsync(e => e.EmployeeId == employee.EmployeeId).ConfigureAwait(false);
+        // Handle updated employee
+        repoEmployee.FirstName = employee.FirstName;
+        repoEmployee.LastName = employee.LastName;
+        repoEmployee.BirthDate = employee.BirthDate;
+        await _repositoryFactory.EmployeeRepository
+            .UpdateEmployeeAsync(repoEmployee);
+
+        var updatedEmployee = await _repositoryFactory.EmployeeRepository
+            .GetEmployeeAsync(repoEmployee.EmployeeId);
+        var employeeDto = _employeeToDtoConverter.Convert(updatedEmployee);
+        return Ok(employeeDto);
+    }
+
     // TODO: Fix search - After creating all version 3 files, noticed that the Repository layer depends on the "EmployeeSearchDto" and repo layer should not rely on dtos. 
     // Since it IS relying on the dto, if we version the dto, it breaks one version or the other and we don't want to have to version the repo.
 

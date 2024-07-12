@@ -83,7 +83,7 @@ public class EmployeesControllerTests : ControllerTestsBase
     [Fact]
     public async Task CanUpdateEmployee()
     {
-        // Arrange a new employee with one address
+        // Arrange a new employee with two addresses
         var newEmployee = new EmployeeCreateDto
         {
             CompanyId = 1,
@@ -149,5 +149,89 @@ public class EmployeesControllerTests : ControllerTestsBase
         Assert.Contains(result.Addresses,
             a => a.Address == "444 Unknown St" &&
             a.AddressTypeId == AddressType.Unknown);
+
+        // clean up test employee
+        var removeEmployee = await _httpClientHelper
+            .DeleteAsync(_baseUrl + result.EmployeeId);
+    }
+
+
+    [Fact]
+    public async Task CanUpsertEmployee()
+    {
+        // Arrange a new employee with two addresses
+        var newEmployee = new EmployeeCreateDto
+        {
+            CompanyId = 1,
+            DepartmentId = 1,
+            Username = "JohnDoeUsername",
+            Password = "JohnDoepassword",
+            FirstName = "John",
+            LastName = "Doe",
+            BirthDate = new DateTime(1995, 8, 7),
+            Addresses = new List<EmployeeAddressCreateDto>
+            {
+                new EmployeeAddressCreateDto
+                {
+                    AddressTypeId = AddressType.Work,
+                    Address = "123 Work St"
+                },
+                new EmployeeAddressCreateDto
+                {
+                    AddressTypeId = AddressType.Residential,
+                    Address = "123 Main St"
+                }
+            }
+        };
+        var newFullEmployee = await _httpClientHelper
+            .PostAsync<EmployeeCreateDto, EmployeeDto>(_baseUrl + "create", newEmployee);
+
+        // Arrange an update to the employee, where one address is updated, and one is new
+        var updateEmployee = new EmployeeUpdateDto
+        {
+            EmployeeId = newFullEmployee.EmployeeId,
+            FirstName = "John updated",
+            LastName = "Doe updated",
+            BirthDate = new DateTime(1994, 8, 7),
+            Addresses = new List<EmployeeAddressUpdateDto>
+            {
+                new EmployeeAddressUpdateDto
+                {
+                    EmployeeId = newFullEmployee.EmployeeId,
+                    AddressTypeId = AddressType.Unknown,
+                    Address = "444 Unknown St"
+                },
+                new EmployeeAddressUpdateDto
+                {
+                    EmployeeId = newFullEmployee.EmployeeId,
+                    AddressTypeId = AddressType.Residential,
+                    Address = "789 New Home St"
+                }
+            }
+        };
+
+        // Act
+        var result = await _httpClientHelper
+            .PutAsync<EmployeeUpdateDto, EmployeeDto>(_baseUrl + "upsert", updateEmployee);
+
+        // Assert
+        Assert.Equal("John updated", result.FirstName);
+        Assert.Equal("Doe updated", result.LastName);
+        Assert.Equal(new DateTime(1994, 8, 7), result.BirthDate);
+        Assert.Equal(3, result.Addresses.Count);
+        Assert.Contains(result.Addresses,
+            a => a.Address == "444 Unknown St" &&
+            a.AddressTypeId == AddressType.Unknown);
+        Assert.Contains(result.Addresses,
+             a => a.Address == "123 Work St" &&
+            a.AddressTypeId == AddressType.Work);
+        Assert.Contains(result.Addresses,
+            a => a.Address == "789 New Home St" &&
+            a.AddressTypeId == AddressType.Residential);
+
+        // clean up test employee
+        var removeEmployee = await _httpClientHelper
+            .DeleteAsync(_baseUrl + result.EmployeeId);
+
     }
 }
