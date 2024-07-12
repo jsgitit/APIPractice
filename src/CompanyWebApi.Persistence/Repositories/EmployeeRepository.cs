@@ -4,15 +4,15 @@ using CompanyWebApi.Core.Extensions;
 using CompanyWebApi.Persistence.DbContexts;
 using CompanyWebApi.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Linq;
-using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace CompanyWebApi.Persistence.Repositories
 {
-    public class EmployeeRepository : BaseRepository<Employee, ApplicationDbContext>, IEmployeeRepository
+    public class EmployeeRepository : BaseRepository<Employee, ApplicationDbContext>,  IEmployeeRepository
     {
         public EmployeeRepository(ApplicationDbContext dbContext)
             : base(dbContext)
@@ -82,5 +82,12 @@ namespace CompanyWebApi.Persistence.Repositories
                 .ToList();
             return employees;
         }
+
+        public async Task UpdateEmployeeAsync(Employee employee, bool tracking = true)
+        {
+            await UpdateAsync(employee, tracking).ConfigureAwait(false);
+            await SaveAsync().ConfigureAwait(false);
+        }
+
     }
 }

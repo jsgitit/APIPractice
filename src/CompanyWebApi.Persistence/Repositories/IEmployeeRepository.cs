@@ -49,5 +49,7 @@ namespace CompanyWebApi.Persistence.Repositories
         /// <param name="tracking">Tracking changes</param>
         /// <returns></returns>
         Task<IList<Employee>> SearchEmployeesAsync(EmployeeSearchDto searchCriteria, bool tracking = false);
+
+        Task UpdateEmployeeAsync(Employee employee, bool tracking = true);    
     }
 }

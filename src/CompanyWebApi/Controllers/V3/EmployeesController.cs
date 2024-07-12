@@ -8,7 +8,6 @@ using CompanyWebApi.Services.Filters;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
@@ -31,16 +30,19 @@ public class EmployeesController : BaseController<EmployeesController>
     private readonly IConverter<Employee, EmployeeDto> _employeeToDtoConverter;
     private readonly IConverter<IList<Employee>, IList<EmployeeDto>> _employeeToDtoListConverter;
     private readonly IConverter<EmployeeCreateDto, Employee> _employeeFromDtoConverter;
+    private readonly IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> _employeeAddressUpdateDtoToEntityConverter;
 
     public EmployeesController(IRepositoryFactory repositoryFactory,
         IConverter<Employee, EmployeeDto> employeeToDtoConverter,
         IConverter<IList<Employee>, IList<EmployeeDto>> employeeToDtoListConverter,
-        IConverter<EmployeeCreateDto, Employee> employeeFromDtoConverter)
+        IConverter<EmployeeCreateDto, Employee> employeeFromDtoConverter,
+        IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> employeeAddressUpdateDtoToEntityConverter)
     {
         _repositoryFactory = repositoryFactory;
         _employeeToDtoConverter = employeeToDtoConverter;
         _employeeToDtoListConverter = employeeToDtoListConverter;
         _employeeFromDtoConverter = employeeFromDtoConverter;
+        _employeeAddressUpdateDtoToEntityConverter = employeeAddressUpdateDtoToEntityConverter;
     }
 
     /// <summary>
@@ -253,7 +255,25 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "employeeId": 1,
     ///       "firstName": "John",
     ///       "lastName": "Whyne",
-    ///       "birthDate": "1965-05-31"
+    ///       "birthDate": "1965-05-31",
+    ///       "addresses": 
+    ///       [
+    ///         {
+    ///            "employeeId": 7,
+    ///            "addressTypeId": 0,
+    ///            "address": "Unknown address"
+    ///         },
+    ///         {
+    ///            "employeeId": 7,
+    ///            "addressTypeId": 1,
+    ///            "address": "Work address"
+    ///         },
+    ///         {
+    ///            "employeeId": 7,
+    ///            "addressTypeId": 2,
+    ///            "address": "Residential address"
+    ///         }
+    ///       ]
     ///     }
     /// 
     /// Sample response body:
@@ -266,7 +286,24 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "age": 55,
     ///       "company": "Company One",
     ///       "department": "HR",
-    ///       "address": "Bangalore, India",
+    ///       "addresses": 
+    ///       [
+    ///         {
+    ///           "employeeId": 7,
+    ///           "addressTypeId": 0,
+    ///           "address": "Unknown address"
+    ///         },
+    ///         {
+    ///           "employeeId": 7,
+    ///           "addressTypeId": 1,
+    ///           "address": "Work address"
+    ///         },
+    ///         {
+    ///           "employeeId": 7,
+    ///           "addressTypeId": 2,
+    ///           "address": "Residential address"
+    ///         }
+    ///       ],
     ///       "username": "johnw"
     ///     }
     /// </remarks>
@@ -276,22 +313,40 @@ public class EmployeesController : BaseController<EmployeesController>
     [SwaggerResponse(StatusCodes.Status404NotFound, "The employee was not found")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [HttpPut("update", Name = "UpdateEmployeeV3")]
-    public async Task<IActionResult> UpdateAsync([FromBody] EmployeeUpdateDto employee, ApiVersion version)
+    public async Task<IActionResult> UpdateEmployeeAsync([FromBody] EmployeeUpdateDto employee, ApiVersion version)
     {
-        Logger.LogDebug(nameof(UpdateAsync));
+        Logger.LogDebug(nameof(UpdateEmployeeAsync));
+        if (employee == null)
+        {
+            return BadRequest();
+        }
+
         var repoEmployee = await _repositoryFactory.EmployeeRepository.GetEmployeeAsync(employee.EmployeeId).ConfigureAwait(false);
         if (repoEmployee == null)
         {
             return NotFound(new { message = "The employee was not found" });
         }
 
+        // Replace current addresses with new addresses provided - idempotent
+        foreach (var address in repoEmployee.EmployeeAddresses)
+        {
+            _repositoryFactory.EmployeeAddressRepository.Remove(address); // remove existing addresses
+        }
+        repoEmployee.EmployeeAddresses = _employeeAddressUpdateDtoToEntityConverter
+            .Convert(employee.Addresses);
+        await _repositoryFactory.EmployeeAddressRepository
+            .UpsertEmployeeAddressesAsync(repoEmployee.EmployeeAddresses); // using upsert for batch insert op
+
+        // Handle updated employee
         repoEmployee.FirstName = employee.FirstName;
         repoEmployee.LastName = employee.LastName;
         repoEmployee.BirthDate = employee.BirthDate;
+        await _repositoryFactory.EmployeeRepository
+            .UpdateEmployeeAsync(repoEmployee);
 
-        await _repositoryFactory.EmployeeRepository.UpdateAsync(repoEmployee);
-        await _repositoryFactory.SaveAsync().ConfigureAwait(false);
-        var employeeDto = _employeeToDtoConverter.Convert(repoEmployee);
+        var updatedEmployee = await _repositoryFactory.EmployeeRepository
+            .GetEmployeeAsync(repoEmployee.EmployeeId);
+        var employeeDto = _employeeToDtoConverter.Convert(updatedEmployee);
         return Ok(employeeDto);
     }
 

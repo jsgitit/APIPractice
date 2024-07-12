@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace CompanyWebApi.Contracts.Dto.V3
 {
@@ -24,5 +26,8 @@ namespace CompanyWebApi.Contracts.Dto.V3
         [Required]
         [Range(typeof(DateTime), "01/01/1900", "01/01/2100")]
 		public DateTime BirthDate { get; set; }
-	}
+
+        [Required]
+        public IList<EmployeeAddressUpdateDto> Addresses { get; set; }
+    }
 }
