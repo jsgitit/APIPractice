@@ -24,7 +24,9 @@ namespace CompanyWebApi.Contracts.Converters.V3
 			var companyDto = new CompanyDto
 			{
 				CompanyId = company.CompanyId,
-				Name = company.Name
+				Name = company.Name,
+				Created = company.Created,
+				Modified = company.Modified
 			};
 			foreach (var department in company.Departments)
             {

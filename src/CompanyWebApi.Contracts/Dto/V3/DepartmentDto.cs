@@ -21,5 +21,7 @@ namespace CompanyWebApi.Contracts.Dto.V3
         public string CompanyName { get; set; }
 
 		public ICollection<string> Employees { get; set; } = new HashSet<string>();
-	}
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
+    }
 }

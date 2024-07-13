@@ -14,5 +14,7 @@ namespace CompanyWebApi.Contracts.Dto.V3
         public string Username { get; set; }
 
         public string Password { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
     }
 }

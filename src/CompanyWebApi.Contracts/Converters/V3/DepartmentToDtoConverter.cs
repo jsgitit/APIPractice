@@ -26,7 +26,9 @@ namespace CompanyWebApi.Contracts.Converters.V3
 				CompanyId = department.CompanyId,
 				CompanyName = department.Company.Name,
 				DepartmentId = department.DepartmentId,
-				Name = department.Name
+				Name = department.Name,
+				Created = department.Created,
+				Modified = department.Modified
 			};
 			foreach (var employee in department.Employees)
             {

@@ -30,7 +30,9 @@ public class EmployeeToDtoConverter : IConverter<Employee, EmployeeDto>, IConver
             {
                 EmployeeId = a.EmployeeId,
                 AddressTypeId = a.AddressTypeId,
-                Address = a.Address
+                Address = a.Address,
+                Created = a.Created,
+                Modified = a.Modified
             }).ToList(),
             Age = employee.Age,
             BirthDate = employee.BirthDate,
@@ -38,7 +40,9 @@ public class EmployeeToDtoConverter : IConverter<Employee, EmployeeDto>, IConver
             CompanyId = employee.Company?.CompanyId ?? 0,
             Company = employee.Company == null ? string.Empty : employee.Company.Name,
             DepartmentId = employee.Department?.DepartmentId ?? 0,
-            Department = employee.Department == null ? string.Empty : employee.Department.Name
+            Department = employee.Department == null ? string.Empty : employee.Department.Name,
+            Created = employee.Created,
+            Modified = employee.Modified
         };
         return employeeDto;
     }

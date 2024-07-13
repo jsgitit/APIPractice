@@ -27,7 +27,9 @@ namespace CompanyWebApi.Contracts.Converters.V3
                 FirstName = user.Employee.FirstName,
                 LastName = user.Employee.LastName,
                 Username = user.Username,
-                Password = user.Password
+                Password = user.Password,
+				Created = user.Created,
+				Modified = user.Modified
 			};
 			return userDto;
 		}

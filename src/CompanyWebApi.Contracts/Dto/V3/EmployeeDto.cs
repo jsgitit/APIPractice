@@ -35,4 +35,7 @@ public class EmployeeDto
 	public int DepartmentId { get; set; }
 
 	public string Department { get; set; }
+
+	public DateTime Created {  get; set; }
+	public DateTime Modified { get; set; }
 }

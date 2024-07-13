@@ -21,7 +21,9 @@ public class EmployeeAddressToDtoConverter : IConverter<EmployeeAddress, Employe
         {
             EmployeeId = employeeAddress.EmployeeId,
             AddressTypeId = employeeAddress.AddressTypeId,
-            Address = employeeAddress.Address
+            Address = employeeAddress.Address,
+            Created = employeeAddress.Created,
+            Modified = employeeAddress.Modified
         };
         return employeeAddressDto;
     }

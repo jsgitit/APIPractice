@@ -15,4 +15,6 @@ public class EmployeeAddressDto
     [Required]
     [StringLength(255, MinimumLength = 1)]
     public string Address { get; set; }
+    public DateTime Created { get; set; }
+    public DateTime Modified { get; set; }
 }

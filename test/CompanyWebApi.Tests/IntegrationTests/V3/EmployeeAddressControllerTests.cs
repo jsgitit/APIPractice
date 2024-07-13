@@ -174,7 +174,7 @@ public class EmployeeAddressControllerTests : ControllerTestsBase
         var updatedAddresses = empAddressesFor5.Concat(empAddressesFor6).ToList();
 
         Assert.Equal(6, updatedAddresses.Count);
-        Assert.Equivalent(employeeAddresses, updatedAddresses, strict: true);
+        Assert.Equivalent(employeeAddresses, updatedAddresses, strict: false); // changed to false because updatedAddresses now have audit dates
 
         // Reset test data
         var oldWorkAddressFor5 = new EmployeeAddressUpdateDto
