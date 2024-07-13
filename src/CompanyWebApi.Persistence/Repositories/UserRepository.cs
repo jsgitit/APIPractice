@@ -25,19 +25,11 @@ namespace CompanyWebApi.Persistence.Repositories
             return await GetUserAsync(user.EmployeeId, tracking).ConfigureAwait(false);
         }
 
-        public async Task<IList<UserDto>> GetUsersAsync(bool tracking = false)
+        public async Task<IList<User>> GetUsersAsync(bool tracking = false)
         {
-            var result = await GetAsync(
+            var result = await GetAsync<User>(
                 include: source => source
                     .Include(user => user.Employee),
-                selector: user => new UserDto
-                {
-                    EmployeeId = user.EmployeeId,
-                    FirstName = user.Employee.FirstName,
-                    LastName = user.Employee.LastName,
-                    Username = user.Username,
-                    Password = user.Password
-                },
                 orderBy: o => o
                     .OrderBy(ob => ob.EmployeeId),
                 tracking: tracking).ConfigureAwait(false);
@@ -77,5 +69,6 @@ namespace CompanyWebApi.Persistence.Repositories
                 tracking: tracking).ConfigureAwait(false);
             return result;
         }
+
     }
 }

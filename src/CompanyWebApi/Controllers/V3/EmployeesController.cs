@@ -46,7 +46,7 @@ public class EmployeesController : BaseController<EmployeesController>
     }
 
     /// <summary>
-    /// Add a new employee
+    /// Add a new employee, with multiple address types
     /// </summary>
     /// <remarks>
     /// Sample request body:
@@ -57,7 +57,18 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "birthDate": "1971-05-18",
     ///       "companyId": 1,
     ///       "departmentId": 2,
-    ///       "address": "Hamilton Street 145/a, 10007 NY",
+    ///       "addresses": [
+    ///         {
+    ///           "employeeId": 0,
+    ///           "addressTypeId": 1,
+    ///           "address": "Hamilton Street 145/a, 10007 NY"
+    ///         },
+    ///         {
+    ///           "employeeId": 0,
+    ///           "addressTypeId": 2,
+    ///           "address": "123 Residential Street"
+    ///         },
+    ///       ],
     ///       "username": "alanf",
     ///       "password": "tntgroup!129"
     ///     }
@@ -65,15 +76,34 @@ public class EmployeesController : BaseController<EmployeesController>
     /// Sample response body:
     /// 
     ///     {
-    ///       "employeeId": 8,
+    ///       "employeeId": 16,
     ///       "firstName": "Alan",
     ///       "lastName": "Ford",
     ///       "birthDate": "1971-05-18T00:00:00",
     ///       "age": 50,
-    ///       "company": "N/A",
-    ///       "department": "N/A",
-    ///       "address": "Hamilton Street 145/a, 10007 NY",
-    ///       "username": "alanf"
+    ///       "addresses": [
+    ///        {
+    ///            "employeeId": 16,
+    ///            "addressTypeId": 0,
+    ///            "address": "000 Unknown St",
+    ///            "created": "2024-07-13T15:40:05.9319142Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///         {
+    ///            "employeeId": 16,
+    ///            "addressTypeId": 1,
+    ///            "address": "123 Work St",
+    ///            "created": "2024-07-13T15:40:05.9319504Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///       ],
+    ///       "username": "alanf",
+    ///       "companyId": 1,
+    ///       "company": "Company One",
+    ///       "departmentId": 2,
+    ///       "department": "Some Department",
+    ///       "created": "2024-07-13T15:40:05.9319504Z",
+    ///       "modified": "1970-01-01T00:00:00Z"
     ///     }
     /// </remarks>
     /// <param name="employee">EmployeeCreateDto model</param>
@@ -110,7 +140,7 @@ public class EmployeesController : BaseController<EmployeesController>
     /// <remarks>
     /// Sample request:
     ///
-    ///     DELETE /api/v2/employees/1
+    ///     DELETE /api/v3/employees/1
     ///
     /// Sample response body:
     ///     
@@ -142,50 +172,74 @@ public class EmployeesController : BaseController<EmployeesController>
     /// <remarks>
     /// Sample request:
     ///
-    ///     GET /api/v2/employees/getall
+    ///     GET /api/v3/employees/getall
     ///
     /// Sample response body:
     ///
     ///     [
-    ///       {
-    ///         "employeeId": 1,
-    ///         "firstName": "John",
-    ///         "lastName": "Whyne",
-    ///         "birthDate": "1991-08-07T00:00:00",
-    ///         "age": 29,
-    ///         "address": "Kentucky, USA",
-    ///         "username": "johnw",
-    ///         "companyId": 1,
-    ///         "company": "Company One",
-    ///         "departmentId": 1,
-    ///         "department": "Logistics"
-    ///       },
-    ///       {
-    ///         "employeeId": 2,
-    ///         "firstName": "Mathias",
-    ///         "lastName": "Gernold",
-    ///         "birthDate": "1997-10-12T00:00:00",
-    ///         "age": 23,
-    ///         "address": "Berlin, Germany",
-    ///         "username": "mathiasg",
-    ///         "companyId": 2,
-    ///         "company": "Company Two",
-    ///         "departmentId": 4,
-    ///         "department": "Sales"
-    ///       },
-    ///       {
-    ///         "employeeId": 3,
-    ///         "firstName": "Julia",
-    ///         "lastName": "Reynolds",
-    ///         "birthDate": "1955-12-16T00:00:00",
-    ///         "age": 65,
-    ///         "address": "Los Angeles, USA",
-    ///         "username": "juliar",
-    ///         "companyId": 3,
-    ///         "company": "Company Three",
-    ///         "departmentId": 7,
-    ///         "department": "Research and Development"
-    ///       }
+    ///     {
+    ///       "employeeId": 6,
+    ///       "firstName": "Alan",
+    ///       "lastName": "Ford",
+    ///       "birthDate": "1971-05-18T00:00:00",
+    ///       "age": 50,
+    ///       "addresses": [
+    ///        {
+    ///            "employeeId": 6,
+    ///            "addressTypeId": 0,
+    ///            "address": "000 Unknown St",
+    ///            "created": "2024-07-13T15:40:05.9319142Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///         {
+    ///            "employeeId": 6,
+    ///            "addressTypeId": 1,
+    ///            "address": "123 Work St",
+    ///            "created": "2024-07-13T15:40:05.9319504Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///       ],
+    ///       "username": "alanf",
+    ///       "companyId": 1,
+    ///       "company": "Company One",
+    ///       "departmentId": 2,
+    ///       "department": "Some Department",
+    ///       "created": "2024-07-13T15:40:05.9319504Z",
+    ///       "modified": "1970-01-01T00:00:00Z"
+    ///     },
+    ///     {
+    ///       "employeeId": 2,
+    ///       "firstName": "Mathias",
+    ///       "lastName": "Gernold",
+    ///       "birthDate": "1997-10-12T00:00:00",
+    ///       "age": 50,
+    ///       "addresses": [
+    ///        {
+    ///            "employeeId": 6,
+    ///            "addressTypeId": 0,
+    ///            "address": "000 Unknown St",
+    ///            "created": "2024-07-13T15:40:05.9319142Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///         {
+    ///            "employeeId": 6,
+    ///            "addressTypeId": 1,
+    ///            "address": "123 Work St",
+    ///            "created": "2024-07-13T15:40:05.9319504Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///       ],
+    ///       "username": "mathiasg",
+    ///       "companyId": 1,
+    ///       "company": "Company One",
+    ///       "departmentId": 4,
+    ///       "department": "Sales",
+    ///       "created": "2024-07-13T15:40:05.9319504Z",
+    ///       "modified": "1970-01-01T00:00:00Z"
+    ///     },
+    ///     {
+    ///      ...
+    ///     }
     ///     ]
     /// </remarks>
     /// <param name="version">API version</param>
@@ -211,7 +265,7 @@ public class EmployeesController : BaseController<EmployeesController>
     /// <remarks>
     /// Sample request:
     ///
-    ///     GET /api/v2/employees/6
+    ///     GET /api/v3/employees/6
     ///
     /// Sample response body:
     /// 
@@ -219,12 +273,31 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "employeeId": 6,
     ///       "firstName": "Alan",
     ///       "lastName": "Ford",
-    ///       "birthDate": "1984-06-15T00:00:00",
-    ///       "age": 36,
-    ///       "company": "Company Three",
-    ///       "department": "Admin",
-    ///       "address": "Milano, Italy",
-    ///       "username": "alanf"
+    ///       "birthDate": "1971-05-18T00:00:00",
+    ///       "age": 50,
+    ///       "addresses": [
+    ///        {
+    ///            "employeeId": 6,
+    ///            "addressTypeId": 0,
+    ///            "address": "000 Unknown St",
+    ///            "created": "2024-07-13T15:40:05.9319142Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///         {
+    ///            "employeeId": 6,
+    ///            "addressTypeId": 1,
+    ///            "address": "123 Work St",
+    ///            "created": "2024-07-13T15:40:05.9319504Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
+    ///         },
+    ///       ],
+    ///       "username": "alanf",
+    ///       "companyId": 1,
+    ///       "company": "Company One",
+    ///       "departmentId": 2,
+    ///       "department": "Some Department",
+    ///       "created": "2024-07-13T15:40:05.9319504Z",
+    ///       "modified": "1970-01-01T00:00:00Z"
     ///     }
     /// </remarks>
     /// <param name="id" example="1">Employee Id</param>
@@ -246,7 +319,9 @@ public class EmployeesController : BaseController<EmployeesController>
     }
 
     /// <summary>
-    /// Update a employee
+    /// Update an employee 
+    /// 
+    /// All provided properties will be used to update the employee, so provide them if known. Properties not available in request body will remain unchanged.
     /// </summary>
     /// <remarks>
     /// Sample request body:
@@ -259,17 +334,17 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "addresses": 
     ///       [
     ///         {
-    ///            "employeeId": 7,
+    ///            "employeeId": 1,
     ///            "addressTypeId": 0,
-    ///            "address": "Unknown address"
+    ///            "address": "Unknown address",
     ///         },
     ///         {
-    ///            "employeeId": 7,
+    ///            "employeeId": 1,
     ///            "addressTypeId": 1,
     ///            "address": "Work address"
     ///         },
     ///         {
-    ///            "employeeId": 7,
+    ///            "employeeId": 1,
     ///            "addressTypeId": 2,
     ///            "address": "Residential address"
     ///         }
@@ -284,27 +359,36 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "lastName": "Whyne",
     ///       "birthDate": "1965-05-31T00:00:00",
     ///       "age": 55,
-    ///       "company": "Company One",
-    ///       "department": "HR",
-    ///       "addresses": 
-    ///       [
+    ///       "addresses": [
     ///         {
-    ///           "employeeId": 7,
+    ///           "employeeId": 1,
     ///           "addressTypeId": 0,
-    ///           "address": "Unknown address"
+    ///           "address": "Unknown address",
+    ///            "created": "2024-07-13T15:40:05.9319504Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
     ///         },
     ///         {
-    ///           "employeeId": 7,
+    ///           "employeeId": 1,
     ///           "addressTypeId": 1,
-    ///           "address": "Work address"
+    ///           "address": "Work address",
+    ///            "created": "2024-07-13T15:40:05.9319504Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
     ///         },
     ///         {
-    ///           "employeeId": 7,
+    ///           "employeeId": 1,
     ///           "addressTypeId": 2,
-    ///           "address": "Residential address"
+    ///           "address": "Residential address",
+    ///            "created": "2024-07-13T15:40:05.9319504Z",
+    ///            "modified": "1970-01-01T00:00:00Z"
     ///         }
     ///       ],
-    ///       "username": "johnw"
+    ///       "username": "johnw",
+    ///       "companyId": 1, 
+    ///       "company": "Company One",
+    ///       "departmentId": 1,
+    ///       "department": "HR",    
+    ///       "created": "2024-07-13T15:40:05.9319504Z",
+    ///       "modified": "2024-07-13T00:00:00Z"
     ///     }
     /// </remarks>
     /// <param name="employee"><see cref="EmployeeUpdateDto"/></param>
@@ -351,9 +435,12 @@ public class EmployeesController : BaseController<EmployeesController>
     }
 
     /// <summary>
-    /// 'Upsert' an employee. Employee info is updated and supplied addresses are inserted or updated. 
-    /// If an employee address existed previously, but was not supplied in request, 
-    /// it will remain in the database unaffected for employee.
+    /// 'Upsert' an employee. 
+    /// 
+    /// All provided properties will be used to upsert the employee, so provide them if known. Properties not available in request body will remain unchanged.
+    /// The supplied address properties are inserted or updated. 
+    /// If an address existed previously, but was not supplied in request body, it will continue to exist unchanged for employee. 
+    /// Note: No addresses are removed using upsert.
     /// </summary>
     /// <remarks>
     /// Sample request body:
@@ -366,12 +453,12 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "addresses": 
     ///       [
     ///         {
-    ///            "employeeId": 7,
+    ///            "employeeId": 1,
     ///            "addressTypeId": 0,
     ///            "address": "Unknown address"
     ///         },
     ///         {
-    ///            "employeeId": 7,
+    ///            "employeeId": 1,
     ///            "addressTypeId": 2,
     ///            "address": "Residential address"
     ///         }
@@ -386,27 +473,37 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "lastName": "Whyne",
     ///       "birthDate": "1965-05-31T00:00:00",
     ///       "age": 55,
-    ///       "company": "Company One",
-    ///       "department": "HR",
     ///       "addresses": 
     ///       [
     ///         {
-    ///           "employeeId": 7,
+    ///           "employeeId": 1,
     ///           "addressTypeId": 0,
-    ///           "address": "Unknown address"
+    ///           "address": "Unknown address",
+    ///           "created": "2024-07-13T15:40:05.9319504Z",
+    ///           "modified": "2024-07-13T15:40:05Z"
     ///         },
     ///         {
-    ///           "employeeId": 7,
+    ///           "employeeId": 1,
     ///           "addressTypeId": 1,
-    ///           "address": "Work address"  (This address existed for employee and will remain after upsert if not supplied in request)
+    ///           "address": "Work address"  (This address existed for employee and will remain after upsert if not supplied in request),
+    ///           "created": "2024-07-13T15:40:05.9319504Z",
+    ///           "modified": "1970-01-01T00:00:00Z"
     ///         },
     ///         {
-    ///           "employeeId": 7,
+    ///           "employeeId": 1,
     ///           "addressTypeId": 2,
     ///           "address": "Residential address"
+    ///           "created": "2024-07-13T15:40:05.9319504Z",
+    ///           "modified": "2024-07-13T15:40:05Z"
     ///         }
     ///       ],
-    ///       "username": "johnw"
+    ///       "username": "johnw",
+    ///       "companyId": 1, 
+    ///       "company": "Company One",
+    ///       "departmentId": 1,
+    ///       "department": "HR", 
+    ///       "created": "2024-07-13T15:40:05.9319504Z",
+    ///       "modified": "2024-07-13T15:40:05Z"
     ///     }
     /// </remarks>
     /// <param name="employee"><see cref="EmployeeUpdateDto"/></param>
@@ -450,10 +547,7 @@ public class EmployeesController : BaseController<EmployeesController>
         return Ok(employeeDto);
     }
 
-    // TODO: Fix search - After creating all version 3 files, I noticed that the Repository layer depends on
-    // the "EmployeeSearchDto" and this layer should not rely on dtos. 
-    // Since it IS relying on the dto, if we version the dto,
-    // it breaks one version or the other and we don't want to have to version the repo.
+    // TODO: Remove older SearchEmployeeAsync method after fully removing v2.1. Uses old Dto, and shouldn't.
 
     /// <summary>
     /// Search for employees
@@ -468,8 +562,6 @@ public class EmployeesController : BaseController<EmployeesController>
     {
         Logger.LogDebug(nameof(SearchAsync));
 
-        // Convert dto to older version since Repository is relying on this older version
-        // TODO: Repository needs to be refactored to not use versioned DTO folder eventually.
         var employeeSearchCriteria = new EmployeeSearchCriteria
         {
             FirstName = searchCriteria.FirstName,

@@ -55,7 +55,11 @@ namespace CompanyWebApi.Controllers.V3
         ///     {
         ///         "departmentId": 10,
         ///         "name": "Test Department",
-        ///         "employees": []
+        ///         "companyId": 1, 
+        ///         "companyName": "Test Company",
+        ///         "employees": [],
+        ///         "created": "2024-06-18T17:53:51.9976026",
+        ///         "modified": "2024-06-18T17:53:51.9976028"
         ///     }
         /// 
         /// </remarks>
@@ -64,10 +68,10 @@ namespace CompanyWebApi.Controllers.V3
         [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(DepartmentDto), Description = "Returns a new department")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Company was not found")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpPost("create", Name = "CreateDepartmentV2")]
+        [HttpPost("create", Name = "CreateDepartmentV3")]
         public async Task<IActionResult> CreateAsync([FromBody] DepartmentCreateDto department, ApiVersion version)
         {
-            Logger.LogDebug("CreateAsync");
+            Logger.LogDebug(nameof(CreateAsync));
             if (!await _repositoryFactory.CompanyRepository.ExistsAsync(c => c.CompanyId == department.CompanyId).ConfigureAwait(false))
             {
                 return NotFound(new { message = $"The Company with id {department.CompanyId} was not found" });
@@ -94,7 +98,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     DELETE /api/v2/departments/1
+        ///     DELETE /api/v3/departments/1
         ///
         /// Sample response body:
         ///     
@@ -103,13 +107,13 @@ namespace CompanyWebApi.Controllers.V3
         /// </remarks>
         /// <param name="id" example="1">Department Id</param>
         /// <param name="version">API version</param>
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Department was successfuly deleted")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Department was successfully deleted")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "No department was found")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpDelete("{id:int}", Name = "DeleteDepartmentByIdV2")]
+        [HttpDelete("{id:int}", Name = "DeleteDepartmentByIdV3")]
         public async Task<IActionResult> DeleteAsync(int id, ApiVersion version)
         {
-            Logger.LogDebug("RemoveAsync");
+            Logger.LogDebug(nameof(DeleteAsync));
             var department = await _repositoryFactory.DepartmentRepository.GetDepartmentAsync(id).ConfigureAwait(false);
             if (department == null)
             {
@@ -126,7 +130,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /api/v2/departments/getall
+        ///     GET /api/v3/departments/getall
         ///
         /// Sample response body:
         ///
@@ -138,7 +142,9 @@ namespace CompanyWebApi.Controllers.V3
         ///         "companyName": "Company One",
         ///         "employees": [
         ///           "John Whyne, Address: Kentucky, USA, Department: Logistics, Username: johnw"
-        ///         ]
+        ///         ],
+        ///         "created": "2024-06-18T17:53:51.9976026",
+        ///         "modified": "2024-06-18T17:53:51.9976028"
         ///       },
         ///       {
         ///         "departmentId": 2,
@@ -147,14 +153,18 @@ namespace CompanyWebApi.Controllers.V3
         ///         "companyName": "Company One",
         ///         "employees": [
         ///           "Alois Mock, Address: Vienna, Austria, Department: Administration, Username: aloism"
-        ///         ]
+        ///         ],
+        ///         "created": "2024-06-18T17:53:51.9976026",
+        ///         "modified": "2024-06-18T17:53:51.9976028"
         ///       },
         ///       {
         ///         "departmentId": 3,
         ///         "name": "Development",
         ///         "companyId": 1,
         ///         "companyName": "Company One",
-        ///         "employees": []
+        ///         "employees": [],
+        ///         "created": "2024-06-18T17:53:51.9976026",
+        ///         "modified": "2024-06-18T17:53:51.9976028"
         ///       }
         ///     ]
         /// </remarks>
@@ -162,10 +172,10 @@ namespace CompanyWebApi.Controllers.V3
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<DepartmentDto>), Description = "Return list of departments")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The departments list is empty")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpGet("getAll", Name = "GetAllDepartmentsV2")]
+        [HttpGet("getAll", Name = "GetAllDepartmentsV3")]
         public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAllAsync(ApiVersion version)
         {
-            Logger.LogDebug("GetAsync");
+            Logger.LogDebug(nameof(GetAllAsync));
             var departments = await _repositoryFactory.DepartmentRepository.GetDepartmentsAsync().ConfigureAwait(false);
             if (!departments.Any())
             {
@@ -181,7 +191,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /api/v2/departments/1
+        ///     GET /api/v3/departments/1
         ///
         /// Sample response body:
         /// 
@@ -192,19 +202,21 @@ namespace CompanyWebApi.Controllers.V3
         ///       "companyName": "Company One",
         ///       "employees": [
         ///         "John Whyne, Address: Kentucky, USA, Department: Logistics, Username: johnw"
-        ///       ]
+        ///       ],
+        ///       "created": "2024-06-18T17:53:51.9976026",
+        ///       "modified": "2024-06-18T17:53:51.9976028"
         ///     }
         /// 
         /// </remarks>
         /// <param name="id" example="1">Department Id</param>
         /// <param name="version">API version</param>
-        [HttpGet("{id:int}", Name = "GetDepartmentByIdV2")]
+        [HttpGet("{id:int}", Name = "GetDepartmentByIdV3")]
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(DepartmentDto), Description = "Return department")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The department was not found")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
         public async Task<ActionResult<DepartmentDto>> GetAsync(int id, ApiVersion version)
         {
-            Logger.LogDebug("GetAsync");
+            Logger.LogDebug(nameof(GetAsync));
             var department = await _repositoryFactory.DepartmentRepository.GetDepartmentAsync(id).ConfigureAwait(false);
             if (department == null)
             {
@@ -230,10 +242,14 @@ namespace CompanyWebApi.Controllers.V3
         ///     {
         ///       "departmentId": 1,
         ///       "name": "NEW DEPARTMENT",
+        ///       "companyId": 1,
+        ///       "companyName": "Company One",
         ///       "employees": [
         ///         "John Whyne, Address: Bangalore, India, Department: NEW DEPARTMENT, Username: johnw",
         ///         "Alois Mock, Address: NewDelhi, India, Department: NEW DEPARTMENT, Username: aloism"
-        ///       ]
+        ///       ],
+        ///       "created": "2024-06-18T17:53:51.9976026",
+        ///       "modified": "2024-06-18T17:53:51.9976028"
         ///     }
         /// 
         /// </remarks>
@@ -242,10 +258,10 @@ namespace CompanyWebApi.Controllers.V3
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(DepartmentDto), Description = "Return updated department")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The department was not found")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpPut("update", Name = "UpdateDepartmentV2")]
+        [HttpPut("update", Name = "UpdateDepartmentV3")]
         public async Task<IActionResult> UpdateAsync([FromBody] DepartmentUpdateDto department, ApiVersion version)
         {
-            Logger.LogDebug("UpdateAsync");
+            Logger.LogDebug(nameof(UpdateAsync));
             var repoDepartment = await _repositoryFactory.DepartmentRepository.GetDepartmentAsync(department.DepartmentId).ConfigureAwait(false);
             if (repoDepartment == null)
             {

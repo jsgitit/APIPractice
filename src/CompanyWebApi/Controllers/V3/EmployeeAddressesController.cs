@@ -58,7 +58,9 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///     {
     ///       "employeeId": 6,
     ///       "addressTypeId": 1,
-    ///       "address": "Milano, Italy"
+    ///       "address": "Milano, Italy",
+    ///       "created": "2024-06-18T17:53:51.9976026",
+    ///       "modified": "2024-06-18T17:53:51.9976028"
     ///     }
     /// </remarks>
     /// <param name="employeeId" example="6">Employee Id</param>
@@ -98,7 +100,9 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///     {
     ///       "employeeId": 6,
     ///       "addressTypeId": 2,
-    ///       "address": "123 Mailing Address street, SomeTown, WA 96800"
+    ///       "address": "123 Mailing Address street, SomeTown, WA 96800",
+    ///       "created": "2024-06-18T17:53:51.9976026",
+    ///       "modified": "2024-06-18T17:53:51.9976028"
     ///     }
     /// </remarks>
     /// <param name="address">EmployeeAddressCreateDto model</param>
@@ -179,22 +183,30 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///       {
     ///         "employeeId": 6,
     ///         "addressTypeId" : 0,
-    ///         "address": "unknown address"
+    ///         "address": "unknown address",
+    ///         "created": "2024-06-18T17:53:51.9976026",
+    ///         "modified": "2024-06-18T17:53:51.9976028"
     ///       },
     ///       {
     ///         "employeeId": 6,
     ///         "addressTypeId" : 1,
-    ///         "address": "Work address"
+    ///         "address": "Work address",
+    ///         "created": "2024-06-18T17:53:51.9976026",
+    ///         "modified": "2024-06-18T17:53:51.9976028"
     ///       },
     ///       {
     ///         "employeeId": 6,
     ///         "addressTypeId" : 2,
-    ///         "address": "Mailing address"
+    ///         "address": "Mailing address",
+    ///         "created": "2024-06-18T17:53:51.9976026",
+    ///         "modified": "2024-06-18T17:53:51.9976028"
     ///       },
     ///       {
     ///         "employeeId": 6,
     ///         "addressTypeId" : 3,
-    ///         "address": "Residential address"
+    ///         "address": "Residential address",
+    ///         "created": "2024-06-18T17:53:51.9976026",
+    ///         "modified": "2024-06-18T17:53:51.9976028"
     ///       }
     ///     ]
     /// </remarks>
@@ -218,7 +230,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     }
 
     /// <summary>
-    /// Update an employee addresses
+    /// Update a single employee address
     /// </summary>
     /// <remarks>
     /// Sample request body:
@@ -234,7 +246,9 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///     {
     ///       "employeeId": 6,
     ///       "addressTypeId": 1,
-    ///       "address": "updated address"
+    ///       "address": "updated address",
+    ///       "created": "2024-06-18T17:53:51.9976026",
+    ///       "modified": "2024-06-18T17:53:51.9976028"
     ///     }
     /// </remarks>
     /// <param name="employeeAddress"><see cref="EmployeeAddressUpdateDto"/></param>
@@ -285,6 +299,11 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///         "address": "updated address"
     ///       }
     ///     ]
+    ///     
+    /// Sample response body:
+    ///     
+    ///     Code 204 No Content
+    ///     
     /// </remarks>
     /// <param name="employeeAddress"><see cref="EmployeeAddressUpdateDto"/></param>
     [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No Content")]

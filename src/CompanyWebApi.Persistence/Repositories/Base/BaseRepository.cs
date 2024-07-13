@@ -169,8 +169,8 @@ namespace CompanyWebApi.Persistence.Repositories.Base
                 throw new ArgumentException("Entity does not exist", nameof(entity));
             }
 
-            DatabaseContext.Entry(existing).CurrentValues.SetValues(entity);
             SetAuditDates(entity, setModified: true);
+            DatabaseContext.Entry(existing).CurrentValues.SetValues(entity);
             if (tracking)
             {
                 DatabaseContext.Entry(existing).State = EntityState.Modified;

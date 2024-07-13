@@ -75,7 +75,7 @@ namespace CompanyWebApi.Controllers.V3
         [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UserAuthenticateDto), Description = "User with token")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Username or password is incorrect")]
-        [HttpPost("authenticate", Name = "AuthenticateUserV2")]
+        [HttpPost("authenticate", Name = "AuthenticateUserV3")]
         public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateModel model, ApiVersion version)
         {
             var user = await _userService.AuthenticateAsync(model.Username, model.Password).ConfigureAwait(false);
@@ -101,10 +101,13 @@ namespace CompanyWebApi.Controllers.V3
         /// Sample response body:
         /// 
         ///     {
+        ///       "employeeId": 1
+        ///       "firstName": "Alan",
+        ///       "lastName": "Ford",
         ///       "username": "alanf",
         ///       "password": "tntgroup!129",
-        ///       "employeeFirstName": "Alan",
-        ///       "employeeLastName": "Ford"
+        ///       "created": "2024-07-13T16:57:38.135Z",
+        ///       "modified": "2024-07-13T16:57:38.135Z"
         ///     }
         /// </remarks>
         /// <param name="user">UserCreateDto model</param>
@@ -112,7 +115,7 @@ namespace CompanyWebApi.Controllers.V3
         [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(UserDto), Description = "Returns a new user")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "The user with EmployeeId {user.EmployeeId} already exists")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The employee with {EmployeeId} was not found")]
-        [HttpPost("create", Name = "CreateUserV2")]
+        [HttpPost("create", Name = "CreateUserV3")]
         public async Task<IActionResult> CreateAsync([FromBody] UserCreateDto user, ApiVersion version)
         {
             Logger.LogDebug(nameof(CreateAsync));
@@ -147,7 +150,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     DELETE /api/v2/users/username
+        ///     DELETE /api/v3/users/username
         ///
         /// Sample response body:
         ///     
@@ -156,9 +159,9 @@ namespace CompanyWebApi.Controllers.V3
         /// </remarks>
         /// <param name="userName">User name</param>
         /// <param name="version">API version</param>
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfuly deleted")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfully deleted")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "No user was found")]
-        [HttpDelete("{userName}", Name = "DeleteUserByNameV2")]
+        [HttpDelete("{userName}", Name = "DeleteUserByNameV3")]
         public async Task<ActionResult> DeleteAsync([Required]string userName, ApiVersion version)
         {
             Logger.LogDebug(nameof(DeleteAsync));
@@ -178,7 +181,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     DELETE /api/v2/users/{employeeId}
+        ///     DELETE /api/v3/users/{employeeId}
         ///
         /// Sample response body:
         ///     
@@ -187,9 +190,9 @@ namespace CompanyWebApi.Controllers.V3
         /// </remarks>
         /// <param name="employeeId">Employee Id</param>
         /// <param name="version">API version</param>
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfuly deleted")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfully deleted")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "No user was found")]
-        [HttpDelete("{employeeId:int}", Name = "DeleteUserByEmployeeIdAsyncV2")]
+        [HttpDelete("{employeeId:int}", Name = "DeleteUserByEmployeeIdAsyncV3")]
         public async Task<ActionResult> DeleteByEmployeeIdAsync([Required] int employeeId, ApiVersion version)
         {
             Logger.LogDebug(nameof(DeleteByEmployeeIdAsync));
@@ -209,7 +212,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /api/v2/users/getall
+        ///     GET /api/v3/users/getall
         ///
         /// Sample response body:
         /// 
@@ -219,36 +222,43 @@ namespace CompanyWebApi.Controllers.V3
         ///         "firstName": "Carl",
         ///         "lastName": "Weiss",
         ///         "username": "johnw",
-        ///         "password": "test"
+        ///         "password": "test",
+        ///         "created": "2024-07-13T16:57:38.135Z",
+        ///         "modified": "2024-07-13T16:57:38.135Z"
         ///       },
         ///       {
         ///         "employeeId": 2,
         ///         "firstName": "Mathias",
         ///         "lastName": "Gernold",
         ///         "username": "mathiasg",
-        ///         "password": "test"
+        ///         "password": "test",
+        ///         "created": "2024-07-13T16:57:38.135Z",
+        ///         "modified": "2024-07-13T16:57:38.135Z"
         ///       },
         ///       {
         ///         "employeeId": 3,
         ///         "firstName": "Julia",
         ///         "lastName": "Reynolds",
         ///         "username": "juliar",
-        ///         "password": "test"
+        ///         "password": "test",
+        ///         "created": "2024-07-13T16:57:38.135Z",
+        ///         "modified": "2024-07-13T16:57:38.135Z"
         ///       }
         ///     ]
         /// </remarks>
         /// <param name="version">API version</param>
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IList<UserDto>), Description = "Return list of users")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The users list is empty")]
-        [HttpGet("getAll", Name = "GetAllUsersV2")]
+        [HttpGet("getAll", Name = "GetAllUsersV3")]
         public async Task<ActionResult<IList<UserDto>>> GetAllAsync(ApiVersion version)
         {
             Logger.LogDebug(nameof(GetAllAsync));
-            var usersDto = await _repositoryFactory.UserRepository.GetUsersAsync().ConfigureAwait(false);
-            if (!usersDto.Any())
+            var users = await _repositoryFactory.UserRepository.GetUsersAsync().ConfigureAwait(false);
+            if (!users.Any())
             {
                 return NotFound(new { message = "The users list is empty"});
             }
+            var usersDto = _usersToDtoConverter.Convert(users);
             return Ok(usersDto);
         }
 
@@ -258,7 +268,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /api/v2/users/alanf
+        ///     GET /api/v3/users/alanf
         ///
         /// Sample response body:
         ///  
@@ -268,21 +278,27 @@ namespace CompanyWebApi.Controllers.V3
         ///         "firstName": "Alan",
         ///         "lastName": "Ford",
         ///         "username": "alanf",
-        ///         "password": "tntgroup!129"
+        ///         "password": "tntgroup!129",
+        ///         "created": "2024-07-13T16:57:38.135Z",
+        ///         "modified": "2024-07-13T16:57:38.135Z"
         ///       },
         ///       {
         ///         "employeeId": 7,
         ///         "firstName": "Alan",
         ///         "lastName": "Ford",
         ///         "username": "alanf",
-        ///         "password": "tntgroup!129"
+        ///         "password": "tntgroup!129",
+        ///         "created": "2024-07-13T16:57:38.135Z",
+        ///         "modified": "2024-07-13T16:57:38.135Z"
         ///       },
         ///       {
         ///         "employeeId": 8,
         ///         "firstName": "Alan",
         ///         "lastName": "Ford",
         ///         "username": "alanf",
-        ///         "password": "tntgroup!129"
+        ///         "password": "tntgroup!129",
+        ///         "created": "2024-07-13T16:57:38.135Z",
+        ///         "modified": "2024-07-13T16:57:38.135Z"
         ///       }
         ///     ]
         /// </remarks>
@@ -290,7 +306,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <param name="version">API version</param>
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IList<UserDto>), Description = "Return list of users")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The users were not found")]
-        [HttpGet("{userName}", Name = "GetUserByUsernameV2")]
+        [HttpGet("{userName}", Name = "GetUserByUsernameV3")]
         public async Task<ActionResult<IList<UserDto>>> GetAsync(string userName, ApiVersion version)
         {
             Logger.LogDebug(nameof(GetAsync));
@@ -322,14 +338,16 @@ namespace CompanyWebApi.Controllers.V3
         ///       "firstName": "Carl",
         ///       "lastName": "Weiss",
         ///       "username": "alanf",
-        ///       "password": "new!pass"
+        ///       "password": "new!pass",
+        ///       "created": "2024-07-13T16:57:38.135Z",
+        ///       "modified": "2024-07-13T16:57:38.135Z"
         ///     }
         /// </remarks>
         /// <param name="userToUpdate"><see cref="UserUpdateDto"/></param>
         /// <param name="version">API AssemblyVersion</param>
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UserDto), Description = "Return updated user")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The employee was not found")]
-        [HttpPut("update", Name = "UpdateUserV2")]
+        [HttpPut("update", Name = "UpdateUserV3")]
         public async Task<IActionResult> UpdateAsync([FromBody] UserUpdateDto userToUpdate, ApiVersion version)
         {
             Logger.LogDebug(nameof(UpdateAsync));
@@ -345,7 +363,9 @@ namespace CompanyWebApi.Controllers.V3
             await _repositoryFactory.UserRepository.UpdateAsync(repoUser);
             await _repositoryFactory.SaveAsync().ConfigureAwait(false);
 
-            var userDto = _userToDtoConverter.Convert(repoUser);
+
+            var updatedUser = await _repositoryFactory.UserRepository.GetUserAsync(userToUpdate.EmployeeId).ConfigureAwait(false);
+            var userDto = _userToDtoConverter.Convert(updatedUser);
             return Ok(userDto);
         }
     }

@@ -12,7 +12,7 @@ namespace CompanyWebApi.Persistence.Repositories
     {
         Task<User> AddUserAsync(User user, bool tracking = false);
 
-        Task<IList<UserDto>> GetUsersAsync(bool tracking = false);
+        Task<IList<User>> GetUsersAsync(bool tracking = false);
 
         Task<User> GetUserAsync(int id, bool tracking = false);
 

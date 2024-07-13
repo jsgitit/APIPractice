@@ -54,14 +54,16 @@ namespace CompanyWebApi.Controllers.V3
         ///     {
         ///         "companyId": 12,
         ///         "name": "Test Company",
-        ///         "employees": []
+        ///         "employees": [],
+        ///         "created": "2024-07-13T14:25:00.6048657Z",
+        ///         "modified": "1970-01-01T00:00:00Z"
         ///     }
         /// </remarks>
         /// <param name="company">CompanyCreateDto model</param>
         /// <param name="version">API version</param>
         [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(CompanyDto), Description = "Returns a new company")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpPost("create", Name = "CreateCompanyV2")]
+        [HttpPost("create", Name = "CreateCompanyV3")]
         public async Task<IActionResult> CreateAsync([FromBody] CompanyCreateDto company, ApiVersion version)
         {
             Logger.LogDebug(nameof(CreateAsync));
@@ -84,7 +86,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     DELETE /api/v2/companies/1
+        ///     DELETE /api/v3/companies/1
         ///
         /// Sample response body:
         ///     
@@ -93,10 +95,10 @@ namespace CompanyWebApi.Controllers.V3
         /// </remarks>
         /// <param name="id" example="1">Company Id</param>
         /// <param name="version">API version</param>
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Company was successfuly deleted")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Company was successfully deleted")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "No company was found")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpDelete("{id:int}", Name = "DeleteCompanyByIdV2")]
+        [HttpDelete("{id:int}", Name = "DeleteCompanyByIdV3")]
         public async Task<IActionResult> DeleteAsync(int id, ApiVersion version)
         {
             Logger.LogDebug(nameof(DeleteAsync));
@@ -116,7 +118,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /api/v2/companies/getall
+        ///     GET /api/v3/companies/getall
         ///
         /// Sample response body:
         /// 
@@ -128,14 +130,18 @@ namespace CompanyWebApi.Controllers.V3
         ///           "John Whyne, Address: Bangalore, India, Department: HR, Username: johnw",
         ///           "Mathias Gernold, Address: Newyork, USA, Department: Admin, Username: mathiasg",
         ///           "Julia Reynolds, Address: California, USA, Department: Development, Username: juliar"
-        ///         ]
+        ///         ],
+        ///         "created": "2024-06-18T17:53:51.9976026",
+        ///         "modified": "2024-06-18T17:53:51.9976028"
         ///       },
         ///       {
         ///         "companyId": 2,
         ///         "name": "Company Two",
         ///         "employees": [
         ///           "Alois Mock, Address: NewDelhi, India, Department: HR, Username: aloism"
-        ///         ]
+        ///         ],
+        ///         "created": "2024-06-18T17:53:51.9976026",
+        ///         "modified": "2024-06-18T17:53:51.9976028"
         ///       },
         ///       {
         ///         "companyId": 3,
@@ -143,7 +149,9 @@ namespace CompanyWebApi.Controllers.V3
         ///         "employees": [
         ///           "Gertraud Bochold, Address: Kentuki, USA, Department: Admin, Username: gertraudb",
         ///           "Alan Ford, Address: Milano, Italy, Department: Admin, Username: alanf"
-        ///         ]
+        ///         ],
+        ///         "created": "2024-06-18T17:53:51.9976026",
+        ///         "modified": "2024-06-18T17:53:51.9976028"
         ///       }
         ///     ]
         /// </remarks>
@@ -151,7 +159,7 @@ namespace CompanyWebApi.Controllers.V3
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyDto>), Description = "Return list of companies")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The companies list is empty")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpGet("getall", Name = "GetAllCompaniesV2")]
+        [HttpGet("getall", Name = "GetAllCompaniesV3")]
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetAllAsync(ApiVersion version)
         {
             Logger.LogDebug(nameof(GetAllAsync));
@@ -170,7 +178,7 @@ namespace CompanyWebApi.Controllers.V3
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /api/v2/companies/1
+        ///     GET /api/v3/companies/1
         ///
         /// Sample response body:
         /// 
@@ -181,7 +189,9 @@ namespace CompanyWebApi.Controllers.V3
         ///         "John Whyne, Address: Bangalore, India, Department: HR, Username: johnw",
         ///         "Mathias Gernold, Address: Newyork, USA, Department: Admin, Username: mathiasg",
         ///         "Julia Reynolds, Address: California, USA, Department: Development, Username: juliar"
-        ///       ]
+        ///       ],
+        ///       "created": "2024-06-18T17:53:51.9976026",
+        ///       "modified": "2024-06-18T17:53:51.9976028"
         ///     }
         /// </remarks>
         /// <param name="id" example="1">Company Id</param>
@@ -189,7 +199,7 @@ namespace CompanyWebApi.Controllers.V3
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(CompanyDto), Description = "Return company")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The company was not found")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpGet("{id:int}", Name = "GetCompanyByIdV2")]
+        [HttpGet("{id:int}", Name = "GetCompanyByIdV3")]
         public async Task<IActionResult> GetCompanyById(int id, ApiVersion version)
         {
             Logger.LogDebug(nameof(GetCompanyById));
@@ -222,7 +232,9 @@ namespace CompanyWebApi.Controllers.V3
         ///         "John Whyne, Address: Bangalore, India, Department: HR, Username: johnw",
         ///         "Mathias Gernold, Address: Newyork, USA, Department: Admin, Username: mathiasg",
         ///         "Julia Reynolds, Address: California, USA, Department: Development, Username: juliar"
-        ///       ]
+        ///       ],
+        ///       "created": "2024-06-18T17:53:51.9976026",
+        ///       "modified": "2024-06-18T17:53:51.9976028"
         ///     }
         /// </remarks>
         /// <param name="company">CompanyUpdateDto model</param>
@@ -230,7 +242,7 @@ namespace CompanyWebApi.Controllers.V3
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(CompanyDto), Description = "Return updated company")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The company was not found")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-        [HttpPut("update", Name = "UpdateCompanyV2")]
+        [HttpPut("update", Name = "UpdateCompanyV3")]
         public async Task<IActionResult> UpdateAsync([FromBody] CompanyUpdateDto company, ApiVersion version)
         {
             Logger.LogDebug(nameof(UpdateAsync));
