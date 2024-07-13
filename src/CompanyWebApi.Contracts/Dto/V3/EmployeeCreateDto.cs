@@ -29,7 +29,7 @@ public class EmployeeCreateDto
     public int DepartmentId { get; set; }
 
     [Required]
-    public IList<EmployeeAddressCreateDto> Addresses { get; set; }
+    public IList<EmployeeAddressCreateWithoutEmployeeIdDto> Addresses { get; set; }
 
     public string Username { get; set; }
 

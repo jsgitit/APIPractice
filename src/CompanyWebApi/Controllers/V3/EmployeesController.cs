@@ -59,12 +59,10 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "departmentId": 2,
     ///       "addresses": [
     ///         {
-    ///           "employeeId": 0,
     ///           "addressTypeId": 1,
     ///           "address": "Hamilton Street 145/a, 10007 NY"
     ///         },
     ///         {
-    ///           "employeeId": 0,
     ///           "addressTypeId": 2,
     ///           "address": "123 Residential Street"
     ///         },

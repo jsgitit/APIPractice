@@ -36,14 +36,14 @@ public class UsersControllerTests : ControllerTestsBase
             FirstName = "TestFirstName",
             LastName = "TestLastName",
             BirthDate = new DateTime(1991, 8, 7),
-            Addresses = new List<EmployeeAddressCreateDto>
+            Addresses = new List<EmployeeAddressCreateWithoutEmployeeIdDto>
             {
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Work,
                     Address = "123 Work St"
                 },
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Residential,
                     Address = "456 Home Ave"

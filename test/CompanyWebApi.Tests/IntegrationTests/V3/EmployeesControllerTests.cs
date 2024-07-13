@@ -33,14 +33,14 @@ public class EmployeesControllerTests : ControllerTestsBase
             BirthDate = new DateTime(1995, 8, 7),
             CompanyId = 1,
             DepartmentId = 1,
-            Addresses = new List<EmployeeAddressCreateDto>
+            Addresses = new List<EmployeeAddressCreateWithoutEmployeeIdDto>
             {
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Work,
                     Address = "123 Work St"
                 },
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Residential,
                     Address = "456 Home Ave"
@@ -93,14 +93,14 @@ public class EmployeesControllerTests : ControllerTestsBase
             FirstName = "John",
             LastName = "Doe",
             BirthDate = new DateTime(1995, 8, 7),
-            Addresses = new List<EmployeeAddressCreateDto>
+            Addresses = new List<EmployeeAddressCreateWithoutEmployeeIdDto>
             {
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Residential,
                     Address = "123 Main St"
                 },
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Work,
                     Address = "123 Work St"
@@ -169,14 +169,14 @@ public class EmployeesControllerTests : ControllerTestsBase
             FirstName = "John",
             LastName = "Doe",
             BirthDate = new DateTime(1995, 8, 7),
-            Addresses = new List<EmployeeAddressCreateDto>
+            Addresses = new List<EmployeeAddressCreateWithoutEmployeeIdDto>
             {
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Work,
                     Address = "123 Work St"
                 },
-                new EmployeeAddressCreateDto
+                new EmployeeAddressCreateWithoutEmployeeIdDto
                 {
                     AddressTypeId = AddressType.Residential,
                     Address = "123 Main St"
