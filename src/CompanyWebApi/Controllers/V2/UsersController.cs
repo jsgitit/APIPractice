@@ -21,8 +21,7 @@ namespace CompanyWebApi.Controllers.V2
 {
     [ApiAuthorization]
     [ApiController]
-    [ApiVersion("2.0", Deprecated = true)]
-    [ApiVersion("2.1")]
+    [ApiVersion("2.1", Deprecated = true)]
     [Produces("application/json")]
     [EnableCors("EnableCORS")]
     [ServiceFilter(typeof(ValidModelStateAsyncActionFilter))]

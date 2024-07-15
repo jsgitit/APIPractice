@@ -10,7 +10,6 @@ using Asp.Versioning;
 namespace CompanyWebApi.Controllers.V3
 {
 	[ApiController]
-    [ApiVersion("2.1", Deprecated = true)]
     [ApiVersion("3.0")]
     [Produces("application/json")]
 	[EnableCors("EnableCORS")]
