@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace CompanyWebApi.Services.Swagger
@@ -84,6 +85,9 @@ namespace CompanyWebApi.Services.Swagger
 
             // Provide a custom strategy for generating the unique Id's
             options.CustomSchemaIds(x => x.FullName);
+
+            // Resolve conflicts between actions with the same route
+            options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
         }
 
         private static string GetXmlCommentsPath()

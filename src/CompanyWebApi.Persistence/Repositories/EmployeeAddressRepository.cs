@@ -55,4 +55,17 @@ public class EmployeeAddressRepository : BaseRepository<EmployeeAddress, Applica
            tracking: tracking).ConfigureAwait(false);
         return result;
     }
+
+    public async Task UpdateEmployeeAddressAsync(EmployeeAddress employeeAddress, bool tracking = true)
+    {
+        await UpdateAsync(employeeAddress).ConfigureAwait(false);
+        await SaveAsync().ConfigureAwait(false);
+
+    }
+
+    public async Task UpsertEmployeeAddressesAsync(IList<EmployeeAddress> employeeAddresses, bool tracking = true)
+    {
+        await UpsertAsync(employeeAddresses).ConfigureAwait(false);
+        await SaveAsync().ConfigureAwait(false);
+    }
 }

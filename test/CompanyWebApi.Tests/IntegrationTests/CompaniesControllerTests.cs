@@ -9,7 +9,7 @@ namespace CompanyWebApi.Tests.IntegrationTests
 {
     public class CompaniesControllerTests : ControllerTestsBase
     {
-        private const string API_VERSION = "V2";
+        private const string API_VERSION = "V2.1";
         private readonly string _baseUrl;
         private readonly HttpClientHelper _httpClientHelper;
 

@@ -4,7 +4,9 @@ using CompanyWebApi.Tests.Factories;
 using CompanyWebApi.Tests.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -64,8 +66,8 @@ namespace CompanyWebApi.Tests.UnitTests
         [Fact]
         public async Task CanGetAll()
         {
-            var employees = await _employeeAddressRepository.GetEmployeeAddressesAsync();
-            Assert.True(employees.Any());
+            var employeesAddresses = await _employeeAddressRepository.GetEmployeeAddressesAsync();
+            Assert.True(employeesAddresses.Any());
         }
 
         [Fact]
@@ -84,7 +86,7 @@ namespace CompanyWebApi.Tests.UnitTests
         }
 
         [Fact]
-        public async Task CanUpdate()
+        public async Task CanUpdateSingleAddress()
         {
             var address = new EmployeeAddress
             {
@@ -93,8 +95,7 @@ namespace CompanyWebApi.Tests.UnitTests
                 Address = "A new work address"
             };
 
-            await _employeeAddressRepository.UpdateAsync(address);
-            await _employeeAddressRepository.SaveAsync();
+            await _employeeAddressRepository.UpdateEmployeeAddressAsync(address);
 
             // Refresh the address entity from the context to reflect changes
             address = await _employeeAddressRepository.GetEmployeeAddressAsync(address.EmployeeId, address.AddressTypeId);
@@ -103,6 +104,56 @@ namespace CompanyWebApi.Tests.UnitTests
             Assert.Equal(AddressType.Work, address.AddressTypeId);
         }
 
+        [Fact]
+        public async Task CanUpdateAndInsertABatchOfAddresses()
+        {
+            // Arrange an update to an existing work address for Employee 2
+            var employeeAddresses = (await _employeeAddressRepository
+                .GetEmployeeAddressesAsync(ea => ea.EmployeeId == 2 && ea.AddressTypeId == AddressType.Work))
+                .ToList(); // Convert to list to allow modifications
+
+            var workAddress = employeeAddresses.FirstOrDefault();
+            workAddress.Address = "123 changed work address";
+            
+            // Arrange a few new addresses for Employee 2
+            employeeAddresses.Add(new EmployeeAddress
+            {
+                EmployeeId = 2,
+                AddressTypeId = AddressType.Mailing,
+                Address = "Initial Mailing Address"
+            });
+            employeeAddresses.Add(new EmployeeAddress
+            {
+                EmployeeId = 2,
+                AddressTypeId = AddressType.Residential,
+                Address = "Initial Residential Address"
+            });
+
+            await _employeeAddressRepository.UpsertEmployeeAddressesAsync(employeeAddresses); // "Upsert" -> is return type needed?
+            await _employeeAddressRepository.SaveAsync();
+
+            var updatedAddresses = (await _employeeAddressRepository
+                .GetEmployeeAddressesAsync(ea => ea.EmployeeId == 2))
+                .ToList();
+
+            Assert.Equal("123 changed work address", updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Work)?.Address);
+            Assert.True(updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Work)?.Modified > DateTime.UtcNow.AddMinutes(-1));
+            Assert.True(updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Work)?.Created < DateTime.UtcNow.AddMinutes(-1));
+
+            Assert.Equal("Initial Mailing Address", updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Mailing)?.Address);
+            // Assert created/modified dates
+            Assert.Equal("Initial Residential Address", updatedAddresses
+                .FirstOrDefault(ea => ea.AddressTypeId == AddressType.Residential)?.Address);
+            // Assert created/modified dates
+
+        }
+
+
+        //}
         // This CannotAddDuplicateEmployeeAddress() test is flaky
         // because it seems to cause other tests in this class to fail.
         // Failed test methods can run successfully when ran in isolation,
@@ -125,5 +176,5 @@ namespace CompanyWebApi.Tests.UnitTests
         //        await _employeeAddressRepository.AddEmployeeAddressAsync(existingEmployeeAddress);
         //    });
         //}
-    }
+    }  
 }

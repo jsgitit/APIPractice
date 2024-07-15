@@ -40,4 +40,20 @@ public interface IEmployeeAddressRepository : IBaseRepository<EmployeeAddress>
     /// <param name="tracking">Tracking changes</param>
     /// <returns></returns>
     Task<IList<EmployeeAddress>> GetEmployeeAddressesAsync(Expression<Func<EmployeeAddress, bool>> predicate = null, bool tracking = false);
+
+    /// <summary>
+    /// Updates a single employee address
+    /// </summary>
+    /// <param name="employeeAddress">EmployeeAddress model</param>
+    /// <param name="tracking">Tracking changes</param>
+    /// <returns></returns>
+    Task UpdateEmployeeAddressAsync(EmployeeAddress employeeAddress, bool tracking = true);
+    
+    /// <summary>
+    /// Updates or inserts multiple employee addresses
+    /// </summary>
+    /// <param name="addresses">List of EmployeeAddress model</param>
+    /// <param name="tracking">Tracking changes</param>
+    /// <returns></returns>
+    Task UpsertEmployeeAddressesAsync(IList<EmployeeAddress> addresses, bool tracking = true);
 }

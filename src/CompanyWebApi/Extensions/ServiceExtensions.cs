@@ -4,6 +4,7 @@ using CompanyWebApi.Services.Swagger;
 using CompanyWebApi.Services.Swagger.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -20,7 +21,7 @@ namespace CompanyWebApi.Extensions
             services.AddApiVersioning(options =>
             {
                 // Specify the default API AssemblyVersion
-                options.DefaultApiVersion = new ApiVersion(2, 1);
+                options.DefaultApiVersion = new ApiVersion(3, 0);
                 // Use default version when version is not specified
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 // Advertise the API versions supported for the particular endpoint
@@ -71,6 +72,9 @@ namespace CompanyWebApi.Extensions
 
                 // Application Controller's API document description information
                 options.DocumentFilter<SwaggerDocumentFilter>();
+
+                // Describe enums using their string values
+                options.UseInlineDefinitionsForEnums();
             });
         }
 
