@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using AutoMapper;
 using CompanyWebApi.Contracts.Converters;
 using CompanyWebApi.Contracts.Dto;
 using CompanyWebApi.Contracts.Entities;
@@ -27,19 +28,13 @@ namespace CompanyWebApi.Controllers.V2;
 public class EmployeeAddressesController : BaseController<EmployeeAddressesController>
 {
     private readonly IRepositoryFactory _repositoryFactory;
-    private readonly IConverter<EmployeeAddress, EmployeeAddressDto> _employeeAddressToDtoConverter;
-    private readonly IConverter<IList<EmployeeAddress>, IList<EmployeeAddressDto>> _employeeAddressToDtoListConverter;
-    private readonly IConverter<EmployeeAddressCreateDto, EmployeeAddress> _employeeAddressFromDtoConverter;
+    private readonly IMapper _mapper;
 
     public EmployeeAddressesController(IRepositoryFactory repositoryFactory,
-            IConverter<EmployeeAddress, EmployeeAddressDto> employeeAddressToDtoConverter,
-            IConverter<IList<EmployeeAddress>, IList<EmployeeAddressDto>> employeeAddressToDtoListConverter,
-            IConverter<EmployeeAddressCreateDto, EmployeeAddress> employeeAddressFromDtoConverter)
+            IMapper mapper)
     {
         _repositoryFactory = repositoryFactory;
-        _employeeAddressToDtoConverter = employeeAddressToDtoConverter;
-        _employeeAddressToDtoListConverter = employeeAddressToDtoListConverter;
-        _employeeAddressFromDtoConverter = employeeAddressFromDtoConverter;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -74,7 +69,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         {
             return NotFound(new { message = "The employee address was not found" });
         }
-        var employeeAddressDto = _employeeAddressToDtoConverter.Convert(employeeAddress);
+        var employeeAddressDto = _mapper.Map<EmployeeAddressDto>(employeeAddress);
         return Ok(employeeAddressDto);
     }
 
@@ -109,7 +104,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     public async Task<IActionResult> CreateAsync([FromBody] EmployeeAddressCreateDto address, ApiVersion version)
     {
         Logger.LogDebug(nameof(CreateAsync));
-        var newEmployeeAddress = _employeeAddressFromDtoConverter.Convert(address);
+        var newEmployeeAddress = _mapper.Map<EmployeeAddress>(address);
         if (!await _repositoryFactory.EmployeeRepository.ExistsAsync(e => e.EmployeeId == address.EmployeeId))
         {
             return NotFound(new { message = $"The Employee with id {address.EmployeeId} was not found" });
@@ -120,7 +115,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         }
 
         var repoEmployeeAddress = await _repositoryFactory.EmployeeAddressRepository.AddEmployeeAddressAsync(newEmployeeAddress).ConfigureAwait(false);
-        var result = _employeeAddressToDtoConverter.Convert(repoEmployeeAddress);
+        var result = _mapper.Map<EmployeeAddressDto>(repoEmployeeAddress);
         var createdResult = new ObjectResult(result)
         {
             StatusCode = StatusCodes.Status201Created
@@ -210,7 +205,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         {
             return NotFound(new { message = "The employee has no addresses" });
         }
-        var employeeAddressDto = _employeeAddressToDtoListConverter.Convert(employeesAddresses);
+        var employeeAddressDto = _mapper.Map<IEnumerable<EmployeeAddressDto>>(employeesAddresses);
         return Ok(employeeAddressDto);
     }
 
@@ -236,7 +231,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     /// </remarks>
     /// <param name="employeeAddress"><see cref="EmployeeAddressUpdateDto"/></param>
     /// <param name="version">API version</param>
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(EmployeeDto), Description = "Return updated employee")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(EmployeeAddressDto), Description = "Return updated employee address")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "The employee / address id combination was not found")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
@@ -254,7 +249,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
 
         await _repositoryFactory.EmployeeAddressRepository.UpdateAsync(repoEmployeeAddress);
         await _repositoryFactory.SaveAsync().ConfigureAwait(false);
-        var employeeAddressDto = _employeeAddressToDtoConverter.Convert(repoEmployeeAddress);
+        var employeeAddressDto = _mapper.Map<EmployeeAddressDto>(repoEmployeeAddress);
         return Ok(employeeAddressDto);
     }
 }
