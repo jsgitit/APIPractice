@@ -284,9 +284,6 @@ namespace CompanyWebApi
             services.AddScoped<IUserService, UserService>();
 
             // V3 Converters
-            services.AddTransient<V3Converters.IConverter<Company, V3Dto.CompanyDto>, V3Converters.CompanyToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<Company>, IList<V3Dto.CompanyDto>>, V3Converters.CompanyToDtoConverter>();
-
             services.AddTransient<V3Converters.IConverter<Department, V3Dto.DepartmentDto>, V3Converters.DepartmentToDtoConverter>();
             services.AddTransient<V3Converters.IConverter<IList<Department>, IList<V3Dto.DepartmentDto>>, V3Converters.DepartmentToDtoConverter>();
 
