@@ -304,7 +304,7 @@ namespace CompanyWebApi.Controllers.V2
             {
                 return NotFound(new { message = "No employees were found" });
             }
-            var employeesDto = _mapper.Map<EmployeeDto>(employees);
+            var employeesDto = _mapper.Map<IList<EmployeeDto>>(employees);
             return Ok(employeesDto);
         }
     }
