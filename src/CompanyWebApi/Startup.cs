@@ -25,8 +25,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using V2Converters = CompanyWebApi.Contracts.Converters;
-using V2Dto = CompanyWebApi.Contracts.Dto;
 using V3Converters = CompanyWebApi.Contracts.Converters.V3;
 using V3Dto = CompanyWebApi.Contracts.Dto.V3;
 
@@ -284,27 +282,6 @@ namespace CompanyWebApi
             services.AddTransient<IJwtTokenHandler, JwtTokenHandler>();
             services.AddTransient<IJwtFactory, JwtFactory>();
             services.AddScoped<IUserService, UserService>();
-
-            // V2 Converters
-            services.AddTransient<V2Converters.IConverter<Company, V2Dto.CompanyDto>, V2Converters.CompanyToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<Company>, IList<V2Dto.CompanyDto>>, V2Converters.CompanyToDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<Department, V2Dto.DepartmentDto>, V2Converters.DepartmentToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<Department>, IList<V2Dto.DepartmentDto>>, V2Converters.DepartmentToDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<Employee, V2Dto.EmployeeDto>, V2Converters.EmployeeToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<Employee>, IList<V2Dto.EmployeeDto>>, V2Converters.EmployeeToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<V2Dto.EmployeeCreateDto, Employee>, V2Converters.EmployeeFromDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<V2Dto.EmployeeCreateDto>, IList<Employee>>, V2Converters.EmployeeFromDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<EmployeeAddress, V2Dto.EmployeeAddressDto>, V2Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<EmployeeAddress>, IList<V2Dto.EmployeeAddressDto>>, V2Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<V2Dto.EmployeeAddressCreateDto, EmployeeAddress>, V2Converters.EmployeeAddressFromDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<V2Dto.EmployeeAddressCreateDto>, IList<EmployeeAddress>>, V2Converters.EmployeeAddressFromDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<User, V2Dto.UserDto>, V2Converters.UserToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<User>, IList<V2Dto.UserDto>>, V2Converters.UserToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<User, V2Dto.UserAuthenticateDto>, V2Converters.UserToAuthenticateDtoConverter>();
 
             // V3 Converters
             services.AddTransient<V3Converters.IConverter<Company, V3Dto.CompanyDto>, V3Converters.CompanyToDtoConverter>();

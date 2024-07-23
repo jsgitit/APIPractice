@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using CompanyWebApi.Contracts.Converters;
 using CompanyWebApi.Contracts.Dto;
+using AutoMapper;
+using CompanyWebApi.Contracts.Converters.V3;
 
 namespace CompanyWebApi.Services.Authorization
 {
@@ -14,14 +16,15 @@ namespace CompanyWebApi.Services.Authorization
 		private readonly AuthSettings _authSettings;
 		private readonly IUserRepository _userRepository;
         private readonly IJwtFactory _jwtFactory;
-        private readonly IConverter<User, UserAuthenticateDto> _userToAuthenticateDtoConverter;
+        private readonly IMapper _mapper;
 
-        public UserService(IOptions<AuthSettings> authSettings, IUserRepository userRepository, 
-            IJwtFactory jwtFactory, IConverter<User, UserAuthenticateDto> userToAuthenticateDtoConverter)
+        public UserService(IOptions<AuthSettings> authSettings, IUserRepository userRepository,
+            IJwtFactory jwtFactory,
+            IMapper mapper)
 		{
             _authSettings = authSettings.Value;
             _jwtFactory = jwtFactory;
-            _userToAuthenticateDtoConverter = userToAuthenticateDtoConverter;
+            _mapper = mapper;
 			_userRepository = userRepository;
 		}
 
@@ -33,7 +36,7 @@ namespace CompanyWebApi.Services.Authorization
 				return null;
 			}
             user.Token = string.IsNullOrEmpty(_authSettings.SecretKey) ? null : _jwtFactory.EncodeToken(user.Username);
-			var result = _userToAuthenticateDtoConverter.Convert(user);
+			var result = _mapper.Map<UserAuthenticateDto>(user);
 			return result;
 		}
 	}

@@ -240,12 +240,12 @@ namespace CompanyWebApi.Controllers.V2
         public async Task<ActionResult<IList<UserDto>>> GetAllAsync(ApiVersion version)
         {
             Logger.LogDebug(nameof(GetAllAsync));
-            var usersDto = await _repositoryFactory.UserRepository.GetUsersAsync().ConfigureAwait(false);
-            if (!usersDto.Any())
+            var users = await _repositoryFactory.UserRepository.GetUsersAsync().ConfigureAwait(false);
+            if (!users.Any())
             {
                 return NotFound(new { message = "The users list is empty" });
             }
-            return Ok(usersDto);
+            return Ok(_mapper.Map<IList<UserDto>>(users));
         }
 
         /// <summary>
