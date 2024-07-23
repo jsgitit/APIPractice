@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using AutoMapper;
 using CompanyWebApi.Contracts.Converters.V3;
 using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
@@ -26,16 +27,13 @@ namespace CompanyWebApi.Controllers.V3
     public class DepartmentsController : BaseController<DepartmentsController>
     {
         private readonly IRepositoryFactory _repositoryFactory;
-        private readonly IConverter<Department, DepartmentDto> _departmentToDtoConverter;
-        private readonly IConverter<IList<Department>, IList<DepartmentDto>> _departmentToDtoListConverter;
+        private readonly IMapper _mapper;
 
         public DepartmentsController(IRepositoryFactory repositoryFactory,
-            IConverter<Department, DepartmentDto> departmentToDtoConverter,
-            IConverter<IList<Department>, IList<DepartmentDto>> departmentToDtoListConverter)
+            IMapper mapper)
         {
             _repositoryFactory = repositoryFactory;
-            _departmentToDtoConverter = departmentToDtoConverter;
-            _departmentToDtoListConverter = departmentToDtoListConverter;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -83,7 +81,7 @@ namespace CompanyWebApi.Controllers.V3
             };
 
             var repoDepartment = await _repositoryFactory.DepartmentRepository.AddDepartmentAsync(newDepartment).ConfigureAwait(false);
-            var result = _departmentToDtoConverter.Convert(repoDepartment);
+            var result = _mapper.Map<DepartmentDto>(repoDepartment);
             var createdResult = new ObjectResult(result)
             {
                 StatusCode = StatusCodes.Status201Created
@@ -180,7 +178,7 @@ namespace CompanyWebApi.Controllers.V3
             {
                 return NotFound(new { message = "The departments list is empty" });
             }
-            var departmentsDto = _departmentToDtoListConverter.Convert(departments);
+            var departmentsDto = _mapper.Map<IEnumerable<DepartmentDto>>(departments);
             return Ok(departmentsDto);
         }
 
@@ -221,7 +219,7 @@ namespace CompanyWebApi.Controllers.V3
             {
                 return NotFound(new { message = "The department was not found" });
             }
-            var departmentDto = _departmentToDtoConverter.Convert(department);
+            var departmentDto = _mapper.Map<DepartmentDto>(department);
             return Ok(departmentDto);
         }
 
@@ -273,7 +271,7 @@ namespace CompanyWebApi.Controllers.V3
             await _repositoryFactory.DepartmentRepository.UpdateAsync(repoDepartment).ConfigureAwait(false);
             await _repositoryFactory.SaveAsync().ConfigureAwait(false);
 
-            var result = _departmentToDtoConverter.Convert(repoDepartment);
+            var result = _mapper.Map<DepartmentDto>(repoDepartment);
             return Ok(result);
         }
     }
