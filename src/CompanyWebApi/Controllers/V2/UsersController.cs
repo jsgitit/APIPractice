@@ -1,4 +1,5 @@
-﻿using CompanyWebApi.Contracts.Converters;
+﻿using Asp.Versioning;
+using AutoMapper;
 using CompanyWebApi.Contracts.Dto;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Controllers.Base;
@@ -10,12 +11,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Swashbuckle.AspNetCore.Annotations;
-using Asp.Versioning;
 
 namespace CompanyWebApi.Controllers.V2
 {
@@ -29,19 +29,16 @@ namespace CompanyWebApi.Controllers.V2
     public class UsersController : BaseController<UsersController>
     {
         private readonly IRepositoryFactory _repositoryFactory;
-        private readonly IConverter<User, UserDto> _userToDtoConverter;
-        private readonly IConverter<IList<User>, IList<UserDto>> _usersToDtoConverter;
+        private readonly IMapper _mapper;
         private readonly IUserService _userService;
 
         public UsersController(IUserService userService,
             IRepositoryFactory repositoryFactory,
-            IConverter<User, UserDto> userToDtoConverter,
-            IConverter<IList<User>, IList<UserDto>> usersToDtoConverter)
+            IMapper mapper)
         {
             _userService = userService;
             _repositoryFactory = repositoryFactory;
-            _userToDtoConverter = userToDtoConverter;
-            _usersToDtoConverter = usersToDtoConverter;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -132,7 +129,7 @@ namespace CompanyWebApi.Controllers.V2
             };
 
             var repoUser = await _repositoryFactory.UserRepository.AddUserAsync(newUser).ConfigureAwait(false);
-            var result = _userToDtoConverter.Convert(repoUser);
+            var result = _mapper.Map<UserDto>(repoUser);
             var createdResult = new ObjectResult(result)
             {
                 StatusCode = StatusCodes.Status201Created
@@ -155,10 +152,10 @@ namespace CompanyWebApi.Controllers.V2
         /// </remarks>
         /// <param name="userName">User name</param>
         /// <param name="version">API version</param>
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfuly deleted")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfully deleted")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "No user was found")]
         [HttpDelete("{userName}", Name = "DeleteUserByNameV2")]
-        public async Task<ActionResult> DeleteAsync([Required]string userName, ApiVersion version)
+        public async Task<ActionResult> DeleteAsync([Required] string userName, ApiVersion version)
         {
             Logger.LogDebug(nameof(DeleteAsync));
             var users = await _repositoryFactory.UserRepository.GetUsersByUsernameAsync(userName).ConfigureAwait(false);
@@ -186,7 +183,7 @@ namespace CompanyWebApi.Controllers.V2
         /// </remarks>
         /// <param name="employeeId">Employee Id</param>
         /// <param name="version">API version</param>
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfuly deleted")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "User was successfully deleted")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "No user was found")]
         [HttpDelete("{employeeId:int}", Name = "DeleteUserByEmployeeIdAsyncV2")]
         public async Task<ActionResult> DeleteByEmployeeIdAsync([Required] int employeeId, ApiVersion version)
@@ -246,7 +243,7 @@ namespace CompanyWebApi.Controllers.V2
             var usersDto = await _repositoryFactory.UserRepository.GetUsersAsync().ConfigureAwait(false);
             if (!usersDto.Any())
             {
-                return NotFound(new { message = "The users list is empty"});
+                return NotFound(new { message = "The users list is empty" });
             }
             return Ok(usersDto);
         }
@@ -298,7 +295,7 @@ namespace CompanyWebApi.Controllers.V2
             {
                 return NotFound(new { message = $"The users with {userName} were not found" });
             }
-            var usersDto = _usersToDtoConverter.Convert(users);
+            var usersDto = _mapper.Map<IList<UserDto>>(users);
             return Ok(usersDto);
         }
 
@@ -344,7 +341,7 @@ namespace CompanyWebApi.Controllers.V2
             await _repositoryFactory.UserRepository.UpdateAsync(repoUser);
             await _repositoryFactory.SaveAsync().ConfigureAwait(false);
 
-            var userDto = _userToDtoConverter.Convert(repoUser);
+            var userDto = _mapper.Map<UserDto>(repoUser);
             return Ok(userDto);
         }
     }
