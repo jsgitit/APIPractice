@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using CompanyWebApi.Contracts.Converters;
+using AutoMapper;
 using CompanyWebApi.Contracts.Dto;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Controllers.Base;
@@ -26,16 +26,13 @@ namespace CompanyWebApi.Controllers.V2
     public class CompaniesController : BaseController<CompaniesController>
     {
         private readonly IRepositoryFactory _repositoryFactory;
-        private readonly IConverter<Company, CompanyDto> _companyToDtoConverter;
-        private readonly IConverter<IList<Company>, IList<CompanyDto>> _companyToDtoListConverter;
+        private readonly IMapper _mapper;
 
         public CompaniesController(IRepositoryFactory repositoryFactory,
-            IConverter<Company, CompanyDto> companyToDtoConverter,
-            IConverter<IList<Company>, IList<CompanyDto>> companyToDtoListConverter)
+            IMapper mapper)
         {
             _repositoryFactory = repositoryFactory;
-            _companyToDtoConverter = companyToDtoConverter;
-            _companyToDtoListConverter = companyToDtoListConverter;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -69,7 +66,7 @@ namespace CompanyWebApi.Controllers.V2
                 Name = company.Name
             };
             var repoCompany = await _repositoryFactory.CompanyRepository.AddCompanyAsync(newCompany).ConfigureAwait(false);
-            var result = _companyToDtoConverter.Convert(repoCompany);
+            var result = _mapper.Map<CompanyDto>(repoCompany);
             var createdResult = new ObjectResult(result)
             {
                 StatusCode = StatusCodes.Status201Created
@@ -159,7 +156,7 @@ namespace CompanyWebApi.Controllers.V2
             {
                 return NotFound(new { message = "The companies list is empty" });
             }
-            var companiesDto = _companyToDtoListConverter.Convert(companies);
+            var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
             return Ok(companiesDto);
         }
 
@@ -197,7 +194,7 @@ namespace CompanyWebApi.Controllers.V2
             {
                 return NotFound(new { message = "The company was not found" });
             }
-            var companyDto = _companyToDtoConverter.Convert(company);
+            var companyDto = _mapper.Map<CompanyDto>(company);
             return Ok(companyDto);
         }
 
@@ -241,7 +238,7 @@ namespace CompanyWebApi.Controllers.V2
             repoCompany.Name = company.Name;
             await _repositoryFactory.CompanyRepository.UpdateAsync(repoCompany).ConfigureAwait(false);
             await _repositoryFactory.SaveAsync().ConfigureAwait(false);
-            var result = _companyToDtoConverter.Convert(repoCompany);
+            var result = _mapper.Map<CompanyDto>(repoCompany);
             return Ok(result);
         }
     }

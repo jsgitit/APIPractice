@@ -306,7 +306,6 @@ namespace CompanyWebApi
             services.AddTransient<V2Converters.IConverter<IList<User>, IList<V2Dto.UserDto>>, V2Converters.UserToDtoConverter>();
             services.AddTransient<V2Converters.IConverter<User, V2Dto.UserAuthenticateDto>, V2Converters.UserToAuthenticateDtoConverter>();
 
-
             // V3 Converters
             services.AddTransient<V3Converters.IConverter<Company, V3Dto.CompanyDto>, V3Converters.CompanyToDtoConverter>();
             services.AddTransient<V3Converters.IConverter<IList<Company>, IList<V3Dto.CompanyDto>>, V3Converters.CompanyToDtoConverter>();
@@ -330,6 +329,9 @@ namespace CompanyWebApi
             services.AddTransient<V3Converters.IConverter<User, V3Dto.UserDto>, V3Converters.UserToDtoConverter>();
             services.AddTransient<V3Converters.IConverter<IList<User>, IList<V3Dto.UserDto>>, V3Converters.UserToDtoConverter>();
             services.AddTransient<V3Converters.IConverter<User, V3Dto.UserAuthenticateDto>, V3Converters.UserToAuthenticateDtoConverter>();
+
+            // Add AutoMapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }
