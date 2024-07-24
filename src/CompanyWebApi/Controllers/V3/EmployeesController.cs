@@ -28,15 +28,12 @@ namespace CompanyWebApi.Controllers.V3;
 public class EmployeesController : BaseController<EmployeesController>
 {
     private readonly IRepositoryFactory _repositoryFactory;
-    private readonly IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> _employeeAddressUpdateDtoToEntityConverter;
     private readonly IMapper _mapper;
 
     public EmployeesController(IRepositoryFactory repositoryFactory,
-        IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> employeeAddressUpdateDtoToEntityConverter,
         IMapper mapper)
     {
         _repositoryFactory = repositoryFactory;
-        _employeeAddressUpdateDtoToEntityConverter = employeeAddressUpdateDtoToEntityConverter;
         _mapper = mapper;
     }
 
@@ -409,8 +406,7 @@ public class EmployeesController : BaseController<EmployeesController>
         {
             _repositoryFactory.EmployeeAddressRepository.Remove(address); // remove existing addresses
         }
-        repoEmployee.EmployeeAddresses = _employeeAddressUpdateDtoToEntityConverter
-            .Convert(employee.Addresses);
+        repoEmployee.EmployeeAddresses = _mapper.Map<IList<EmployeeAddress>>(employee.Addresses);
         await _repositoryFactory.EmployeeAddressRepository
             .UpsertEmployeeAddressesAsync(repoEmployee.EmployeeAddresses); // using upsert for batch insert op
 
@@ -520,8 +516,7 @@ public class EmployeesController : BaseController<EmployeesController>
             return NotFound(new { message = "The employee was not found" });
         }
 
-        var changedEmployeeAddresses = _employeeAddressUpdateDtoToEntityConverter
-            .Convert(employee.Addresses); 
+        var changedEmployeeAddresses = _mapper.Map<IList<EmployeeAddress>>(employee.Addresses); 
         await _repositoryFactory.EmployeeAddressRepository
             .UpsertEmployeeAddressesAsync(changedEmployeeAddresses);
         repoEmployee.EmployeeAddresses.Clear();

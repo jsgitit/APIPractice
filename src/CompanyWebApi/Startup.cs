@@ -284,14 +284,6 @@ namespace CompanyWebApi
             services.AddScoped<IUserService, UserService>();
 
             // V3 Converters
-            services.AddTransient<V3Converters.IConverter<EmployeeAddress, V3Dto.EmployeeAddressDto>, V3Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<EmployeeAddress>, IList<V3Dto.EmployeeAddressDto>>, V3Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<V3Dto.EmployeeAddressCreateDto, EmployeeAddress>, V3Converters.EmployeeAddressFromDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<V3Dto.EmployeeAddressCreateDto>, IList<EmployeeAddress>>, V3Converters.EmployeeAddressFromDtoConverter>();
-
-            services.AddTransient<V3Converters.IConverter<V3Dto.EmployeeAddressUpdateDto, EmployeeAddress>, V3Converters.EmployeeAddressUpdateDtoToEntityConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<V3Dto.EmployeeAddressUpdateDto>, IList<EmployeeAddress>>, V3Converters.EmployeeAddressUpdateDtoToEntityConverter>();
-
             services.AddTransient<V3Converters.IConverter<User, V3Dto.UserDto>, V3Converters.UserToDtoConverter>();
             services.AddTransient<V3Converters.IConverter<IList<User>, IList<V3Dto.UserDto>>, V3Converters.UserToDtoConverter>();
             services.AddTransient<V3Converters.IConverter<User, V3Dto.UserAuthenticateDto>, V3Converters.UserToAuthenticateDtoConverter>();
