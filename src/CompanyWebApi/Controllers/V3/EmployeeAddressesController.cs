@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using CompanyWebApi.Contracts.Converters.V3;
+using AutoMapper;
 using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Controllers.Base;
@@ -27,22 +27,13 @@ namespace CompanyWebApi.Controllers.V3;
 public class EmployeeAddressesController : BaseController<EmployeeAddressesController>
 {
     private readonly IRepositoryFactory _repositoryFactory;
-    private readonly IConverter<EmployeeAddress, EmployeeAddressDto> _employeeAddressToDtoConverter;
-    private readonly IConverter<IList<EmployeeAddress>, IList<EmployeeAddressDto>> _employeeAddressToDtoListConverter;
-    private readonly IConverter<EmployeeAddressCreateDto, EmployeeAddress> _employeeAddressFromDtoConverter;
-    private readonly IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> _employeeAddressFromUpdateDtoListConverter;
+    private readonly IMapper _mapper;
 
     public EmployeeAddressesController(IRepositoryFactory repositoryFactory,
-            IConverter<EmployeeAddress, EmployeeAddressDto> employeeAddressToDtoConverter,
-            IConverter<IList<EmployeeAddress>, IList<EmployeeAddressDto>> employeeAddressToDtoListConverter,
-            IConverter<EmployeeAddressCreateDto, EmployeeAddress> employeeAddressFromDtoConverter,
-            IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> employeeAddressFromUpdateDtoListConverter)
+        IMapper mapper)
     {
         _repositoryFactory = repositoryFactory;
-        _employeeAddressToDtoConverter = employeeAddressToDtoConverter;
-        _employeeAddressToDtoListConverter = employeeAddressToDtoListConverter;
-        _employeeAddressFromDtoConverter = employeeAddressFromDtoConverter;
-        _employeeAddressFromUpdateDtoListConverter = employeeAddressFromUpdateDtoListConverter;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -79,7 +70,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         {
             return NotFound(new { message = "The employee address was not found" });
         }
-        var employeeAddressDto = _employeeAddressToDtoConverter.Convert(employeeAddress);
+        var employeeAddressDto = _mapper.Map<EmployeeAddressDto>(employeeAddress);
         return Ok(employeeAddressDto);
     }
 
@@ -116,7 +107,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     public async Task<IActionResult> CreateAsync([FromBody] EmployeeAddressCreateDto address, ApiVersion version)
     {
         Logger.LogDebug(nameof(CreateAsync));
-        var newEmployeeAddress = _employeeAddressFromDtoConverter.Convert(address);
+        var newEmployeeAddress = _mapper.Map<EmployeeAddress>(address);
         if (!await _repositoryFactory.EmployeeRepository.ExistsAsync(e => e.EmployeeId == address.EmployeeId))
         {
             return NotFound(new { message = $"The Employee with id {address.EmployeeId} was not found" });
@@ -125,9 +116,9 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         {
             return BadRequest(new { message = $"The Employee with id {address.EmployeeId} and Address Type Id {address.AddressTypeId} already exists" });
         }
-
+        
         var repoEmployeeAddress = await _repositoryFactory.EmployeeAddressRepository.AddEmployeeAddressAsync(newEmployeeAddress).ConfigureAwait(false);
-        var result = _employeeAddressToDtoConverter.Convert(repoEmployeeAddress);
+        var result = _mapper.Map<EmployeeAddressDto>(repoEmployeeAddress);
         var createdResult = new ObjectResult(result)
         {
             StatusCode = StatusCodes.Status201Created
@@ -225,7 +216,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         {
             return NotFound(new { message = "The employee has no addresses" });
         }
-        var employeeAddressDto = _employeeAddressToDtoListConverter.Convert(employeesAddresses);
+        var employeeAddressDto = _mapper.Map<IEnumerable<EmployeeAddressDto>>(employeesAddresses);
         return Ok(employeeAddressDto);
     }
 
@@ -271,7 +262,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
 
         await _repositoryFactory.EmployeeAddressRepository.UpdateAsync(repoEmployeeAddress);
         await _repositoryFactory.SaveAsync().ConfigureAwait(false);
-        var employeeAddressDto = _employeeAddressToDtoConverter.Convert(repoEmployeeAddress);
+        var employeeAddressDto = _mapper.Map<EmployeeAddressDto>(repoEmployeeAddress);
         return Ok(employeeAddressDto);
     }
 
@@ -305,7 +296,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///     Code 204 No Content
     ///     
     /// </remarks>
-    /// <param name="employeeAddress"><see cref="EmployeeAddressUpdateDto"/></param>
+    /// <param name="employeeAddresses"><see cref="EmployeeAddressUpdateDto"/></param>
     [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No Content")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "The employee id was not found")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
@@ -334,8 +325,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
             return NotFound(ModelState);
         }
 
-        var newEmployeeAddresses = _employeeAddressFromUpdateDtoListConverter
-            .Convert(employeeAddresses);
+        var newEmployeeAddresses = _mapper.Map<IList<EmployeeAddress>>(employeeAddresses);
 
         await _repositoryFactory.EmployeeAddressRepository
             .UpsertEmployeeAddressesAsync(newEmployeeAddresses);

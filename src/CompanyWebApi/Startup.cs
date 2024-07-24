@@ -1,5 +1,4 @@
 using CompanyWebApi.Configurations;
-using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Core.Auth;
 using CompanyWebApi.Extensions;
 using CompanyWebApi.Middleware;
@@ -21,14 +20,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using V2Converters = CompanyWebApi.Contracts.Converters;
-using V2Dto = CompanyWebApi.Contracts.Dto;
-using V3Converters = CompanyWebApi.Contracts.Converters.V3;
-using V3Dto = CompanyWebApi.Contracts.Dto.V3;
 
 namespace CompanyWebApi
 {
@@ -285,51 +279,8 @@ namespace CompanyWebApi
             services.AddTransient<IJwtFactory, JwtFactory>();
             services.AddScoped<IUserService, UserService>();
 
-            // V2 Converters
-            services.AddTransient<V2Converters.IConverter<Company, V2Dto.CompanyDto>, V2Converters.CompanyToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<Company>, IList<V2Dto.CompanyDto>>, V2Converters.CompanyToDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<Department, V2Dto.DepartmentDto>, V2Converters.DepartmentToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<Department>, IList<V2Dto.DepartmentDto>>, V2Converters.DepartmentToDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<Employee, V2Dto.EmployeeDto>, V2Converters.EmployeeToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<Employee>, IList<V2Dto.EmployeeDto>>, V2Converters.EmployeeToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<V2Dto.EmployeeCreateDto, Employee>, V2Converters.EmployeeFromDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<V2Dto.EmployeeCreateDto>, IList<Employee>>, V2Converters.EmployeeFromDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<EmployeeAddress, V2Dto.EmployeeAddressDto>, V2Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<EmployeeAddress>, IList<V2Dto.EmployeeAddressDto>>, V2Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<V2Dto.EmployeeAddressCreateDto, EmployeeAddress>, V2Converters.EmployeeAddressFromDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<V2Dto.EmployeeAddressCreateDto>, IList<EmployeeAddress>>, V2Converters.EmployeeAddressFromDtoConverter>();
-
-            services.AddTransient<V2Converters.IConverter<User, V2Dto.UserDto>, V2Converters.UserToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<IList<User>, IList<V2Dto.UserDto>>, V2Converters.UserToDtoConverter>();
-            services.AddTransient<V2Converters.IConverter<User, V2Dto.UserAuthenticateDto>, V2Converters.UserToAuthenticateDtoConverter>();
-
-
-            // V3 Converters
-            services.AddTransient<V3Converters.IConverter<Company, V3Dto.CompanyDto>, V3Converters.CompanyToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<Company>, IList<V3Dto.CompanyDto>>, V3Converters.CompanyToDtoConverter>();
-
-            services.AddTransient<V3Converters.IConverter<Department, V3Dto.DepartmentDto>, V3Converters.DepartmentToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<Department>, IList<V3Dto.DepartmentDto>>, V3Converters.DepartmentToDtoConverter>();
-
-            services.AddTransient<V3Converters.IConverter<Employee, V3Dto.EmployeeDto>, V3Converters.EmployeeToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<Employee>, IList<V3Dto.EmployeeDto>>, V3Converters.EmployeeToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<V3Dto.EmployeeCreateDto, Employee>, V3Converters.EmployeeFromDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<V3Dto.EmployeeCreateDto>, IList<Employee>>, V3Converters.EmployeeFromDtoConverter>();
-
-            services.AddTransient<V3Converters.IConverter<EmployeeAddress, V3Dto.EmployeeAddressDto>, V3Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<EmployeeAddress>, IList<V3Dto.EmployeeAddressDto>>, V3Converters.EmployeeAddressToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<V3Dto.EmployeeAddressCreateDto, EmployeeAddress>, V3Converters.EmployeeAddressFromDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<V3Dto.EmployeeAddressCreateDto>, IList<EmployeeAddress>>, V3Converters.EmployeeAddressFromDtoConverter>();
-
-            services.AddTransient<V3Converters.IConverter<V3Dto.EmployeeAddressUpdateDto, EmployeeAddress>, V3Converters.EmployeeAddressUpdateDtoToEntityConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<V3Dto.EmployeeAddressUpdateDto>, IList<EmployeeAddress>>, V3Converters.EmployeeAddressUpdateDtoToEntityConverter>();
-
-            services.AddTransient<V3Converters.IConverter<User, V3Dto.UserDto>, V3Converters.UserToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<User>, IList<V3Dto.UserDto>>, V3Converters.UserToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<User, V3Dto.UserAuthenticateDto>, V3Converters.UserToAuthenticateDtoConverter>();
+            // Add AutoMapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }
