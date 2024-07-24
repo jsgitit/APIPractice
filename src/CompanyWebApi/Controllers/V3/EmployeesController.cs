@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using AutoMapper;
 using CompanyWebApi.Contracts.Converters.V3;
 using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
@@ -27,22 +28,16 @@ namespace CompanyWebApi.Controllers.V3;
 public class EmployeesController : BaseController<EmployeesController>
 {
     private readonly IRepositoryFactory _repositoryFactory;
-    private readonly IConverter<Employee, EmployeeDto> _employeeToDtoConverter;
-    private readonly IConverter<IList<Employee>, IList<EmployeeDto>> _employeeToDtoListConverter;
-    private readonly IConverter<EmployeeCreateDto, Employee> _employeeFromDtoConverter;
     private readonly IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> _employeeAddressUpdateDtoToEntityConverter;
+    private readonly IMapper _mapper;
 
     public EmployeesController(IRepositoryFactory repositoryFactory,
-        IConverter<Employee, EmployeeDto> employeeToDtoConverter,
-        IConverter<IList<Employee>, IList<EmployeeDto>> employeeToDtoListConverter,
-        IConverter<EmployeeCreateDto, Employee> employeeFromDtoConverter,
-        IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> employeeAddressUpdateDtoToEntityConverter)
+        IConverter<IList<EmployeeAddressUpdateDto>, IList<EmployeeAddress>> employeeAddressUpdateDtoToEntityConverter,
+        IMapper mapper)
     {
         _repositoryFactory = repositoryFactory;
-        _employeeToDtoConverter = employeeToDtoConverter;
-        _employeeToDtoListConverter = employeeToDtoListConverter;
-        _employeeFromDtoConverter = employeeFromDtoConverter;
         _employeeAddressUpdateDtoToEntityConverter = employeeAddressUpdateDtoToEntityConverter;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -113,7 +108,7 @@ public class EmployeesController : BaseController<EmployeesController>
     public async Task<IActionResult> CreateAsync([FromBody] EmployeeCreateDto employee, ApiVersion version)
     {
         Logger.LogDebug(nameof(CreateAsync));
-        var newEmployee = _employeeFromDtoConverter.Convert(employee);
+        var newEmployee = _mapper.Map<Employee>(employee);
         if (!await _repositoryFactory.CompanyRepository.ExistsAsync(c => c.CompanyId == employee.CompanyId).ConfigureAwait(false))
         {
             return NotFound(new { message = $"The Company with id {employee.CompanyId} was not found" });
@@ -124,7 +119,7 @@ public class EmployeesController : BaseController<EmployeesController>
         }
 
         var repoEmployee = await _repositoryFactory.EmployeeRepository.AddEmployeeAsync(newEmployee).ConfigureAwait(false);
-        var result = _employeeToDtoConverter.Convert(repoEmployee);
+        var result = _mapper.Map<EmployeeDto>(repoEmployee);
         var createdResult = new ObjectResult(result)
         {
             StatusCode = StatusCodes.Status201Created
@@ -253,7 +248,7 @@ public class EmployeesController : BaseController<EmployeesController>
         {
             return NotFound(new { message = "The employees list is empty" });
         }
-        var employeesDto = _employeeToDtoListConverter.Convert(employees);
+        var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>> (employees);
         return Ok(employeesDto);
     }
 
@@ -312,7 +307,7 @@ public class EmployeesController : BaseController<EmployeesController>
         {
             return NotFound(new { message = "The employee was not found" });
         }
-        var employeeDto = _employeeToDtoConverter.Convert(employee);
+        var employeeDto = _mapper.Map<EmployeeDto>(employee);
         return Ok(employeeDto);
     }
 
@@ -428,7 +423,7 @@ public class EmployeesController : BaseController<EmployeesController>
 
         var updatedEmployee = await _repositoryFactory.EmployeeRepository
             .GetEmployeeAsync(repoEmployee.EmployeeId);
-        var employeeDto = _employeeToDtoConverter.Convert(updatedEmployee);
+        var employeeDto = _mapper.Map<EmployeeDto>(updatedEmployee);
         return Ok(employeeDto);
     }
 
@@ -541,7 +536,7 @@ public class EmployeesController : BaseController<EmployeesController>
 
         var updatedEmployee = await _repositoryFactory.EmployeeRepository
             .GetEmployeeAsync(repoEmployee.EmployeeId);
-        var employeeDto = _employeeToDtoConverter.Convert(updatedEmployee);
+        var employeeDto = _mapper.Map<EmployeeDto>(updatedEmployee);
         return Ok(employeeDto);
     }
 
@@ -573,7 +568,7 @@ public class EmployeesController : BaseController<EmployeesController>
         {
             return NotFound(new { message = "No employees were found" });
         }
-        var employeesDto = _employeeToDtoListConverter.Convert(employees);
+        var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employees);
         return Ok(employeesDto);
     }
 }
