@@ -1,5 +1,4 @@
 using CompanyWebApi.Configurations;
-using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Core.Auth;
 using CompanyWebApi.Extensions;
 using CompanyWebApi.Middleware;
@@ -21,12 +20,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using V3Converters = CompanyWebApi.Contracts.Converters.V3;
-using V3Dto = CompanyWebApi.Contracts.Dto.V3;
 
 namespace CompanyWebApi
 {
@@ -282,11 +278,6 @@ namespace CompanyWebApi
             services.AddTransient<IJwtTokenHandler, JwtTokenHandler>();
             services.AddTransient<IJwtFactory, JwtFactory>();
             services.AddScoped<IUserService, UserService>();
-
-            // V3 Converters
-            services.AddTransient<V3Converters.IConverter<User, V3Dto.UserDto>, V3Converters.UserToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<IList<User>, IList<V3Dto.UserDto>>, V3Converters.UserToDtoConverter>();
-            services.AddTransient<V3Converters.IConverter<User, V3Dto.UserAuthenticateDto>, V3Converters.UserToAuthenticateDtoConverter>();
 
             // Add AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
