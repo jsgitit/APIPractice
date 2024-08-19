@@ -30,7 +30,7 @@ namespace CompanyWebApi.Tests.IntegrationTests.V4
             };
             var company = await _httpClientHelper.PostAsync<CompanyCreateDto, CompanyDto>(_baseUrl, newCompany);
             Assert.Equal("Test Company", company.Name);
-            await _httpClientHelper.DeleteAsync(_baseUrl + $"DeleteCompanyById{API_VERSION}/{company.CompanyId}");
+            await _httpClientHelper.DeleteAsync(_baseUrl + $"{company.CompanyId}");
         }
 
         [Fact]
