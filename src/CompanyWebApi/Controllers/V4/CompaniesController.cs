@@ -18,7 +18,7 @@ namespace CompanyWebApi.Controllers.V4;
 
 [ApiAuthorization]
 [ApiController]
-[ApiVersion("4.0")]
+[ApiVersion("4.0")] 
 [Produces("application/json")]
 [EnableCors("EnableCORS")]
 [ServiceFilter(typeof(ValidModelStateAsyncActionFilter))]
@@ -205,7 +205,7 @@ public class CompaniesController : BaseController<CompaniesController>
     [SwaggerResponse(StatusCodes.Status404NotFound, "The company was not found")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [HttpGet("{id:int}/full", Name = "GetCompanyByIdFullV4")]
-    public async Task<ActionResult<CompanyDto>> GetCompanyByIdFullAsync(int id, ApiVersion version)
+    public async Task<ActionResult<CompanyFullDto>> GetCompanyByIdFullAsync(int id, ApiVersion version)
     {
         Logger.LogDebug(nameof(GetCompanyByIdFullAsync));
         var company = await _repositoryFactory.CompanyRepository.GetCompanyAsync(id).ConfigureAwait(false);
@@ -300,8 +300,8 @@ public class CompaniesController : BaseController<CompaniesController>
         {
             return NotFound(new { message = "The companies list is empty" });
         }
-        var companiesDto = _mapper.Map<IEnumerable<CompanyFullDto>>(companies);
-        return Ok(new CompanyFullListDto { Companies = companiesDto });
+        var companiesFullDto = _mapper.Map<IEnumerable<CompanyFullDto>>(companies);
+        return Ok(new CompanyFullListDto { Companies = companiesFullDto });
     }
 
     /// <summary>
