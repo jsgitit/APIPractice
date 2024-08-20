@@ -60,13 +60,14 @@ namespace CompanyWebApi.Contracts.Tests.V4
             // Arrange
             var company = new Company
             {
-                CompanyId = 1,
-                Name = "Test Company",
+                CompanyId = 999,
+                Name = "This company should not be the one mapped",
                 Departments = new List<Department>
                 {
                     new Department
                     {
-                        Name = "HR",
+                        DepartmentId = 998,
+                        Name = "This department should not be the one mapped",
                         Employees = new List<Employee>
                         {
                             new Employee
@@ -85,7 +86,11 @@ namespace CompanyWebApi.Contracts.Tests.V4
                                 User = new User
                                 {
                                     Username = "jdoe"
-                                }
+                                },
+                                CompanyId = 998,
+                                Company = new Company {CompanyId = 1, Name = "Test Company in the Employee object"},
+                                DepartmentId = 1,
+                                Department = new Department { DepartmentId = 1, Name = "HR"}
                             }
                         }
                     }
@@ -100,13 +105,17 @@ namespace CompanyWebApi.Contracts.Tests.V4
             Assert.Equal(company.Name, companyFullDto.Name);
             Assert.Single(companyFullDto.Employees);
 
-            var employeeDto = companyFullDto.Employees.First();
-            Assert.Equal(1, employeeDto.EmployeeId);
-            Assert.Equal("John", employeeDto.FirstName);
-            Assert.Equal("Doe", employeeDto.LastName);
-            Assert.Single(employeeDto.Addresses);
-            Assert.Equal("123 Main St", employeeDto.Addresses.First().Address);
-            Assert.Equal("jdoe", employeeDto.Username);
+            var employeeFullDto = companyFullDto.Employees.First();
+            Assert.Equal(1, employeeFullDto.EmployeeId);
+            Assert.Equal("John", employeeFullDto.FirstName);
+            Assert.Equal("Doe", employeeFullDto.LastName);
+            Assert.Equal(1, employeeFullDto.CompanyId);
+            Assert.Equal("Test Company in the Employee object", employeeFullDto.Company);
+            Assert.Equal(1, employeeFullDto.DepartmentId);
+            Assert.Equal("HR", employeeFullDto.Department);
+            Assert.Single(employeeFullDto.Addresses);
+            Assert.Equal("123 Main St", employeeFullDto.Addresses.First().Address);
+            Assert.Equal("jdoe", employeeFullDto.Username);
         }
 
         [Fact]
@@ -145,6 +154,25 @@ namespace CompanyWebApi.Contracts.Tests.V4
             Assert.NotNull(employeeDto.Addresses); // Should not be null, even if source is null
             Assert.Empty(employeeDto.Addresses); // Should be an empty list
             Assert.Equal(string.Empty, employeeDto.Username); // Should be empty string if User is null
+        }
+
+        [Fact]
+        public void CompanyToCompanyFullDto_ShouldHandleEmptyCollections()
+        {
+            // Arrange
+            var company = new Company
+            {
+                CompanyId = 1,
+                Name = "Test Company",
+                Departments = new List<Department>() // Empty departments list
+            };
+
+            // Act
+            var companyFullDto = _mapper.Map<CompanyFullDto>(company);
+
+            // Assert
+            Assert.NotNull(companyFullDto.Employees);
+            Assert.Empty(companyFullDto.Employees);
         }
     }
 }

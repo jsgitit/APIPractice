@@ -10,7 +10,7 @@ public class CompanyFullDto
 
     public int CompanyId { get; set; }
     public string Name { get; set; }
-    public IEnumerable<EmployeeDto> Employees { get; set; } = new List<EmployeeDto>();
+    public IEnumerable<EmployeeFullDto> Employees { get; set; } = new List<EmployeeFullDto>();
     public DateTime Created { get; set; }
     public DateTime Modified { get; set; }
 }

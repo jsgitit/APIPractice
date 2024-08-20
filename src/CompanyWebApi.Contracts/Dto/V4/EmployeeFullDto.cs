@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CompanyWebApi.Contracts.Dto.V4;
 
 /// <summary>
-/// Employee basic data transfer object
+/// Employee full details data transfer object
 /// </summary>
-public class EmployeeDto
+public class EmployeeFullDto
 {
     public int EmployeeId { get; set; }
 
@@ -14,6 +15,12 @@ public class EmployeeDto
     public string LastName { get; set; }
 
     public DateTime BirthDate { get; set; }
+
+    public int Age { get; set; }
+
+    public IList<EmployeeAddressDto> Addresses { get; set; }
+
+    public string Username { get; set; }
 
     public int CompanyId { get; set; }
 

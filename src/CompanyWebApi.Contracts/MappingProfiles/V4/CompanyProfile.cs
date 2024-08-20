@@ -3,26 +3,25 @@ using CompanyWebApi.Contracts.Dto.V4;
 using CompanyWebApi.Contracts.Entities;
 using System.Linq;
 
-namespace CompanyWebApi.Contracts.MappingProfiles.V4
+namespace CompanyWebApi.Contracts.MappingProfiles.V4;
+
+public class CompanyProfile : Profile
 {
-    public class CompanyProfile : Profile
+    public CompanyProfile()
     {
-        public CompanyProfile()
-        {
-            CreateMap<Company, CompanyDto>();
+        CreateMap<Company, CompanyDto>();
 
-            CreateMap<Company, CompanyFullDto>()
-                .ForMember(dest => dest.Employees, opt => opt.MapFrom(src => src.Departments.SelectMany(d => d.Employees)));
+        CreateMap<Company, CompanyFullDto>()
+            .ForMember(dest => dest.Employees, opt => opt.MapFrom(src => src.Departments.SelectMany(d => d.Employees).ToList()));
 
-            CreateMap<Employee, EmployeeDto>()
-                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Department.Company.Name))
-                .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.Department.Company.CompanyId))
-                .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department.Name))
-                .ForMember(dest => dest.DepartmentId, opt => opt.MapFrom(src => src.Department.DepartmentId))
-                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User != null ? src.User.Username : string.Empty))
-                .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.EmployeeAddresses));
+        CreateMap<Employee, EmployeeFullDto>()
+            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company.Name))
+            .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.Company.CompanyId))
+            .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department.Name))
+            .ForMember(dest => dest.DepartmentId, opt => opt.MapFrom(src => src.Department.DepartmentId))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User != null ? src.User.Username : string.Empty))
+            .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.EmployeeAddresses));
 
-            CreateMap<EmployeeAddress, EmployeeAddressDto>();
-        }
+        CreateMap<EmployeeAddress, EmployeeAddressDto>();
     }
 }

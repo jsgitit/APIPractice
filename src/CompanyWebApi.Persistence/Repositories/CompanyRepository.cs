@@ -28,8 +28,15 @@ namespace CompanyWebApi.Persistence.Repositories
         {
             var result = await GetAsync<Company>(
                 include: source => source
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddresses)
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.User),
+                    .Include(cmp => cmp.Departments)
+                        .ThenInclude(cmp => cmp.Employees)
+                            .ThenInclude(cmp => cmp.EmployeeAddresses)
+                    .Include(cmp => cmp.Departments)
+                        .ThenInclude(cmp => cmp.Employees)
+                            .ThenInclude(cmp => cmp.User)
+                    .Include(cmp => cmp.Departments)
+                        .ThenInclude(dept => dept.Employees)
+                            .ThenInclude(emp => emp.Company), 
                 orderBy: cmp => cmp
                     .OrderBy(o => o.CompanyId),
                 tracking: tracking).ConfigureAwait(false);
@@ -41,9 +48,18 @@ namespace CompanyWebApi.Persistence.Repositories
             var result = await GetSingleOrDefaultAsync<Company>(
                 cmp => cmp.CompanyId == id,
                 source => source
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddresses)
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.User),
-                tracking).ConfigureAwait(false);
+                    .Include(cmp => cmp.Departments)
+                        .ThenInclude(dept => dept.Employees)
+                            .ThenInclude(emp => emp.EmployeeAddresses)
+                    .Include(cmp => cmp.Departments)
+                        .ThenInclude(dept => dept.Employees)
+                            .ThenInclude(emp => emp.User)
+                    .Include(cmp => cmp.Departments)
+                        .ThenInclude(dept => dept.Employees)
+                            .ThenInclude(emp => emp.Company), 
+                    tracking)
+                .ConfigureAwait(false);
+                    
             return result;
         }
 
@@ -53,7 +69,10 @@ namespace CompanyWebApi.Persistence.Repositories
                 predicate,
                 source => source
                     .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.EmployeeAddresses)
-                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.User),
+                    .Include(cmp => cmp.Departments).ThenInclude(cmp => cmp.Employees).ThenInclude(cmp => cmp.User)
+                    .Include(cmp => cmp.Departments)
+                        .ThenInclude(dept => dept.Employees)
+                            .ThenInclude(emp => emp.Company),
                 tracking).ConfigureAwait(false);
             return result;
         }

@@ -112,13 +112,13 @@ public class DepartmentProfileTests
         Assert.Equal(department.Company.Name, departmentFullDto.CompanyName);
         Assert.Single(departmentFullDto.Employees);
 
-        var employeeDto = departmentFullDto.Employees.First();
-        Assert.Equal(1, employeeDto.EmployeeId);
-        Assert.Equal("John", employeeDto.FirstName);
-        Assert.Equal("Doe", employeeDto.LastName);
-        Assert.Single(employeeDto.Addresses);
-        Assert.Equal("123 Main St", employeeDto.Addresses.First().Address);
-        Assert.Equal("jdoe", employeeDto.Username);
+        var employeeFullDto = departmentFullDto.Employees.First();
+        Assert.Equal(1, employeeFullDto.EmployeeId);
+        Assert.Equal("John", employeeFullDto.FirstName);
+        Assert.Equal("Doe", employeeFullDto.LastName);
+        Assert.Single(employeeFullDto.Addresses);
+        Assert.Equal("123 Main St", employeeFullDto.Addresses.First().Address);
+        Assert.Equal("jdoe", employeeFullDto.Username);
     }
 
     [Fact]
