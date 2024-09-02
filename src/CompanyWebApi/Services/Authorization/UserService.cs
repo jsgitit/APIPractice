@@ -8,6 +8,17 @@ using System.Threading.Tasks;
 
 namespace CompanyWebApi.Services.Authorization;
 
+/// <summary>
+/// User Service
+/// 
+/// TODOs:
+/// 1. BugFix: After trying to remove V2 of API, discovered V3 and V4 still depend on V2 items:
+/// - V2 UserAuthenticateDto
+/// - V2 UserDto
+/// - MappingProfiles\V2_1
+/// 2. Develop strategy to resolve Bug by either versioning service or something else. 
+///
+/// </summary>
 public class UserService : IUserService
 {
     private readonly AuthSettings _authSettings;

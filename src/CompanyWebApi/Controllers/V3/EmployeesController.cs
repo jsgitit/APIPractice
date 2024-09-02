@@ -534,8 +534,6 @@ public class EmployeesController : BaseController<EmployeesController>
         return Ok(employeeDto);
     }
 
-    // TODO: Remove older SearchEmployeeAsync method after fully removing v2.1. Uses old Dto, and shouldn't.
-
     /// <summary>
     /// Search for employees
     /// </summary>
