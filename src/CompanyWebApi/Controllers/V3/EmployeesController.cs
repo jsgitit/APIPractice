@@ -19,7 +19,7 @@ namespace CompanyWebApi.Controllers.V3;
 
 [ApiAuthorization]
 [ApiController]
-[ApiVersion("3.0")]
+[ApiVersion("3.0", Deprecated = true)]
 [Produces("application/json")]
 [EnableCors("EnableCORS")]
 [ServiceFilter(typeof(ValidModelStateAsyncActionFilter))]
@@ -533,8 +533,6 @@ public class EmployeesController : BaseController<EmployeesController>
         var employeeDto = _mapper.Map<EmployeeDto>(updatedEmployee);
         return Ok(employeeDto);
     }
-
-    // TODO: Remove older SearchEmployeeAsync method after fully removing v2.1. Uses old Dto, and shouldn't.
 
     /// <summary>
     /// Search for employees

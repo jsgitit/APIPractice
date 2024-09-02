@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
-using CompanyWebApi.Contracts.Dto.V3;
+using CompanyWebApi.Contracts.Dto.V4;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Controllers.Base;
 using CompanyWebApi.Persistence.Repositories.Factory;
@@ -14,11 +14,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CompanyWebApi.Controllers.V3;
+namespace CompanyWebApi.Controllers.V4;
 
 [ApiAuthorization]
 [ApiController]
-[ApiVersion("3.0", Deprecated = true)]
+[ApiVersion("4.0")]
 [Produces("application/json")]
 [EnableCors("EnableCORS")]
 [ServiceFilter(typeof(ValidModelStateAsyncActionFilter))]
@@ -33,44 +33,6 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     {
         _repositoryFactory = repositoryFactory;
         _mapper = mapper;
-    }
-
-    /// <summary>
-    /// Get an employee address with employee Id and address type Id
-    /// </summary>
-    /// <remarks>
-    /// Sample request:
-    ///
-    ///     GET /api/v3/employeeAddresses/6/1
-    ///
-    /// Sample response body:
-    /// 
-    ///     {
-    ///       "employeeId": 6,
-    ///       "addressTypeId": 1,
-    ///       "address": "Milano, Italy",
-    ///       "created": "2024-06-18T17:53:51.9976026",
-    ///       "modified": "2024-06-18T17:53:51.9976028"
-    ///     }
-    /// </remarks>
-    /// <param name="employeeId" example="6">Employee Id</param>
-    /// <param name="addressTypeId" example="1">Address Type Id</param>
-    /// <param name="version">API version</param>
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(EmployeeAddressDto), Description = "Return employee address")]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The employee address was not found")]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
-    [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
-    [HttpGet("{employeeId:int}/{addressTypeId:AddressType}", Name = "GetEmployeeAddressByIdsV3")]
-    public async Task<ActionResult<EmployeeAddressDto>> GetAsync(int employeeId, AddressType addressTypeId, ApiVersion version)
-    {
-        Logger.LogDebug(nameof(GetAsync));
-        var employeeAddress = await _repositoryFactory.EmployeeAddressRepository.GetEmployeeAddressAsync(employeeId, addressTypeId).ConfigureAwait(false);
-        if (employeeAddress == null)
-        {
-            return NotFound(new { message = "The employee address was not found" });
-        }
-        var employeeAddressDto = _mapper.Map<EmployeeAddressDto>(employeeAddress);
-        return Ok(employeeAddressDto);
     }
 
     /// <summary>
@@ -96,14 +58,13 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///     }
     /// </remarks>
     /// <param name="address">EmployeeAddressCreateDto model</param>
-    /// <param name="version">API version</param>
     [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(EmployeeAddressDto), Description = "Returns a new employee address")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Employee Address was not found")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Employee and Address Type already exists")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
-    [HttpPost("create", Name = "CreateEmployeeAddressV3")]
-    public async Task<IActionResult> CreateAsync([FromBody] EmployeeAddressCreateDto address, ApiVersion version)
+    [HttpPost(Name = nameof(CreateAsync))]
+    public async Task<IActionResult> CreateAsync([FromBody] EmployeeAddressCreateDto address)
     {
         Logger.LogDebug(nameof(CreateAsync));
         var newEmployeeAddress = _mapper.Map<EmployeeAddress>(address);
@@ -115,48 +76,49 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         {
             return BadRequest(new { message = $"The Employee with id {address.EmployeeId} and Address Type Id {address.AddressTypeId} already exists" });
         }
-        
+
         var repoEmployeeAddress = await _repositoryFactory.EmployeeAddressRepository.AddEmployeeAddressAsync(newEmployeeAddress).ConfigureAwait(false);
-        var result = _mapper.Map<EmployeeAddressDto>(repoEmployeeAddress);
-        var createdResult = new ObjectResult(result)
-        {
-            StatusCode = StatusCodes.Status201Created
-        };
-        return createdResult;
+        var employeeAddressDto = _mapper.Map<EmployeeAddressDto>(repoEmployeeAddress);
+
+        // TODO: Fix inconsistent route, int or AddressType? CreatedAtRoute wasn't working well with AddressType for some reason
+        return CreatedAtRoute(nameof(GetAsync), new { employeeId = employeeAddressDto.EmployeeId, addressTypeId = (int)employeeAddressDto.AddressTypeId }, employeeAddressDto);
     }
 
     /// <summary>
-    /// Deletes an employee address given an EmployeeId and AddressTypeID
+    /// Get an employee address with employee Id and address type Id
     /// </summary>
     /// <remarks>
     /// Sample request:
     ///
-    ///     DELETE /api/v3/employees/6/2
+    ///     GET /api/v4/employeeAddresses/6/1
     ///
     /// Sample response body:
-    ///     
-    ///    Code 200 Success
     /// 
+    ///     {
+    ///       "employeeId": 6,
+    ///       "addressTypeId": 1,
+    ///       "address": "Milano, Italy",
+    ///       "created": "2024-06-18T17:53:51.9976026",
+    ///       "modified": "2024-06-18T17:53:51.9976028"
+    ///     }
     /// </remarks>
     /// <param name="employeeId" example="6">Employee Id</param>
-    /// <param name="addressTypeId" example="2">Address Type Id</param>
-    /// <param name="version">API version</param>
-    [SwaggerResponse(StatusCodes.Status200OK, Description = "Employee address was successfully deleted")]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "No employee / address type was found")]
+    /// <param name="addressTypeId" example="1">Address Type Id</param>
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(EmployeeAddressDto), Description = "Return employee address")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "The employee address was not found")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
-    [HttpDelete("{employeeId:int}/{addressTypeId:AddressType}", Name = "DeleteEmployeeAddressByIdsV3")]
-    public async Task<IActionResult> DeleteAsync(int employeeId, AddressType addressTypeId, ApiVersion version)
+    [HttpGet("{employeeId:int}/{addressTypeId:int}", Name = nameof(GetAsync))]
+    public async Task<ActionResult<EmployeeAddressDto>> GetAsync(int employeeId, AddressType addressTypeId)
     {
-        Logger.LogDebug(nameof(DeleteAsync));
+        Logger.LogDebug(nameof(GetAsync));
         var employeeAddress = await _repositoryFactory.EmployeeAddressRepository.GetEmployeeAddressAsync(employeeId, addressTypeId).ConfigureAwait(false);
         if (employeeAddress == null)
         {
-            return NotFound(new { message = "No employee / address type was found" });
+            return NotFound(new { message = "The employee address was not found" });
         }
-        _repositoryFactory.EmployeeAddressRepository.Remove(employeeAddress);
-        await _repositoryFactory.SaveAsync().ConfigureAwait(false);
-        return Ok();
+        var employeeAddressDto = _mapper.Map<EmployeeAddressDto>(employeeAddress);
+        return Ok(employeeAddressDto);
     }
 
     /// <summary>
@@ -165,7 +127,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     /// <remarks>
     /// Sample request:
     ///
-    ///     GET /api/v3/employeeAddress/6
+    ///     GET /api/v4/employeeAddress/6
     ///
     /// Sample response body:
     ///
@@ -201,13 +163,12 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///     ]
     /// </remarks>
     /// <param name="employeeId">Employee Id</param>
-    /// <param name="version">API version</param>
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<EmployeeAddressDto>), Description = "Return list of all employee's addresses")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "The employee has no addresses")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
-    [HttpGet("{employeeId:int}", Name = "GetAllEmployeesAddressesV3")]
-    public async Task<ActionResult<IEnumerable<EmployeeAddressDto>>> GetAllEmployeesAddressesAsync(int employeeId, ApiVersion version)
+    [HttpGet("{employeeId:int}", Name = nameof(GetAllEmployeesAddressesAsync))]
+    public async Task<ActionResult<IEnumerable<EmployeeAddressDto>>> GetAllEmployeesAddressesAsync(int employeeId)
     {
         Logger.LogDebug(nameof(GetAllEmployeesAddressesAsync));
         var employeesAddresses = await _repositoryFactory.EmployeeAddressRepository.GetEmployeeAddressesAsync(ea => ea.EmployeeId == employeeId).ConfigureAwait(false);
@@ -242,13 +203,12 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     ///     }
     /// </remarks>
     /// <param name="employeeAddress"><see cref="EmployeeAddressUpdateDto"/></param>
-    /// <param name="version">API version</param>
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(EmployeeAddressDto), Description = "Return updated employee address")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "The employee / address id combination was not found")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
-    [HttpPut("update", Name = "UpdateEmployeeAddressV3")]
-    public async Task<ActionResult<EmployeeAddressDto>> UpdateEmployeeAddressAsync([FromBody] EmployeeAddressUpdateDto employeeAddress, ApiVersion version)
+    [HttpPut(Name = nameof(UpdateEmployeeAddressAsync))]
+    public async Task<ActionResult<EmployeeAddressDto>> UpdateEmployeeAddressAsync([FromBody] EmployeeAddressUpdateDto employeeAddress)
     {
         Logger.LogDebug(nameof(UpdateEmployeeAddressAsync));
         var repoEmployeeAddress = await _repositoryFactory.EmployeeAddressRepository.GetEmployeeAddressAsync(employeeAddress.EmployeeId, employeeAddress.AddressTypeId).ConfigureAwait(false);
@@ -300,7 +260,7 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
     [SwaggerResponse(StatusCodes.Status404NotFound, "The employee id was not found")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
     [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
-    [HttpPut("upsertBatch", Name = "UpsertEmployeeAddressesV3")]
+    [HttpPut("upsertBatch", Name = nameof(UpsertEmployeeAddressBatchAsync))]
     public async Task<IActionResult> UpsertEmployeeAddressBatchAsync([FromBody] IList<EmployeeAddressUpdateDto> employeeAddresses)
     {
         if (!ModelState.IsValid)
@@ -329,6 +289,38 @@ public class EmployeeAddressesController : BaseController<EmployeeAddressesContr
         await _repositoryFactory.EmployeeAddressRepository
             .UpsertEmployeeAddressesAsync(newEmployeeAddresses);
 
+        return NoContent();
+    }
+    /// <summary>
+    /// Deletes an employee address given an EmployeeId and AddressTypeID
+    /// </summary>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     DELETE /api/v4/employees/6/2
+    ///
+    /// Sample response body:
+    ///     
+    ///    Code 204 No Content
+    /// 
+    /// </remarks>
+    /// <param name="employeeId" example="6">Employee Id</param>
+    /// <param name="addressTypeId" example="2">Address Type Id</param>
+    [SwaggerResponse(StatusCodes.Status200OK, Description = "Employee address was successfully deleted")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "No employee / address type was found")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized user")]
+    [SwaggerOperation(Tags = new[] { "Employee's Addresses" })]
+    [HttpDelete("{employeeId:int}/{addressTypeId:AddressType}", Name = nameof(DeleteAsync))]
+    public async Task<IActionResult> DeleteAsync(int employeeId, AddressType addressTypeId)
+    {
+        Logger.LogDebug(nameof(DeleteAsync));
+        var employeeAddress = await _repositoryFactory.EmployeeAddressRepository.GetEmployeeAddressAsync(employeeId, addressTypeId).ConfigureAwait(false);
+        if (employeeAddress == null)
+        {
+            return NotFound(new { message = "No employee / address type was found" });
+        }
+        _repositoryFactory.EmployeeAddressRepository.Remove(employeeAddress);
+        await _repositoryFactory.SaveAsync().ConfigureAwait(false);
         return NoContent();
     }
 }

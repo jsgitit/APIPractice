@@ -5,7 +5,6 @@ using CompanyWebApi.Middleware;
 using CompanyWebApi.Persistence.DbContexts;
 using CompanyWebApi.Persistence.Repositories;
 using CompanyWebApi.RouteConstraints;
-using CompanyWebApi.Services.Authorization;
 using CompanyWebApi.Services.Filters;
 using CompanyWebApi.Services.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -279,7 +278,8 @@ namespace CompanyWebApi
             // Services
             services.AddTransient<IJwtTokenHandler, JwtTokenHandler>();
             services.AddTransient<IJwtFactory, JwtFactory>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<CompanyWebApi.Services.Authentication.V3.IUserService, CompanyWebApi.Services.Authentication.V3.UserService>();
+            services.AddScoped<CompanyWebApi.Services.Authentication.V4.IUserService, CompanyWebApi.Services.Authentication.V4.UserService>();
 
             // Add AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

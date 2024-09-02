@@ -44,14 +44,6 @@ namespace CompanyWebApi.Persistence.Repositories
         Task<IList<Employee>> GetEmployeesAsync(Expression<Func<Employee, bool>> predicate = null, bool tracking = false);
 
         /// <summary>
-        /// Search employees (deprecated)
-        /// </summary>
-        /// <param name="searchCriteria">EmployeeSearchDto model</param>
-        /// <param name="tracking">Tracking changes</param>
-        /// <returns></returns>
-        Task<IList<Employee>> SearchEmployeesAsync(EmployeeSearchDto searchCriteria, bool tracking = false);
-
-        /// <summary>
         /// Search employees
         /// </summary>
         /// <param name="searchCriteria">EmployeeSearchCriteria model</param>

@@ -68,21 +68,6 @@ namespace CompanyWebApi.Persistence.Repositories
             return result;
         }
 
-        public async Task<IList<Employee>> SearchEmployeesAsync(EmployeeSearchDto searchCriteria, bool tracking = false)
-        {
-            var employees = await GetEmployeesAsync(null, tracking).ConfigureAwait(false);
-            employees = employees.If(!string.IsNullOrEmpty(searchCriteria.FirstName), q => q.Where(x =>
-                    x.FirstName.Contains(searchCriteria.FirstName, StringComparison.InvariantCultureIgnoreCase)))
-                .If(!string.IsNullOrEmpty(searchCriteria.LastName), q => q.Where(x =>
-                    x.LastName.Contains(searchCriteria.LastName, StringComparison.InvariantCultureIgnoreCase)))
-                .If(!string.IsNullOrEmpty(searchCriteria.Department), q => q.Where(x =>
-                    x.Department.Name.Contains(searchCriteria.Department, StringComparison.InvariantCultureIgnoreCase)))
-                .If(!string.IsNullOrEmpty(searchCriteria.Username), q => q.Where(x =>
-                    x.User.Username.Contains(searchCriteria.Username, StringComparison.InvariantCultureIgnoreCase)))
-                .If(searchCriteria.BirthDate.HasValue, q => q.Where(x => x.BirthDate == searchCriteria.BirthDate))
-                .ToList();
-            return employees;
-        }
         public async Task<IList<Employee>> SearchEmployeesAsync(EmployeeSearchCriteria searchCriteria, bool tracking = false)
         {
             var employees = await GetEmployeesAsync(null, tracking).ConfigureAwait(false);

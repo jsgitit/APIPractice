@@ -1,3 +1,24 @@
+# APIPractice
+
+This project's goal is to practice implementing various types of changes and versioning that might be required in a real world .NET API. 
+The application was forked from Matt's original implementation, where he was demonstrating Open API and Swagger usage.  (HUGE thank you for Matt's original work!)
+
+Types of changes include:
+- implementing Code First data migrations
+- removing old custom converters and adding AutoMapper
+- adding new EmployeeAddress endpoint (which helps EFCore migrations)
+- changing existing endpoints to return a normalized json format
+- removing old versioning style and implementing ApiVersioning library
+- API versions that changed from 1.0, 2.0, 2.1, 3.0 to 4.0, while using a URL path versioning scheme
+
+The project implements new API versions without breaking our ""pretend clients"" using the older version.  The allows clients time to migrate to the newer version.
+
+***This Github project continues to be a work in progress, and is not meant for any production use.***
+
+NOTE: The remaining documentation here is Matt's original documentation unchanged from it's original implementation.
+
+---
+
 # OpenAPI.Swagger.Demo
 
 This comprehensive sample application shows **how to create JWT secured, versioned CRUD OpenAPI** using latest **.NET 6**, documented with **Swagger** and tested with **Unit** and **Integration tests for secured API**. You can find also how to use **Entity Framework Core** with **SQLite database provider**, how to use **Serilog** for logging requests/responses, how to **generally capture exceptions** with custom middleware, etc.

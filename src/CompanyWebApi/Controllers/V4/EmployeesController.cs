@@ -396,7 +396,6 @@ public class EmployeesController : BaseController<EmployeesController>
     ///       "modified": "1970-01-01T00:00:00Z"
     ///     }
     /// </remarks>
-    /// <param name="id" example="6">Employee Id</param>
     /// <param name="employee">EmployeeUpdateDto model</param>
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(EmployeeFullDto), Description = "Return updated employee")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "The employee was not found")]
@@ -561,7 +560,6 @@ public class EmployeesController : BaseController<EmployeesController>
     [HttpGet("search", Name = nameof(SearchEmployeeAsync))]
     public async Task<IActionResult> SearchEmployeeAsync([FromQuery] EmployeeSearchDto searchCriteria)
     {
-        // TODO: Remove older SearchEmployeeAsync method after fully removing v2.1. Uses old Dto, and shouldn't.
         Logger.LogDebug(nameof(SearchEmployeeAsync));
 
         var employeeSearchCriteria = new EmployeeSearchCriteria
