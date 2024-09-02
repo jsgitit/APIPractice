@@ -1,24 +1,12 @@
 using AutoMapper;
 using CompanyWebApi.Configurations;
-using CompanyWebApi.Contracts.Dto;
+using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Core.Auth;
 using CompanyWebApi.Persistence.Repositories;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
-namespace CompanyWebApi.Services.Authorization;
-
-/// <summary>
-/// User Service
-/// 
-/// TODOs:
-/// 1. BugFix: After trying to remove V2 of API, discovered V3 and V4 still depend on V2 items:
-/// - V2 UserAuthenticateDto
-/// - V2 UserDto
-/// - MappingProfiles\V2_1
-/// 2. Develop strategy to resolve Bug by either versioning service or something else. 
-///
-/// </summary>
+namespace CompanyWebApi.Services.Authentication.V3;
 public class UserService : IUserService
 {
     private readonly AuthSettings _authSettings;

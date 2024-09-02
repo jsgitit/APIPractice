@@ -6,7 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CompanyWebApi.Tests.IntegrationTests.V3;
+namespace CompanyWebApi.Tests.IntegrationTests.Controllers.V3;
 
 public class EmployeesControllerTests : ControllerTestsBase
 {
@@ -119,11 +119,11 @@ public class EmployeesControllerTests : ControllerTestsBase
             BirthDate = new DateTime(1994, 8, 7),
             Addresses = new List<EmployeeAddressUpdateDto>
             {
-                new EmployeeAddressUpdateDto 
+                new EmployeeAddressUpdateDto
                 {
                     EmployeeId = newFullEmployee.EmployeeId,
                     AddressTypeId = AddressType.Residential,
-                    Address = "789 New Home St" 
+                    Address = "789 New Home St"
                 },
                 new EmployeeAddressUpdateDto
                 {

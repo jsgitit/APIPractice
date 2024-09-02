@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CompanyWebApi.Tests.IntegrationTests.V3;
+namespace CompanyWebApi.Tests.IntegrationTests.Controllers.V3;
 public class EmployeeAddressControllerTests : ControllerTestsBase
 {
     private const string API_VERSION = "V3.0";
@@ -178,7 +178,7 @@ public class EmployeeAddressControllerTests : ControllerTestsBase
 
         // Reset test data
         var oldWorkAddressFor5 = new EmployeeAddressUpdateDto
-        { EmployeeId = 5, AddressTypeId = AddressType.Work, Address = "Cologne, Germany"};
+        { EmployeeId = 5, AddressTypeId = AddressType.Work, Address = "Cologne, Germany" };
 
         await _httpClientHelper.PutAsync<EmployeeAddressUpdateDto, EmployeeAddressDto>(
             $"{_baseUrl}update", oldWorkAddressFor5);
@@ -222,8 +222,8 @@ public class EmployeeAddressControllerTests : ControllerTestsBase
 
 
         var newUnknownAddresses = new List<EmployeeAddressUpdateDto>
-        { 
-            new EmployeeAddressUpdateDto { EmployeeId = 9999, AddressTypeId = AddressType.Unknown, Address = "Unknown" } 
+        {
+            new EmployeeAddressUpdateDto { EmployeeId = 9999, AddressTypeId = AddressType.Unknown, Address = "Unknown" }
         };
 
         // Act

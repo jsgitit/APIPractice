@@ -1,7 +1,7 @@
-﻿using CompanyWebApi.Contracts.Dto;
+﻿using CompanyWebApi.Contracts.Dto.V3;
 using System.Threading.Tasks;
 
-namespace CompanyWebApi.Services.Authorization
+namespace CompanyWebApi.Services.Authentication.V3
 {
 	public interface IUserService
 	{

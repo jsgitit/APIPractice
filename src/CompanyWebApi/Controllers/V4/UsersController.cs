@@ -4,7 +4,7 @@ using CompanyWebApi.Contracts.Dto.V4;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Controllers.Base;
 using CompanyWebApi.Persistence.Repositories.Factory;
-using CompanyWebApi.Services.Authorization;
+using CompanyWebApi.Services.Authentication.V4;
 using CompanyWebApi.Services.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -141,7 +141,7 @@ public class UsersController : BaseController<UsersController>
     /// <remarks>
     /// Sample request:
     ///
-    ///     GET /api/v4/users/getall
+    ///     GET /api/v4/users
     ///
     /// Sample response body:
     /// 
@@ -187,7 +187,7 @@ public class UsersController : BaseController<UsersController>
             return NotFound(new { message = "The users list is empty" });
         }
         var usersDto = _mapper.Map<IList<UserDto>>(users);
-        return Ok(usersDto);
+        return Ok(usersDto); // TODO: fix top level array, by introducing wrapper UserListDto.cs
     }
 
     /// <summary>

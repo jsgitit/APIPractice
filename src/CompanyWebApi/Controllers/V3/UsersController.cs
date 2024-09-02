@@ -4,7 +4,7 @@ using CompanyWebApi.Contracts.Dto.V3;
 using CompanyWebApi.Contracts.Entities;
 using CompanyWebApi.Controllers.Base;
 using CompanyWebApi.Persistence.Repositories.Factory;
-using CompanyWebApi.Services.Authorization;
+using CompanyWebApi.Services.Authentication.V3;
 using CompanyWebApi.Services.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;

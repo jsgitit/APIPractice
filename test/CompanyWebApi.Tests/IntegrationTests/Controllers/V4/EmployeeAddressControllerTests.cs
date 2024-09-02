@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CompanyWebApi.Tests.IntegrationTests.V4;
+namespace CompanyWebApi.Tests.IntegrationTests.Controllers.V4;
 public class EmployeeAddressControllerTests : ControllerTestsBase
 {
     private const string API_VERSION = "V4.0";

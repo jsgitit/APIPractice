@@ -8,7 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CompanyWebApi.Tests.IntegrationTests.V3;
+namespace CompanyWebApi.Tests.IntegrationTests.Controllers.V3;
 
 public class UsersControllerTests : ControllerTestsBase
 {
@@ -111,7 +111,7 @@ public class UsersControllerTests : ControllerTestsBase
             Username = "johnw",
             Password = "test"
         };
-        var authenticatedUser = await _httpClientHelper.PostAsync<AuthenticateModel, AuthenticateModel>(_usersBaseUrl + "authenticate", user);
+        var authenticatedUser = await _httpClientHelper.PostAsync<AuthenticateModel, UserAuthenticateDto>(_usersBaseUrl + "authenticate", user);
         Assert.NotNull(authenticatedUser);
     }
 }

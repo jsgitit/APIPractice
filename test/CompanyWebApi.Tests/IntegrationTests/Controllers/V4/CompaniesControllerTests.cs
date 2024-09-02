@@ -1,11 +1,12 @@
 using CompanyWebApi.Contracts.Dto.V4;
 using CompanyWebApi.Tests.Services;
+using Microsoft.AspNetCore.Components.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CompanyWebApi.Tests.IntegrationTests.V4
+namespace CompanyWebApi.Tests.IntegrationTests.Controllers.V4
 {
     public class CompaniesControllerTests : ControllerTestsBase
     {
@@ -74,13 +75,27 @@ namespace CompanyWebApi.Tests.IntegrationTests.V4
         [Fact]
         public async Task CanUpdateCompany()
         {
+            // Note: Renaming a existing company while other tests are running caused a race condition 
+            // for this test, so, I create a new company, then rename it to complete this test. 
+            // Renaming an existing company caused other test methods like GetAllCompanies() to fail,
+            // since the names would not match.
+
+            var newCompany = new CompanyCreateDto
+            {
+                Name = "Test Company To Rename"
+            };
+            var company = await _httpClientHelper.PostAsync<CompanyCreateDto, CompanyDto>(_baseUrl, newCompany);
+            var companyIdToRename = company.CompanyId;
+
             var companyToUpdate = new CompanyUpdateDto
             {
-                CompanyId = 1,
-                Name = "Test Company"
+                CompanyId = companyIdToRename,
+                Name = "Test Company Renamed"
             };
             var updatedCompany = await _httpClientHelper.PutAsync<CompanyUpdateDto, CompanyDto>(_baseUrl, companyToUpdate);
-            Assert.Equal("Test Company", updatedCompany.Name);
+            Assert.Equal("Test Company Renamed", updatedCompany.Name);
+
+            await _httpClientHelper.DeleteAsync(_baseUrl + $"{companyIdToRename}");
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CompanyWebApi.Tests.IntegrationTests.V3
+namespace CompanyWebApi.Tests.IntegrationTests.Controllers.V3
 {
     public class DepartmentsControllerTests : ControllerTestsBase
     {
